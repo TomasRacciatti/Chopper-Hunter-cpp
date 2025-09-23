@@ -82,7 +82,6 @@ void Game::Update(float dt)
 	_window.setView(_view);
 
 	auto mousePos = sf::Mouse::getPosition(_window);
-
 	_playerInput.mouseWorld = _window.mapPixelToCoords(mousePos);
 
 	if (_player)
@@ -101,12 +100,12 @@ void Game::Update(float dt)
 	}
 	else
 	{
-		SpawnHelicopter();
+		if (_state == State::Play)
+			SpawnHelicopter();
 	}
 
 
-	// Colision Bullet con Entity
-
+	// ===== Combat =====
 	// Bullet Player a Helicopteros
 	if (_heli && _heli->IsAlive()) 
 		Combat::ResolveHits(_playerBulletPool, _heli.get());
@@ -114,6 +113,12 @@ void Game::Update(float dt)
 	// Bullet de Helis le pegan al Player
 	if (_player && _player->IsAlive())
 		Combat::ResolveHits(_enemyBulletPool, _player.get());
+
+	if (_player && !_player->IsAlive())
+	{
+		EnterMenu();
+		return;
+	}
 }
 
 void Game::Draw()
@@ -123,8 +128,11 @@ void Game::Draw()
 
 	_level.Draw(_window);
 
-	if (_player) _player->Draw(_window);
-	if (_heli) _heli->Draw(_window);
+	if (_state == State::Play)
+	{
+		if (_player) _player->Draw(_window);
+		if (_heli) _heli->Draw(_window);
+	}
 
 	_window.display();
 }
@@ -134,6 +142,15 @@ void Game::EnterMenu()
 	_state = State::Menu;
 	_view = _window.getDefaultView();
 	_window.setView(_view);
+
+	// Despawneamos entidades
+	_player.reset();
+	_playerInput = {};
+	_heli.reset();
+
+	// Limpiamos las balas
+	_playerBulletPool.Reset();
+	_enemyBulletPool.Reset();
 }
 
 void Game::BeginPlay()
