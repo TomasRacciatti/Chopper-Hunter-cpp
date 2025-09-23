@@ -67,12 +67,12 @@ Bullet* Weapon::EmitBullet(sf::Vector2f origin, sf::Vector2f dirUnit)
 
 	if (dirUnit.x == 0.f && dirUnit.y == 0.f) return nullptr;
 
-	if (auto* b = _pool->Spawn()) 
+	if (auto* bullet = _pool->Spawn()) 
 	{
-		b->Activate(origin,
+		bullet->Activate(origin,
 			{ dirUnit.x * _bulletSpeed, dirUnit.y * _bulletSpeed },
 			_bulletLifeTime, _bulletDamage);
-		return b;
+		return bullet;
 	}
 	return nullptr; // pool agotada
 }

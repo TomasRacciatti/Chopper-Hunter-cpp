@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Pistol.h"
+#include "Combat.h"
 
 
 Game::Game()
@@ -102,6 +103,17 @@ void Game::Update(float dt)
 	{
 		SpawnHelicopter();
 	}
+
+
+	// Colision Bullet con Entity
+
+	// Bullet Player a Helicopteros
+	if (_heli && _heli->IsAlive()) 
+		Combat::ResolveHits(_playerBulletPool, _heli.get());
+
+	// Bullet de Helis le pegan al Player
+	if (_player && _player->IsAlive())
+		Combat::ResolveHits(_enemyBulletPool, _player.get());
 }
 
 void Game::Draw()

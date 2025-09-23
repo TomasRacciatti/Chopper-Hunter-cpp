@@ -187,6 +187,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bullet.h" />
+    <ClInclude Include="src\Combat.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Helicopter.h" />

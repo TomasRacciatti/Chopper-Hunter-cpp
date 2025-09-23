@@ -8,7 +8,7 @@ class Player;
 class Helicopter : public Entity
 {
 public:
-    explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret);
+    explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, int hp = 10);
 
     void Update(float dt, const Level& lvl) override;
     void Draw(sf::RenderTarget& rt) const override;
@@ -16,8 +16,6 @@ public:
     void SetTarget(sf::Vector2f worldPos) { _targetPos = worldPos; }
 
 private:
-    int _hp = 10;
-
     // FSM
     enum class State { Entering, Patrol, Hover };
     State _state = State::Entering;

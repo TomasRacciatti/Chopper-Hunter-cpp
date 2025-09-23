@@ -14,6 +14,8 @@ public:
     bool Alive() const { return _alive; }
     sf::FloatRect GetBounds() const { return _shape.getGlobalBounds(); }
 
+    int Damage() const { return _damage; }
+
     // Pool
     void Activate(sf::Vector2f pos, sf::Vector2f vel, float life, int dmg) {
         _shape.setPosition(pos);

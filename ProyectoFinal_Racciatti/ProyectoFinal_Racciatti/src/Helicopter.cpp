@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <cmath>
 
-Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret)
-    : Entity(spawnPos, { 96.f, 40.f }, _hp)   // Placeholder para debug, despues reemplazar con sprite
+Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, int hp)
+    : Entity(spawnPos, { 96.f, 40.f }, hp)   // Placeholder para debug, despues reemplazar con sprite
     , _turret(std::move(turret))
 {
     _body.setFillColor(sf::Color(160, 160, 160));   // Color temporal
