@@ -38,7 +38,7 @@ public:
         for (auto& item : _items)
         {
             item.Deactivate();
-            _free.push_back(&item)
+            _free.push_back(&item);
         }
     }
 

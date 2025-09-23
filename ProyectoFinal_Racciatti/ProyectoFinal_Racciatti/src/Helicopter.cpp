@@ -26,7 +26,7 @@ void Helicopter::Update(float dt, const Level& lvl)
     if (_turret) 
     {
         const auto muzzle = Muzzle();
-        _turret->Update(dt, /*fireHeld*/true, muzzle, _targetPos, lvl);
+        _turret->Update(dt, /*fireHeld*/_firing, muzzle, _targetPos, lvl);
     }
 }
 
@@ -43,6 +43,7 @@ void Helicopter::Draw(sf::RenderTarget& rt) const
 void Helicopter::EnterPatrol(const Level& lvl)
 {
     _state = State::Patrol;
+    _firing = true;
     _hoverTimer = 0.f;
     _bobTime = 0.f;
     PickNewPatrolTarget(lvl);
@@ -51,6 +52,7 @@ void Helicopter::EnterPatrol(const Level& lvl)
 void Helicopter::EnterHover()
 {
     _state = State::Hover;
+    _firing = true;
     _hoverDuration = Utils::RandomFloat(1.f, 4.f);
     _hoverTimer = 0.f;
     _bobTime = 0.f;
@@ -78,6 +80,8 @@ void Helicopter::UpdateEntering(float dt, const Level& lvl)
         PickNewPatrolTarget(lvl);
         _entryTargetReady = true;
     }
+
+    _firing = false;
     
     auto pos = _body.getPosition();
     const sf::Vector2f target{ _patrolTargetX, _altitude };

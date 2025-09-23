@@ -50,6 +50,7 @@ private:
 
     // Turret
     std::unique_ptr<Weapon> _turret;
+    bool _firing = false;
 
     // Helpers
     void EnterPatrol(const Level& lvl);
@@ -61,5 +62,7 @@ private:
     void UpdateHover(float dt, const Level& lvl);
 
     sf::Vector2f Muzzle() const;
+
+    void SetFiring(bool canFire) { _firing = canFire; }
 };
 
