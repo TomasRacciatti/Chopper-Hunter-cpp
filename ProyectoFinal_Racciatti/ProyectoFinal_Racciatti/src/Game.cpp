@@ -1,0 +1,131 @@
+#include "Game.h"
+#include "Pistol.h"
+
+Game::Game()
+	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
+	, _level(_window.getSize(), "Sprites/background.png")
+{
+	_window.setFramerateLimit(60);
+	_view = _window.getDefaultView();
+
+	EnterMenu();
+}
+Game::~Game() = default;
+
+void Game::Play()
+{
+	while (_window.isOpen())
+	{
+		HandleEvents();
+
+		float dt = _clock.restart().asSeconds();
+		if (dt > 0.05f)
+			dt = 0.05f;
+
+		Update(dt);
+		Draw();
+	}
+}
+
+void Game::HandleEvents()
+{
+	while (auto ev = _window.pollEvent())
+	{
+		if (ev->is<sf::Event::Closed>())
+			_window.close();
+
+		if (ev->is<sf::Event::KeyPressed>())
+		{
+			auto key = ev->getIf<sf::Event::KeyPressed>();
+			if (key->scancode == sf::Keyboard::Scancode::Escape) {
+				if (_state == State::Play) _state = State::Pause;
+				else _window.close();
+			}
+			else if (_state == State::Menu && key->scancode == sf::Keyboard::Scancode::Enter) {
+				BeginPlay();
+			}
+
+			// Movement
+			if (key->scancode == sf::Keyboard::Scancode::A) _playerInput.left = true;
+			if (key->scancode == sf::Keyboard::Scancode::D) _playerInput.right = true;
+			if (key->scancode == sf::Keyboard::Scancode::S) _playerInput.crouch = true;
+		}
+
+		if (ev->is<sf::Event::KeyReleased>())
+		{
+			auto key = ev->getIf<sf::Event::KeyReleased>();
+			if (key->scancode == sf::Keyboard::Scancode::A) _playerInput.left = false;
+			if (key->scancode == sf::Keyboard::Scancode::D) _playerInput.right = false;
+			if (key->scancode == sf::Keyboard::Scancode::S) _playerInput.crouch = false;
+		}
+
+		if (ev->is<sf::Event::MouseButtonPressed>())
+		{
+			auto mouseButton = ev->getIf<sf::Event::MouseButtonPressed>();
+			if (mouseButton->button == sf::Mouse::Button::Left) _playerInput.fireHeld = true;
+		}
+
+		if (ev->is<sf::Event::MouseButtonReleased>())
+		{
+			auto mouseButton = ev->getIf<sf::Event::MouseButtonReleased>();
+			if (mouseButton->button == sf::Mouse::Button::Left) _playerInput.fireHeld = false;
+		}
+	}
+}
+
+void Game::Update(float dt)
+{
+	if (_state != State::Play) return;
+
+	_window.setView(_view);
+
+	auto mousePos = sf::Mouse::getPosition(_window);
+
+	_playerInput.mouseWorld = _window.mapPixelToCoords(mousePos);
+
+	if (_player)
+	{
+		_player->SetInput(_playerInput);
+		_player->Update(dt, _level);
+	}
+}
+
+void Game::Draw()
+{
+	_window.clear();
+	_window.setView(_view);
+
+	_level.Draw(_window);
+
+	if (_player)
+		_player->Draw(_window);
+
+	_window.display();
+}
+
+void Game::EnterMenu()
+{
+	_state = State::Menu;
+	_view = _window.getDefaultView();
+	_window.setView(_view);
+}
+
+void Game::BeginPlay()
+{
+	_state = State::Play;
+	_view = _window.getDefaultView();
+	_window.setView(_view);
+
+	//Spawn player
+	sf::Vector2f spawnPos(_window.getSize().x * 0.5f, _window.getSize().y - 64.f);
+	_player = std::make_unique<Player>(spawnPos);
+
+	// Spawn de arma
+	_player->EquipWeapon(std::make_unique<Pistol>(
+		0.4f,						// Cooldown
+		300.f,						// Bullet speed
+		5.f,						// Bullet lifetime
+		1,							// Bullet damage
+		&_playerBulletPool
+	));
+}
