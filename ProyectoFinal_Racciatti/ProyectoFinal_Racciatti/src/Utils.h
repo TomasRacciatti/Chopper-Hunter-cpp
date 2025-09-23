@@ -18,4 +18,14 @@ namespace Utils
         float len = Length(v);
         return (len > 0.f) ? sf::Vector2f{ v.x / len, v.y / len } : sf::Vector2f{ 0.f,0.f };
     }
+
+    inline int RandomInt(int min, int max)
+    {
+        return rand() % (max - min + 1) + min;
+    }
+
+    inline int RandomFloat(float min, float max)
+    {
+        return min + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (max - min);
+    }
 }

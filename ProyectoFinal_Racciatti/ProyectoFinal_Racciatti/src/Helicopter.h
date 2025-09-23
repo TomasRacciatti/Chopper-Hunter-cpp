@@ -1,0 +1,66 @@
+#pragma once
+#include "Entity.h"
+#include "Weapon.h"
+#include <memory>
+
+class Player;
+
+class Helicopter : public Entity
+{
+public:
+    explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret);
+
+    void Update(float dt, const Level& lvl) override;
+    void Draw(sf::RenderTarget& rt) const override;
+
+    void SetTarget(sf::Vector2f worldPos) { _targetPos = worldPos; }
+
+private:
+    int _hp = 10;
+
+    // FSM
+    enum class State { Entering, Patrol, Hover };
+    State _state = State::Entering;
+
+
+    // ==== Movement ====
+    float _altitude = 120.f;     // Altura a la que va a estar
+    float _minX = 32.f;          // Limites para el movimiento de lado a lado
+    float _maxX = 0.f;
+
+    // Enter
+    float _enterSpeed = 160.f;
+    
+    // Patrol
+    float _minSpeed = 200.f;
+    float _maxSpeed = 300.f;
+    float _patrolSpeed = 250.f;
+    float _patrolTargetX = 0.f; // Punto en ventana a donde se va a mover el heli
+
+    // Hover
+    float _hoverDuration = 2.f; // Esto lo vamos a randomizar entre 1 y 4
+    float _hoverTimer = 0.f;
+    float _hoverHorizontalSpeed = 14.f;
+    float _hoverBobSpeed = 2.4f;
+    float _hoverBobAmp = 8.f;
+    float _bobTime = 0.f;       // Control del seno
+
+
+    // Aim
+    sf::Vector2f _targetPos{ 0.f, 0.f };
+
+    // Turret
+    std::unique_ptr<Weapon> _turret;
+
+    // Helpers
+    void EnterPatrol(const Level& lvl);
+    void EnterHover();
+    void PickNewPatrolTarget(const Level& lvl);
+
+    void UpdateEntering(float dt, const Level& lvl);
+    void UpdatePatrol(float dt, const Level& lvl);
+    void UpdateHover(float dt, const Level& lvl);
+
+    sf::Vector2f Muzzle() const;
+};
+

@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Pistol.h"
 
+
 Game::Game()
 	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
 	, _level(_window.getSize(), "Sprites/background.png")
@@ -88,6 +89,19 @@ void Game::Update(float dt)
 		_player->SetInput(_playerInput);
 		_player->Update(dt, _level);
 	}
+
+	// Helis
+	if (_heli && _heli->IsAlive()) 
+	{
+		if (_player && _player->IsAlive()) 
+			_heli->SetTarget(_player->Center());
+
+		_heli->Update(dt, _level);
+	}
+	else
+	{
+		SpawnHelicopter();
+	}
 }
 
 void Game::Draw()
@@ -97,8 +111,8 @@ void Game::Draw()
 
 	_level.Draw(_window);
 
-	if (_player)
-		_player->Draw(_window);
+	if (_player) _player->Draw(_window);
+	if (_heli) _heli->Draw(_window);
 
 	_window.display();
 }
@@ -128,4 +142,28 @@ void Game::BeginPlay()
 		1,							// Bullet damage
 		&_playerBulletPool
 	));
+
+	// Spawn de Heli
+	SpawnHelicopter();
+}
+
+
+// Helper para no sobrecargar mucho BeginPlay
+
+void Game::SpawnHelicopter() {
+	const auto win = _window.getSize();
+	const bool fromLeft = (rand() % 2) == 0;
+	const float off = 120.f;
+	sf::Vector2f heliSpawn = fromLeft ? sf::Vector2f{ -off, 0.f }
+						: sf::Vector2f{ static_cast<float>(win.x) + off, 0.f };
+
+	// Torreta
+	auto turret = std::make_unique<Pistol>(
+		0.7f,     // cooldown
+		300.f,    // bullet speed
+		5.f,      // bullet life
+		1,        // damage
+		&_enemyBulletPool);
+
+	_heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret));
 }

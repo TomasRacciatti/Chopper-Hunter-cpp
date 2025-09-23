@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Level.h"
 #include "Player.h"
+#include "Helicopter.h"
 
 class Game
 {
@@ -39,6 +40,11 @@ private:
 	// Input
 	Player::Input _playerInput;
 	std::unique_ptr<Player> _player; // unique ptr me permite asegurarme que los punteros de player se borren si se borra el game
+
+	// Enemies
+	std::unique_ptr<Helicopter> _heli;
+
+	void SpawnHelicopter();
 
 	//Pools
 	size_t poolCapacity = 256;

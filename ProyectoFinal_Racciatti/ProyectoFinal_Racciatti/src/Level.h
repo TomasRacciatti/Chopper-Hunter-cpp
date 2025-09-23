@@ -10,6 +10,8 @@ public:
     Level(const sf::Vector2u& windowSize,
         const std::string& bgPath = "Sprites/background.png");
 
+    sf::Vector2u WindowSize() const { return _windowSize; }
+
     void Draw(sf::RenderTarget& rt) const;
 
     // Colisiones
@@ -19,6 +21,8 @@ public:
 protected:
 
 private:
+    sf::Vector2u _windowSize{ 0,0 };
+    
     // Data de Background
     sf::Texture _bgTex;
     sf::Sprite _bgSprite;

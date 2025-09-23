@@ -1,7 +1,8 @@
 #include "Level.h"
 
 Level::Level(const sf::Vector2u& windowSize, const std::string& bgPath)
-    : _bgTex{}              // En SFML 3 tenemos que construir la textura
+    : _windowSize(windowSize)
+    , _bgTex{}              // En SFML 3 tenemos que construir la textura
     , _bgSprite{_bgTex}     // y construir el sprite con esa textura
 {
 	_bgLoaded = _bgTex.loadFromFile(bgPath);
