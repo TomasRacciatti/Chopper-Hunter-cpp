@@ -164,13 +164,16 @@ void Game::BeginPlay()
 
 void Game::SpawnHelicopter() {
 	const auto win = _window.getSize();
-	const float bodyW = 96.f;
-	const float minX = 32.f;
-	const float maxX = static_cast<float>(win.x) - bodyW - 32.f;
 
-	const float offY = 120.f;
-	float spawnX = Utils::RandomFloat(minX, maxX);
-	sf::Vector2f heliSpawn{ spawnX, -offY };
+	constexpr float kOffX = 80.f;
+	const float minSpawnX = -kOffX;
+	const float maxSpawnX = static_cast<float>(win.x) + kOffX;
+
+	constexpr float kMinOffY = 80.f;
+	constexpr float kMaxOffY = 220.f;
+	const float spawnX = Utils::RandomFloat(minSpawnX, maxSpawnX);
+	const float spawnY = -Utils::RandomFloat(kMinOffY, kMaxOffY);
+	sf::Vector2f heliSpawn{ spawnX, spawnY };
 
 	// Torreta
 	auto turret = std::make_unique<Pistol>(

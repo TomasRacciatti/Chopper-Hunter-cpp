@@ -27,7 +27,8 @@ private:
     float _maxX = 0.f;
 
     // Enter
-    float _enterSpeed = 300.f;
+    float _enterSpeed = 500.f;
+    bool _entryTargetReady = false;
     
     // Patrol
     float _minSpeed = 200.f;

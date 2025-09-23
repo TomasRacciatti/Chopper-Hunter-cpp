@@ -71,19 +71,40 @@ void Helicopter::PickNewPatrolTarget(const Level& lvl)
 
 // Updates
 
-void Helicopter::UpdateEntering(float dt, const Level&)
+void Helicopter::UpdateEntering(float dt, const Level& lvl)
 {
-    auto pos = _body.getPosition();
-    if (pos.y < _altitude) 
+    if (!_entryTargetReady) 
     {
-        pos.y += _enterSpeed * dt;
-        if (pos.y >= _altitude) 
+        PickNewPatrolTarget(lvl);
+        _entryTargetReady = true;
+    }
+    
+    auto pos = _body.getPosition();
+    const sf::Vector2f target{ _patrolTargetX, _altitude };
+
+    const sf::Vector2f velocity{ target.x - pos.x, target.y - pos.y };
+    const float len = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+
+    if (len > 0.f) 
+    {
+        const float step = _enterSpeed * dt;
+        if (step >= len) 
         {
-            pos.y = _altitude;
+            _body.setPosition(target);
             EnterHover();
         }
+        else
+        {
+            const sf::Vector2f dir{ velocity.x / len, velocity.y / len };
+            pos.x += dir.x * step;
+            pos.y += dir.y * step;
+            _body.setPosition(pos);
+        }
     }
-    _body.setPosition(pos);
+    else
+    {
+        EnterHover();
+    }
 }
 
 void Helicopter::UpdatePatrol(float dt, const Level& lvl)

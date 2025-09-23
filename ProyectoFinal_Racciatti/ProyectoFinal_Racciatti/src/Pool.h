@@ -32,6 +32,16 @@ public:
         _free.push_back(obj);
     }
 
+    void Reset()
+    {
+        _free.clear();
+        for (auto& item : _items)
+        {
+            item.Deactivate();
+            _free.push_back(&item)
+        }
+    }
+
     std::vector<T>& Items() { return _items; }
     const std::vector<T>& Items() const { return _items; }
 
