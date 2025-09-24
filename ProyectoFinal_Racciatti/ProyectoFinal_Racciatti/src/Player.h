@@ -32,8 +32,8 @@ private:
 	bool  _crouched = false;
 
 	// Stand and crouch -- Por ahora debug con rectangulos
-	sf::Vector2f _standSize{ 32.f, 48.f };
-	sf::Vector2f _crouchSize{ 32.f, 32.f };
+	sf::Vector2f _standSize{ 34.f, 84.f };
+	sf::Vector2f _crouchSize{ 34.f, 58.f };
 
 	// Weapon
 	std::unique_ptr<Weapon> _weapon;

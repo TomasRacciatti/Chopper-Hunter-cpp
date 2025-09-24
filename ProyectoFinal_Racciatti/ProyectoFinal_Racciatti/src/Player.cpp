@@ -4,7 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 Player::Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager& resourceManager)
-    : Entity(startPos, { 25.f, 50.f }, 10)
+    : Entity(startPos, { 34.f, 84.f }, 10)
 {
     //_body.setFillColor(sf::Color(255, 255, 255));
 

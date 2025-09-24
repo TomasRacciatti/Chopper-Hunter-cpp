@@ -1,11 +1,12 @@
 #include "Game.h"
+#include <ctime>;
 #include "Pistol.h"
 #include "Combat.h"
 
 
 Game::Game()
 	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
-	, _level(_window.getSize(), ".../sprites/background.png")
+	, _level(_window.getSize(), "../sprites/background.png")
 {
 	_window.setFramerateLimit(60);
 	_view = _window.getDefaultView();
@@ -16,6 +17,8 @@ Game::~Game() = default;
 
 void Game::Play()
 {
+	srand(time(nullptr));
+	
 	while (_window.isOpen())
 	{
 		HandleEvents();
@@ -172,7 +175,7 @@ void Game::CreatePlayer()
 	const auto window = _window.getSize();
 	const sf::Vector2f spawnPos(window.x * 0.5f, window.y - 64.f);
 
-	std::string path = ".../sprites/player/SoldierSpriteSheet.png";
+	std::string path = "../sprites/player/SoldierSpriteSheet.png";
 	_player = std::make_unique<Player>(spawnPos, path, resourceManager);
 
 	// Spawn de arma
