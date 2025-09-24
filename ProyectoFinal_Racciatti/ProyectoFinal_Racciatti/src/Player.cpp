@@ -14,9 +14,9 @@ Player::Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager
     _body.setTextureRect(area);
 }
 
-void Player::EquipWeapon(std::unique_ptr<Weapon> w)
+void Player::EquipWeapon(std::unique_ptr<Weapon> weapon)
 {
-    _weapon = std::move(w);
+    _weapon = std::move(weapon);
 }
 
 void Player::Update(float dt, const Level& lvl)
