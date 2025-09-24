@@ -18,7 +18,7 @@ public:
 		sf::Vector2f mouseWorld{ 0.f, 0.f };
 	};
 
-	void EquipWeapon(std::unique_ptr<Weapon> w);
+	void EquipWeapon(std::unique_ptr<Weapon> weapon);
 
 	void SetInput(const Input& input) { _input = input; }
 
@@ -33,7 +33,7 @@ private:
 
 	// Stand and crouch -- Por ahora debug con rectangulos
 	sf::Vector2f _standSize{ 34.f, 84.f };
-	sf::Vector2f _crouchSize{ 34.f, 58.f };
+	sf::Vector2f _crouchSize{ 34.f, 58.f }; // Esto probablemente vuele cuando usemos las anims
 
 	// Weapon
 	std::unique_ptr<Weapon> _weapon;
