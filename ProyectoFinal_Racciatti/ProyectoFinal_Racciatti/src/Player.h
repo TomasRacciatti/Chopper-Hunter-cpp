@@ -46,5 +46,15 @@ private:
 	void MoveAndCollideX(float dx, const Level& lvl);
 	void SnapToFloor(const Level& lvl);
 
+	// Anim
+	static constexpr int kFrameW = 25;
+	static constexpr int kFrameH = 50;
+	static constexpr int kCrouchH = 39;
+
+	static constexpr int kIdleRow = 0;
+	static constexpr int kIdleCol = 0;
+	static constexpr int kCrouchRow = 2;
+	static constexpr int kCrouchCol = 0;
+
 };
 

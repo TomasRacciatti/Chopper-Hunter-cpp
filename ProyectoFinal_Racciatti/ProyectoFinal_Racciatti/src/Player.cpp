@@ -4,13 +4,14 @@
 #include <SFML/Window/Keyboard.hpp>
 
 Player::Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager& resourceManager)
-    : Entity(startPos, { 32.f, 48.f }, 10)
+    : Entity(startPos, { 25.f, 50.f }, 10)
 {
-    _body.setFillColor(sf::Color(255, 255, 255));
+    //_body.setFillColor(sf::Color(255, 255, 255));
 
-    sf::IntRect area({ 0,0 }, { 50,25 });
-    sf::Texture& texture = resourceManager.GetTexture(imageFilePath, false, area);
-
+    sf::IntRect area = Utils::FrameRect(kIdleCol, kIdleRow, kFrameW, kFrameH);
+    //sf::Texture& texture = resourceManager.GetTexture(imageFilePath, false, area);
+    _body.setTexture(&resourceManager.GetTexture(imageFilePath, false, area));
+    _body.setTextureRect(area);
 }
 
 void Player::EquipWeapon(std::unique_ptr<Weapon> w)

@@ -28,4 +28,9 @@ namespace Utils
     {
         return min + static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * (max - min);
     }
+
+    inline sf::IntRect FrameRect(int col, int row, int w, int h)
+    {
+        return sf::IntRect({ col * w, row * h }, { w, h });
+    }
 }
