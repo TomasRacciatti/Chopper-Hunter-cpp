@@ -2,11 +2,12 @@
 #include "Entity.h"
 #include <memory>
 #include "Weapon.h"
+#include "ResourceManager.h"
 
 class Player: public Entity
 {
 public:
-	Player(sf::Vector2f startPos);
+	Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager& resourceManager);
 
 	struct Input
 	{
@@ -27,7 +28,7 @@ public:
 private:
 	// Movement
 	float _baseSpeed = 320.f;
-	float _crouchMul = 0.55f;
+	float _crouchMul = 0.5f;
 	bool  _crouched = false;
 
 	// Stand and crouch -- Por ahora debug con rectangulos

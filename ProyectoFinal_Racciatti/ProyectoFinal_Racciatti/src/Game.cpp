@@ -5,7 +5,7 @@
 
 Game::Game()
 	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
-	, _level(_window.getSize(), "Sprites/background.png")
+	, _level(_window.getSize(), ".../sprites/background.png")
 {
 	_window.setFramerateLimit(60);
 	_view = _window.getDefaultView();
@@ -159,9 +159,21 @@ void Game::BeginPlay()
 	_view = _window.getDefaultView();
 	_window.setView(_view);
 
-	//Spawn player
-	sf::Vector2f spawnPos(_window.getSize().x * 0.5f, _window.getSize().y - 64.f);
-	_player = std::make_unique<Player>(spawnPos);
+
+	CreatePlayer();
+	SpawnHelicopter();
+}
+
+
+// Helpers para no sobrecargar mucho BeginPlay
+
+void Game::CreatePlayer()
+{
+	const auto window = _window.getSize();
+	const sf::Vector2f spawnPos(window.x * 0.5f, window.y - 64.f);
+
+	std::string path = ".../sprites/player/SoldierSpriteSheet.png";
+	_player = std::make_unique<Player>(spawnPos, path, resourceManager);
 
 	// Spawn de arma
 	_player->EquipWeapon(std::make_unique<Pistol>(
@@ -171,15 +183,10 @@ void Game::BeginPlay()
 		1,							// Bullet damage
 		&_playerBulletPool
 	));
-
-	// Spawn de Heli
-	SpawnHelicopter();
 }
 
-
-// Helper para no sobrecargar mucho BeginPlay
-
-void Game::SpawnHelicopter() {
+void Game::SpawnHelicopter() 
+{
 	const auto win = _window.getSize();
 
 	constexpr float kOffX = 80.f;

@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Level.h"
+#include "ResourceManager.h"
 #include "Player.h"
 #include "Helicopter.h"
 
@@ -16,6 +17,9 @@ protected:
 
 private:
 	enum class State {Menu, Play, Pause };
+
+	// Resources
+	ResourceManager resourceManager;
 
 	// Window
 	sf::RenderWindow _window;
@@ -44,6 +48,8 @@ private:
 	// Enemies
 	std::unique_ptr<Helicopter> _heli;
 
+	// Spawners
+	void CreatePlayer();
 	void SpawnHelicopter();
 
 	//Pools

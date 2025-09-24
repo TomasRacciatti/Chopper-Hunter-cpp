@@ -3,10 +3,13 @@
 #include "Utils.h"
 #include <SFML/Window/Keyboard.hpp>
 
-Player::Player(sf::Vector2f startPos)
+Player::Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager& resourceManager)
     : Entity(startPos, { 32.f, 48.f }, 10)
 {
     _body.setFillColor(sf::Color(255, 255, 255));
+
+    sf::IntRect area({ 0,0 }, { 50,25 });
+    sf::Texture& texture = resourceManager.GetTexture(imageFilePath, false, area);
 
 }
 
