@@ -13,6 +13,7 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Re
 {
     _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
     
+    _visualScale = 2.f;
     _sprite.setScale(sf::Vector2f(_visualScale, _visualScale));
 
     _sprite.setOrigin(sf::Vector2f(_frameSize.x * 0.5f, _frameSize.y * 0.5f));

@@ -47,15 +47,33 @@ private:
 	void SnapToFloor(const Level& lvl);
 
 	// Anims
-	static constexpr int kFrameW = 23;
-	static constexpr int kFrameH = 56;
-	static constexpr int kCrouchH = 38;
-	static constexpr int kDeathW = 29;
+	enum class Anim { Idle, Run, Crouch };
 
-	static constexpr int kIdleRow = 0;
-	static constexpr int kIdleCol = 0;
-	static constexpr int kCrouchRow = 2;
-	static constexpr int kCrouchCol = 0;
+	sf::Texture* _tex = nullptr;
+	sf::Sprite   _sprite;
 
+	static constexpr int frameW = 23;
+	static constexpr int frameH = 56;
+
+	static constexpr int crouchH = 38;
+	static constexpr int deathW = 29;
+
+	static constexpr int _rowIdle = 0;
+	static constexpr int _rowRun = 1;
+	static constexpr int _rowCrouch = 2;
+	static constexpr int _rowDeath = 3;
+
+	// Run anim
+	int   _runFrameCount = 8;
+	int   _frame = 0;
+	float _frameTime = 0.09f;
+	float _animTimer = 0.f;
+
+	Anim  _anim = Anim::Idle;
+
+	void SelectAnim();
+	void ApplyFrame(int col, int row);
+	void UpdateRunAnim(float dt);
+	void SyncSpriteToBody();
 };
 

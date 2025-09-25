@@ -4,14 +4,17 @@
 #include <SFML/Window/Keyboard.hpp>
 
 Player::Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager& resourceManager)
-    : Entity(startPos, { 34.f, 84.f }, 10)
+    : Entity(startPos, { 34.f, 84.f }, /*hp*/10)
+    , _tex(&resourceManager.GetTexture(imageFilePath, /*mipmap*/false, {}))
+    , _sprite(*_tex)
 {
-    //_body.setFillColor(sf::Color(255, 255, 255));
 
-    sf::IntRect area = Utils::FrameRect(kIdleCol, kIdleRow, kFrameW, kFrameH);
-    //sf::Texture& texture = resourceManager.GetTexture(imageFilePath, false, area);
-    _body.setTexture(&resourceManager.GetTexture(imageFilePath, false, area));
-    _body.setTextureRect(area);
+    ApplyFrame(0, _rowIdle);
+
+    _visualScale = 1.5f;
+    _sprite.setOrigin(sf::Vector2f(frameW * 0.5f, static_cast<float>(frameH)));
+    _sprite.setScale({ _visualScale, _visualScale });
+    SyncSpriteToBody();
 }
 
 void Player::EquipWeapon(std::unique_ptr<Weapon> weapon)
@@ -32,6 +35,14 @@ void Player::Update(float dt, const Level& lvl)
     MoveAndCollideX(horizontalV * dt, lvl);
     SnapToFloor(lvl);
 
+    // Anim
+    SelectAnim();
+
+    if (_anim == Anim::Run)
+        UpdateRunAnim(dt);
+
+    SyncSpriteToBody();
+
     // Disparo
     if (_weapon)
     {
@@ -48,7 +59,7 @@ void Player::Update(float dt, const Level& lvl)
 void Player::Draw(sf::RenderTarget& rt) const
 {
     // Dibujamos al jugador
-    Entity::Draw(rt);
+    rt.draw(_sprite);
 
     // Dibujamos el arma
     if (_weapon)
@@ -110,4 +121,59 @@ void Player::SnapToFloor(const Level& lvl) // Como no tenemos salto:
 
     pos.y = floor.position.y - size.y;
     _body.setPosition(pos);
+}
+
+// ===== Anim =====
+void Player::SelectAnim()
+{
+    if (_input.crouch) {
+        if (_anim != Anim::Crouch) {
+            _anim = Anim::Crouch;
+            ApplyFrame(0, _rowCrouch);
+        }
+        return;
+    }
+
+    const bool moving = _input.left || _input.right;
+    if (moving) {
+        if (_anim != Anim::Run) {
+            _anim = Anim::Run;
+            _frame = 0;
+            _animTimer = 0.f;
+            ApplyFrame(_frame, _rowRun);
+        }
+    }
+    else {
+        if (_anim != Anim::Idle) {
+            _anim = Anim::Idle;
+            ApplyFrame(0, _rowIdle);
+        }
+    }
+}
+
+void Player::ApplyFrame(int col, int row)
+{
+    const int left = col * frameW;
+    const int top = row * frameH;
+
+    _sprite.setTextureRect(sf::IntRect({ left, top }, { frameW, frameH }));
+
+    _sprite.setOrigin({ frameW * 0.5f, static_cast<float>(frameH) });
+}
+
+void Player::UpdateRunAnim(float dt)
+{
+    _animTimer += dt;
+    if (_animTimer >= _frameTime) 
+    {
+        _animTimer -= _frameTime;
+        _frame = (_frame + 1) % _runFrameCount;
+        ApplyFrame(_frame, _rowRun);
+    }
+}
+
+void Player::SyncSpriteToBody() 
+{
+    const auto r = _body.getGlobalBounds();
+    _sprite.setPosition({ r.position.x + r.size.x * 0.5f, r.position.y + r.size.y });
 }

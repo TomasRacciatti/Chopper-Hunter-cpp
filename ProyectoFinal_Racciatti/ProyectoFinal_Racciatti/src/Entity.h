@@ -26,8 +26,8 @@ public:
 	sf::Vector2f Center() const;
 
 protected:
-	// Placeholder para los sprites
 	sf::RectangleShape _body;
+	float _visualScale = 1.f;
 
 	int _health = 10;
 	bool _alive = true;

@@ -65,8 +65,6 @@ private:
     float _frameTime = 0.12f;
     float _animTimer = 0.f;
 
-    float _visualScale = 2.0f;
-
     // Helpers
     void EnterPatrol(const Level& lvl);
     void EnterHover();
