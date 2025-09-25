@@ -6,7 +6,7 @@
 
 Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, ResourceManager& resources,
     const std::string& sheetPath, int hp)
-    : Entity(spawnPos, { 177.f, 51.f }, hp)
+    : Entity(spawnPos, { 140.f, 51.f }, hp)
     , _turret(std::move(turret))
     , _tex(&resources.GetTexture(sheetPath, false, {}))
     , _sprite(*_tex)
@@ -18,7 +18,7 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Re
 
     _sprite.setOrigin(sf::Vector2f(_frameSize.x * 0.5f, _frameSize.y * 0.5f));
 
-    _body.setSize({ _frameSize.x * _visualScale, _frameSize.y * _visualScale });
+    _body.setSize({ _frameSize.x * _visualScale, _frameSize.y * _visualScale }); // Aca sobreescribo el tamaño
     _body.setOrigin(_body.getSize() * 0.5f);
     _body.setPosition(spawnPos);
     _sprite.setPosition(spawnPos);
@@ -207,4 +207,22 @@ sf::Vector2f Helicopter::TurretBaseWorld() const
         heliPos.x + localX * _visualScale,
         heliPos.y + localY * _visualScale
     };
+}
+
+sf::FloatRect Helicopter::GetBounds() const
+{
+    const sf::Vector2f c = _body.getPosition();
+
+    const float scaleX = _body.getSize().x / static_cast<float>(_frameSize.x);
+    const float scaleY = _body.getSize().y / static_cast<float>(_frameSize.y);
+
+    const float fullW = static_cast<float>(_frameSize.x) * scaleX;
+    const float fullH = static_cast<float>(_frameSize.y) * scaleY;
+
+    const float left = c.x - fullW * 0.5f;
+    const float top = c.y - fullH * 0.5f;
+
+    const float collW = 140.f * scaleX;
+
+    return sf::FloatRect({ left, top }, { collW, fullH });
 }

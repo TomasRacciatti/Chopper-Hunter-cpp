@@ -17,6 +17,8 @@ public:
 
     void SetTarget(sf::Vector2f worldPos) { _targetPos = worldPos; }
 
+    sf::FloatRect GetBounds() const override;
+
 private:
     // FSM
     enum class State { Entering, Patrol, Hover };

@@ -22,8 +22,8 @@ public:
 	void Die() { _alive = false; }
 
 	// Helpers que nos van a ayudar con colisiones
-	sf::FloatRect GetBounds() const;
 	sf::Vector2f Center() const;
+	virtual sf::FloatRect GetBounds() const;
 
 protected:
 	sf::RectangleShape _body;
