@@ -4,13 +4,23 @@
 #include <algorithm>
 #include <cmath>
 
-Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, int hp)
-    : Entity(spawnPos, { 96.f, 40.f }, hp)   // Placeholder para debug, despues reemplazar con sprite
+Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, ResourceManager& resources,
+    const std::string& sheetPath, int hp)
+    : Entity(spawnPos, { 177.f, 51.f }, hp)
     , _turret(std::move(turret))
+    , _tex(&resources.GetTexture(sheetPath, false, {}))
+    , _sprite(*_tex)
 {
-    _body.setFillColor(sf::Color(160, 160, 160));   // Color temporal
-    _body.setOutlineThickness(1.f);
-    _body.setOutlineColor(sf::Color(255, 255, 255));
+    _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
+    
+    _sprite.setScale(sf::Vector2f(_visualScale, _visualScale));
+
+    _sprite.setOrigin(sf::Vector2f(0.f, 0.f));
+
+    _body.setSize({ _frameSize.x * _visualScale, _frameSize.y * _visualScale });
+
+    _body.setPosition(spawnPos);
+    _sprite.setPosition(spawnPos);
 }
 
 void Helicopter::Update(float dt, const Level& lvl)
@@ -22,6 +32,10 @@ void Helicopter::Update(float dt, const Level& lvl)
         case State::Hover:    UpdateHover(dt, lvl); break;
     }
 
+    // Anim
+    _sprite.setPosition(_body.getPosition());
+    UpdateAnimation(dt);
+
     // Turret siempre esta apuntando al jugador
     if (_turret) 
     {
@@ -32,7 +46,7 @@ void Helicopter::Update(float dt, const Level& lvl)
 
 void Helicopter::Draw(sf::RenderTarget& rt) const
 {
-    Entity::Draw(rt);
+    rt.draw(_sprite);
     if (_turret) _turret->Draw(rt);
 }
 
@@ -154,6 +168,21 @@ void Helicopter::UpdateHover(float dt, const Level& lvl)
         EnterPatrol(lvl);
     }
 }
+
+// ==== Anim ====
+
+void Helicopter::UpdateAnimation(float dt)
+{
+    _animTimer += dt;
+    if (_animTimer >= _frameTime) 
+    {
+        _animTimer -= _frameTime;
+        _frame = (_frame + 1) % _frameCount;
+        _sprite.setTextureRect(sf::IntRect({ _frame * _frameSize.x, 0 }, { _frameSize.x, _frameSize.y }));
+    }
+}
+
+// ==== Turret ====
 
 sf::Vector2f Helicopter::Muzzle() const
 {

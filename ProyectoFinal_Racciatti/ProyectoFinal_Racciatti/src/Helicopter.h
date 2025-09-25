@@ -1,14 +1,16 @@
 #pragma once
 #include "Entity.h"
 #include "Weapon.h"
-#include <memory>
+#include "ResourceManager.h"
+//#include <memory>
 
 class Player;
 
 class Helicopter : public Entity
 {
 public:
-    explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, int hp = 10);
+    explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, ResourceManager& resources,
+        const std::string& sheetPath, int hp = 10);
 
     void Update(float dt, const Level& lvl) override;
     void Draw(sf::RenderTarget& rt) const override;
@@ -52,6 +54,17 @@ private:
     std::unique_ptr<Weapon> _turret;
     bool _firing = false;
 
+    // ====== Anim ======
+    sf::Texture* _tex = nullptr;
+    sf::Sprite _sprite;
+    sf::Vector2i _frameSize{ 177, 51 };
+    int _frameCount = 4;
+    int _frame = 0;
+    float _frameTime = 0.12f;
+    float _animTimer = 0.f;
+
+    float _visualScale = 2.0f;
+
     // Helpers
     void EnterPatrol(const Level& lvl);
     void EnterHover();
@@ -60,6 +73,8 @@ private:
     void UpdateEntering(float dt, const Level& lvl);
     void UpdatePatrol(float dt, const Level& lvl);
     void UpdateHover(float dt, const Level& lvl);
+
+    void UpdateAnimation(float dt);
 
     sf::Vector2f Muzzle() const;
 

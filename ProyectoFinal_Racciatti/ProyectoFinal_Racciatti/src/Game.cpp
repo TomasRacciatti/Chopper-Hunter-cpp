@@ -210,5 +210,6 @@ void Game::SpawnHelicopter()
 		1,        // damage
 		&_enemyBulletPool);
 
-	_heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret));
+	std::string path = "../sprites/enemies/HelicopterSpriteSheet.png";
+	_heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), resourceManager, path);
 }
