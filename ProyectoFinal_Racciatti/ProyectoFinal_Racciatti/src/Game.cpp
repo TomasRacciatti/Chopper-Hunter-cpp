@@ -179,13 +179,19 @@ void Game::CreatePlayer()
 	_player = std::make_unique<Player>(spawnPos, path, resourceManager);
 
 	// Spawn de arma
-	_player->EquipWeapon(std::make_unique<Pistol>(
+	auto pistol = std::make_unique<Pistol>(
 		0.4f,						// Cooldown
 		300.f,						// Bullet speed
 		5.f,						// Bullet lifetime
 		1,							// Bullet damage
 		&_playerBulletPool
-	));
+	);
+
+	std::string pistolPath = "../sprites/player/Pistol.png";
+	sf::Texture& pistolTex = resourceManager.GetTexture(pistolPath, false, {});
+	pistol->SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.0f);
+	pistol->SetMuzzleDistance(18.f);
+	_player->EquipWeapon(std::move(pistol));
 }
 
 void Game::SpawnHelicopter() 
@@ -209,6 +215,10 @@ void Game::SpawnHelicopter()
 		5.f,      // bullet life
 		1,        // damage
 		&_enemyBulletPool);
+	std::string turretPath = "../sprites/enemies/Turret.png";
+	sf::Texture& turretTex = resourceManager.GetTexture(turretPath, false, {});
+	turret->SetVisualSprite(turretTex, { 25.f, 26.5f }, 1.0f);
+	turret->SetMuzzleDistance(25.f);
 
 	std::string path = "../sprites/enemies/HelicopterSpriteSheet.png";
 	_heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), resourceManager, path);

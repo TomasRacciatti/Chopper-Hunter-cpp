@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Bullet.h"
 #include "Pool.h"
+#include <memory>
 
 class Level;
 
@@ -26,6 +27,14 @@ public:
 
 	float AngleDegrees() const { return _angleDeg; }
 
+	void SetVisualSprite(sf::Texture& tex, sf::Vector2f originPx, float spriteScale = 1.f) 
+	{
+		_sprite = std::make_unique<sf::Sprite>(tex);
+		_sprite->setOrigin(originPx);
+		_sprite->setScale({ spriteScale, spriteScale });
+	}
+	void SetMuzzleDistance(float d) { _muzzleDistance = d; }
+
 protected:
 	// Disparo particular de cada arma
 	virtual void Shoot(sf::Vector2f origin, sf::Vector2f dir) = 0;
@@ -38,7 +47,8 @@ protected:
 	int   _bulletDamage;
 
 	// Visual
-	sf::RectangleShape _barrel;  // Debug, ahora es un rectangulo nomas, despues reemplazar con el sprite
+	std::unique_ptr<sf::Sprite> _sprite;
+	float _muzzleDistance = 25.f;
 	float _angleDeg = 0.f;
 
 private:

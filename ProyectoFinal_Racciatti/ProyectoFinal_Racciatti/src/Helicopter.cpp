@@ -36,7 +36,15 @@ void Helicopter::Update(float dt, const Level& lvl)
     _sprite.setPosition(_body.getPosition());
     UpdateAnimation(dt);
 
-    // Turret siempre esta apuntando al jugador
+    // Turret 
+    const sf::Vector2f heliPos = _body.getPosition();
+
+    const sf::Vector2f turretPos = {
+        heliPos.x + _turretOffsetPx.x * _visualScale,
+        heliPos.y + _turretOffsetPx.y * _visualScale
+    };
+
+    // siempre esta apuntando al jugador
     if (_turret) 
     {
         const auto muzzle = Muzzle();

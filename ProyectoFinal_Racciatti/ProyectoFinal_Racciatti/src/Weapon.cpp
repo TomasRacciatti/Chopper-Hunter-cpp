@@ -13,10 +13,7 @@ Weapon::Weapon(float cooldown, float bulletSpeed,
 	, _cooldown(cooldown)
 	, _pool(sharedPool)
 {
-	// Rectangulo para visualizar, reemplazar por sprite de arma
-	_barrel.setSize({ 20.f, 4.f });
-	_barrel.setOrigin({ 2.f, 2.f }); // Lo ponemos un poco mas atras para que rote desde la base
-	_barrel.setFillColor(sf::Color(60, 110, 235));
+	
 }
 
 void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f target, const Level& lvl)
@@ -26,8 +23,8 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 	_angleDeg = std::atan2(dir.y, dir.x) * 180.f / 3.14159265f;
 
 	// Rotar el visual
-	_barrel.setPosition(origin);
-	_barrel.setRotation(sf::degrees(_angleDeg));
+	_sprite->setPosition(origin);
+	_sprite->setRotation(sf::degrees(_angleDeg));
 	
 	// Disparo
 	_timer -= dt;
@@ -54,7 +51,7 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 void Weapon::Draw(sf::RenderTarget& rt) const
 {
 	// Visual del arma
-	rt.draw(_barrel);
+	rt.draw(*_sprite);
 	
 	// Visual de balas
 	for (const auto& bullet : _pool->Items())
@@ -67,9 +64,15 @@ Bullet* Weapon::EmitBullet(sf::Vector2f origin, sf::Vector2f dirUnit)
 
 	if (dirUnit.x == 0.f && dirUnit.y == 0.f) return nullptr;
 
+	const sf::Vector2f muzzle = 
+	{
+	origin.x + dirUnit.x * _muzzleDistance,
+	origin.y + dirUnit.y * _muzzleDistance
+	};
+
 	if (auto* bullet = _pool->Spawn()) 
 	{
-		bullet->Activate(origin,
+		bullet->Activate(muzzle,
 			{ dirUnit.x * _bulletSpeed, dirUnit.y * _bulletSpeed },
 			_bulletLifeTime, _bulletDamage);
 		return bullet;

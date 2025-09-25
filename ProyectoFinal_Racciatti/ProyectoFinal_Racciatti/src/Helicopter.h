@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Weapon.h"
 #include "ResourceManager.h"
-//#include <memory>
+#include <memory>
 
 class Player;
 
@@ -53,6 +53,7 @@ private:
     // Turret
     std::unique_ptr<Weapon> _turret;
     bool _firing = false;
+    sf::Vector2f _turretOffsetPx{ 118.f - 177.f * 0.5f, 49.f - 51.f * 0.5f };
 
     // ====== Anim ======
     sf::Texture* _tex = nullptr;
