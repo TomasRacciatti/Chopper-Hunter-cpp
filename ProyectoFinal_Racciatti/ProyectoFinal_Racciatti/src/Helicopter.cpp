@@ -15,10 +15,10 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Re
     
     _sprite.setScale(sf::Vector2f(_visualScale, _visualScale));
 
-    _sprite.setOrigin(sf::Vector2f(0.f, 0.f));
+    _sprite.setOrigin(sf::Vector2f(_frameSize.x * 0.5f, _frameSize.y * 0.5f));
 
     _body.setSize({ _frameSize.x * _visualScale, _frameSize.y * _visualScale });
-
+    _body.setOrigin(_body.getSize() * 0.5f);
     _body.setPosition(spawnPos);
     _sprite.setPosition(spawnPos);
 }
@@ -39,23 +39,18 @@ void Helicopter::Update(float dt, const Level& lvl)
     // Turret 
     const sf::Vector2f heliPos = _body.getPosition();
 
-    const sf::Vector2f turretPos = {
-        heliPos.x + _turretOffsetPx.x * _visualScale,
-        heliPos.y + _turretOffsetPx.y * _visualScale
-    };
-
     // siempre esta apuntando al jugador
     if (_turret) 
     {
-        const auto muzzle = Muzzle();
-        _turret->Update(dt, /*fireHeld*/_firing, muzzle, _targetPos, lvl);
+        const sf::Vector2f turretPos = TurretBaseWorld();
+        _turret->Update(dt, /*fireHeld*/ _firing, turretPos, _targetPos, lvl);
     }
 }
 
 void Helicopter::Draw(sf::RenderTarget& rt) const
 {
-    rt.draw(_sprite);
     if (_turret) _turret->Draw(rt);
+    rt.draw(_sprite);
 }
 
 
@@ -198,4 +193,17 @@ sf::Vector2f Helicopter::Muzzle() const
     const float muzzleX = rect.position.x + rect.size.x * 0.80f;
     const float muzzleY = rect.position.y + rect.size.y * 0.45f;
     return { muzzleX, muzzleY };
+}
+
+sf::Vector2f Helicopter::TurretBaseWorld() const
+{
+    const sf::Vector2f heliPos = _sprite.getPosition();
+
+    const float localX = kTurretOffsetPx.x - (_frameSize.x * 0.5f);
+    const float localY = kTurretOffsetPx.y - (_frameSize.y * 0.5f);
+
+    return {
+        heliPos.x + localX * _visualScale,
+        heliPos.y + localY * _visualScale
+    };
 }

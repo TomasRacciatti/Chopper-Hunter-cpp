@@ -53,7 +53,8 @@ private:
     // Turret
     std::unique_ptr<Weapon> _turret;
     bool _firing = false;
-    sf::Vector2f _turretOffsetPx{ 118.f - 177.f * 0.5f, 49.f - 51.f * 0.5f };
+    static constexpr sf::Vector2f kTurretOffsetPx{ 118.f, 49.f };
+    sf::Vector2f TurretBaseWorld() const;
 
     // ====== Anim ======
     sf::Texture* _tex = nullptr;

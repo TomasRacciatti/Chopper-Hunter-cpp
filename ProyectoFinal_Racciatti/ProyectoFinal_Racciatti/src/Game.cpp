@@ -180,8 +180,8 @@ void Game::CreatePlayer()
 
 	// Spawn de arma
 	auto pistol = std::make_unique<Pistol>(
-		0.4f,						// Cooldown
-		300.f,						// Bullet speed
+		0.35f,						// Cooldown
+		350.f,						// Bullet speed
 		5.f,						// Bullet lifetime
 		1,							// Bullet damage
 		&_playerBulletPool
@@ -189,7 +189,7 @@ void Game::CreatePlayer()
 
 	std::string pistolPath = "../sprites/player/Pistol.png";
 	sf::Texture& pistolTex = resourceManager.GetTexture(pistolPath, false, {});
-	pistol->SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.0f);
+	pistol->SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.5f);
 	pistol->SetMuzzleDistance(18.f);
 	_player->EquipWeapon(std::move(pistol));
 }
@@ -210,8 +210,8 @@ void Game::SpawnHelicopter()
 
 	// Torreta
 	auto turret = std::make_unique<Pistol>(
-		0.7f,     // cooldown
-		300.f,    // bullet speed
+		0.65f,     // cooldown
+		350.f,    // bullet speed
 		5.f,      // bullet life
 		1,        // damage
 		&_enemyBulletPool);

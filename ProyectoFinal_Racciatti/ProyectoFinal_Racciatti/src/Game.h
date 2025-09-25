@@ -58,7 +58,7 @@ private:
 	{ 
 		poolCapacity, [](Bullet& bullet)
 		{
-			bullet.SetRadius(3.f);
+			bullet.SetRadius(4.f);
 			bullet.SetColor(sf::Color(240,225,60)); 
 		} 
 	};
@@ -67,7 +67,7 @@ private:
 	{
 		poolCapacity, [](Bullet& bullet)
 		{
-			bullet.SetRadius(3.f);
+			bullet.SetRadius(4.f);
 			bullet.SetColor(sf::Color(230,50,50));
 		}
 	};
