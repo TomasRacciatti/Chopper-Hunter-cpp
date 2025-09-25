@@ -37,6 +37,9 @@ void Entity::TakeDamage(int dmg)
 
 sf::FloatRect Entity::GetBounds() const
 {
+    // Puedo hacer esta func virtual, El player la overridea y 
+    // si esta normal deja el get bound, pero si esta agachado retorno el getbounds 
+    // achicado en Y
     return _body.getGlobalBounds();
 }
 
