@@ -28,6 +28,10 @@ public:
 
     void SetRadius(float radius) { _shape.setRadius(radius); _shape.setOrigin({ radius, radius }); }
     void SetColor(const sf::Color& color) { _shape.setFillColor(color); }
+    void SetOutline(float thickness, sf::Color color) {
+        _shape.setOutlineThickness(thickness);
+        _shape.setOutlineColor(color);
+    }
 
 private:
     sf::CircleShape _shape;

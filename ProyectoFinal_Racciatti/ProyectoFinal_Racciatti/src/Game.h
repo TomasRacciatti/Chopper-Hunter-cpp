@@ -60,6 +60,7 @@ private:
 		{
 			bullet.SetRadius(4.f);
 			bullet.SetColor(sf::Color(240,225,60)); 
+			bullet.SetOutline(1.f, sf::Color::Black);
 		} 
 	};
 
@@ -69,6 +70,7 @@ private:
 		{
 			bullet.SetRadius(4.f);
 			bullet.SetColor(sf::Color(230,50,50));
+			bullet.SetOutline(1.f, sf::Color::Black);
 		}
 	};
 };
