@@ -6,7 +6,7 @@
 
 Game::Game()
 	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
-	, _level(_window.getSize(), "../sprites/background.png")
+	, _level(_window.getSize(), resourceManager, "../sprites/backgrounds/Game_bg.png")
 {
 	_window.setFramerateLimit(60);
 	_view = _window.getDefaultView();

@@ -1,26 +1,26 @@
 #include "Level.h"
+#include "ResourceManager.h"
 
-Level::Level(const sf::Vector2u& windowSize, const std::string& bgPath)
+Level::Level(const sf::Vector2u& windowSize, ResourceManager& resourceManager, const std::string& bgPath)
     : _windowSize(windowSize)
-    , _bgTex{}              // En SFML 3 tenemos que construir la textura
-    , _bgSprite{_bgTex}     // y construir el sprite con esa textura
+    , _bgTex(&resourceManager.GetTexture(bgPath, false, {}))
+    , _bgSprite(*_bgTex)
 {
-	_bgLoaded = _bgTex.loadFromFile(bgPath);
-    if (_bgLoaded)
-        FitBackground(windowSize);
-
-    BuildTiles(windowSize, 64);
+    _bgTex = &resourceManager.GetTexture(bgPath, false, {});
+    _bgSprite.setTexture(*_bgTex);
+    FitBackground();
+    BuildTiles(_windowSize, 64);
 }
 
-void Level::FitBackground(const sf::Vector2u& window)
+void Level::FitBackground()
 {
-    auto size = _bgTex.getSize();
-    if (size.x == 0 || size.y == 0) return;
-
-    const float sx = static_cast<float>(window.x) / static_cast<float>(size.x);
-    const float sy = static_cast<float>(window.y) / static_cast<float>(size.y);
+    const auto texSize = _bgTex->getSize();
+    if (!texSize.x || !texSize.y) return;
+    const float sx = static_cast<float>(_windowSize.x) / static_cast<float>(texSize.x);
+    const float sy = static_cast<float>(_windowSize.y) / static_cast<float>(texSize.y);
     _bgSprite.setScale(sf::Vector2f{ sx, sy });
-    _bgSprite.setPosition(sf::Vector2f{ 0.f, 0.f });
+
+    _bgSprite.setPosition({ 0.f, 0.f });
 }
 
 void Level::BuildTiles(const sf::Vector2u& win, unsigned tileSize)
@@ -98,7 +98,7 @@ void Level::BuildTiles(const sf::Vector2u& win, unsigned tileSize)
 
 void Level::Draw(sf::RenderTarget& rt) const
 {
-    if (_bgLoaded) rt.draw(_bgSprite);
+    rt.draw(_bgSprite);
     for (size_t i = 0; i < _tiles.size(); ++i)
         rt.draw(_tiles[i]);
 }

@@ -3,12 +3,15 @@
 #include <vector>
 #include <string>
 
+class ResourceManager;
+
 class Level
 {
 public:
     Level() = default;
     Level(const sf::Vector2u& windowSize,
-        const std::string& bgPath = "Sprites/background.png");
+        ResourceManager& resourceManager,
+        const std::string& bgPath);
 
     sf::Vector2u WindowSize() const { return _windowSize; }
 
@@ -24,15 +27,14 @@ private:
     sf::Vector2u _windowSize{ 0,0 };
     
     // Data de Background
-    sf::Texture _bgTex;
+    const sf::Texture* _bgTex = nullptr;
     sf::Sprite _bgSprite;
-    bool _bgLoaded = false;
 
     // Piso y paredes momentaneas
     std::vector<sf::RectangleShape> _tiles;
 
     void BuildTiles(const sf::Vector2u& window, unsigned tileSize = 64);
-    void FitBackground(const sf::Vector2u& window);
+    void FitBackground();
 
     // Colisiones
     std::vector<sf::FloatRect> _colliders;
