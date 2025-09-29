@@ -60,10 +60,10 @@ void MainMenu::Update(float dt)
 
 void MainMenu::Draw()
 {
-	window.draw(*background);
-	window.draw(*startButton);
-	window.draw(*buttonText);
-	//window->draw(text);
+	_window.draw(*background);
+	_window.draw(*startButton);
+	_window.draw(*buttonText);
+	//_window->draw(text);
 }
 
 void MainMenu::HandleEvents(const sf::Event& ev)
@@ -72,8 +72,8 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 	{
 		if (mouse->button == sf::Mouse::Button::Left)
 		{
-			sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-			sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+			sf::Vector2i pixelPos = sf::Mouse::getPosition(_window);
+			sf::Vector2f worldPos = _window.mapPixelToCoords(pixelPos);
 
 			if (startButton->getGlobalBounds().contains(worldPos))
 			{

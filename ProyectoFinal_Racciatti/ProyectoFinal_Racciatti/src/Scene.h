@@ -12,7 +12,7 @@ class Scene
 {
 protected:
 	SceneID nextSceneID;
-	sf::RenderWindow& window;
+	sf::RenderWindow& _window;
 	bool wantsChange;
 
 public:
