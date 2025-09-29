@@ -10,7 +10,7 @@
 class GameplayScene : public Scene
 {
 public:
-	GameplayScene(sf::RenderWindow& window, ResourceManager& resourceManager);
+	GameplayScene(ResourceManager& resource, sf::RenderWindow& window);
 	~GameplayScene() override;
 
 	void HandleEvents(const sf::Event& ev) override;

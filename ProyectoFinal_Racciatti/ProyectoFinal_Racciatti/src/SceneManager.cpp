@@ -11,10 +11,10 @@ void SceneManager::SetScene(SceneID id)
     switch (id) 
     {
     case SceneID::MainMenu:
-        _scene = std::make_unique<MainMenu>(_window, resourceManager);
+        _scene = std::make_unique<MainMenu>(resourceManager, _window);
         break;
     case SceneID::Gameplay:
-        _scene = std::make_unique<GameplayScene>(_window, resourceManager);
+        _scene = std::make_unique<GameplayScene>(resourceManager, _window);
         break;
     }
 }

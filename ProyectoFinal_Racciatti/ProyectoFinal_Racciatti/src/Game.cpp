@@ -1,225 +1,51 @@
 #include "Game.h"
-#include <ctime>;
-#include "Pistol.h"
-#include "Combat.h"
+#include <ctime>
 
 
 Game::Game()
 	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
-	, _level(_window.getSize(), resourceManager, "../sprites/backgrounds/Game_bg.png")
+	, _sceneManager(_window, resourceManager)
 {
 	_window.setFramerateLimit(60);
-	_view = _window.getDefaultView();
-
-	EnterMenu();
+	_window.setView(_view);
 }
 Game::~Game() = default;
 
-void Game::Play()
+void Game::Run()
 {
 	srand(time(nullptr));
 	
 	while (_window.isOpen())
 	{
-		HandleEvents();
-
 		float dt = _clock.restart().asSeconds();
-		if (dt > 0.05f)
+		if (dt > 0.05f) 
 			dt = 0.05f;
 
-		Update(dt);
-		Draw();
-	}
-}
-
-void Game::HandleEvents()
-{
-	while (auto ev = _window.pollEvent())
-	{
-		if (ev->is<sf::Event::Closed>())
-			_window.close();
-
-		if (ev->is<sf::Event::KeyPressed>())
+		while (auto ev = _window.pollEvent()) 
 		{
-			auto key = ev->getIf<sf::Event::KeyPressed>();
-			if (key->scancode == sf::Keyboard::Scancode::Escape) {
-				if (_state == State::Play) _state = State::Pause;
-				else _window.close();
+			if (ev->is<sf::Event::Closed>())
+			{
+				_window.close();
+				continue;
 			}
-			else if (_state == State::Menu && key->scancode == sf::Keyboard::Scancode::Enter) {
-				BeginPlay();
-			}
-
-			// Movement
-			if (key->scancode == sf::Keyboard::Scancode::A) _playerInput.left = true;
-			if (key->scancode == sf::Keyboard::Scancode::D) _playerInput.right = true;
-			if (key->scancode == sf::Keyboard::Scancode::S) _playerInput.crouch = true;
+			if (auto* scene = _sceneManager.Current())
+				scene->HandleEvents(*ev);
 		}
 
-		if (ev->is<sf::Event::KeyReleased>())
+		if (auto* scene = _sceneManager.Current()) 
 		{
-			auto key = ev->getIf<sf::Event::KeyReleased>();
-			if (key->scancode == sf::Keyboard::Scancode::A) _playerInput.left = false;
-			if (key->scancode == sf::Keyboard::Scancode::D) _playerInput.right = false;
-			if (key->scancode == sf::Keyboard::Scancode::S) _playerInput.crouch = false;
-		}
+			scene->Input();
+			scene->Update(dt);
 
-		if (ev->is<sf::Event::MouseButtonPressed>())
+			_window.clear();
+			_window.setView(_view);
+
+			scene->Draw();
+		}
+		else
 		{
-			auto mouseButton = ev->getIf<sf::Event::MouseButtonPressed>();
-			if (mouseButton->button == sf::Mouse::Button::Left) _playerInput.fireHeld = true;
-		}
-
-		if (ev->is<sf::Event::MouseButtonReleased>())
-		{
-			auto mouseButton = ev->getIf<sf::Event::MouseButtonReleased>();
-			if (mouseButton->button == sf::Mouse::Button::Left) _playerInput.fireHeld = false;
+			_window.clear();
+			_window.display();
 		}
 	}
-}
-
-void Game::Update(float dt)
-{
-	if (_state != State::Play) return;
-
-	_window.setView(_view);
-
-	auto mousePos = sf::Mouse::getPosition(_window);
-	_playerInput.mouseWorld = _window.mapPixelToCoords(mousePos);
-
-	if (_player)
-	{
-		_player->SetInput(_playerInput);
-		_player->Update(dt, _level);
-	}
-
-	// Helis
-	if (_heli && _heli->IsAlive()) 
-	{
-		if (_player && _player->IsAlive()) 
-			_heli->SetTarget(_player->Center());
-
-		_heli->Update(dt, _level);
-	}
-	else
-	{
-		if (_state == State::Play)
-			SpawnHelicopter();
-	}
-
-
-	// ===== Combat =====
-	// Bullet Player a Helicopteros
-	if (_heli && _heli->IsAlive()) 
-		Combat::ResolveHits(_playerBulletPool, _heli.get());
-
-	// Bullet de Helis le pegan al Player
-	if (_player && _player->IsAlive())
-		Combat::ResolveHits(_enemyBulletPool, _player.get());
-
-	if (_player && !_player->IsAlive())
-	{
-		EnterMenu();
-		return;
-	}
-}
-
-void Game::Draw()
-{
-	_window.clear();
-	_window.setView(_view);
-
-	_level.Draw(_window);
-
-	if (_state == State::Play)
-	{
-		if (_player) _player->Draw(_window);
-		if (_heli) _heli->Draw(_window);
-	}
-
-	_window.display();
-}
-
-void Game::EnterMenu()
-{
-	_state = State::Menu;
-	_view = _window.getDefaultView();
-	_window.setView(_view);
-
-	// Despawneamos entidades
-	_player.reset();
-	_playerInput = {};
-	_heli.reset();
-
-	// Limpiamos las balas
-	_playerBulletPool.Reset();
-	_enemyBulletPool.Reset();
-}
-
-void Game::BeginPlay()
-{
-	_state = State::Play;
-	_view = _window.getDefaultView();
-	_window.setView(_view);
-
-
-	CreatePlayer();
-	SpawnHelicopter();
-}
-
-
-// Helpers para no sobrecargar mucho BeginPlay
-
-void Game::CreatePlayer()
-{
-	const auto window = _window.getSize();
-	const sf::Vector2f spawnPos(window.x * 0.5f, window.y - 64.f);
-
-	std::string path = "../sprites/player/SoldierSpriteSheet.png";
-	_player = std::make_unique<Player>(spawnPos, path, resourceManager);
-
-	// Spawn de arma
-	auto pistol = std::make_unique<Pistol>(
-		0.35f,						// Cooldown
-		350.f,						// Bullet speed
-		5.f,						// Bullet lifetime
-		1,							// Bullet damage
-		&_playerBulletPool
-	);
-
-	std::string pistolPath = "../sprites/player/Pistol.png";
-	sf::Texture& pistolTex = resourceManager.GetTexture(pistolPath, false, {});
-	pistol->SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.5f);
-	pistol->SetMuzzleDistance(18.f);
-	_player->EquipWeapon(std::move(pistol));
-}
-
-void Game::SpawnHelicopter() 
-{
-	const auto win = _window.getSize();
-
-	constexpr float kOffX = 80.f;
-	const float minSpawnX = -kOffX;
-	const float maxSpawnX = static_cast<float>(win.x) + kOffX;
-
-	constexpr float kMinOffY = 80.f;
-	constexpr float kMaxOffY = 220.f;
-	const float spawnX = Utils::RandomFloat(minSpawnX, maxSpawnX);
-	const float spawnY = -Utils::RandomFloat(kMinOffY, kMaxOffY);
-	sf::Vector2f heliSpawn{ spawnX, spawnY };
-
-	// Torreta
-	auto turret = std::make_unique<Pistol>(
-		0.65f,     // cooldown
-		350.f,    // bullet speed
-		5.f,      // bullet life
-		1,        // damage
-		&_enemyBulletPool);
-	std::string turretPath = "../sprites/enemies/Turret.png";
-	sf::Texture& turretTex = resourceManager.GetTexture(turretPath, false, {});
-	turret->SetVisualSprite(turretTex, { 25.f, 26.5f }, 1.0f);
-	turret->SetMuzzleDistance(25.f);
-
-	std::string path = "../sprites/enemies/HelicopterSpriteSheet.png";
-	_heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), resourceManager, path);
 }

@@ -10,6 +10,9 @@ public:
 	SceneManager(sf::RenderWindow& win, ResourceManager& resources);
 	void SetScene(SceneID id);
 
+	Scene* Current() { return _scene.get(); }
+	const Scene* Current() const { return _scene.get(); }
+
 private:
 	sf::RenderWindow& _window;
 	ResourceManager& resourceManager;

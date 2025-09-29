@@ -3,7 +3,7 @@
 
 static constexpr const char* bgPath = "../sprites/backgrounds/Game_bg.png";
 
-GameplayScene::GameplayScene(sf::RenderWindow& _window, ResourceManager& resourceManager)
+GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow& _window)
     : Scene(_window)
     , resourceManager(resourceManager)
     , _level(_window.getSize(), resourceManager, bgPath)

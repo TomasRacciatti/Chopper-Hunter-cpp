@@ -1,10 +1,10 @@
 #include "MainMenu.h"
 
-MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window) 
+MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
 	: Scene(window)
 	, text(resourceManager.GetFont("../fonts/MilitaryPoster.ttf"), "PLAY", 48)
 {
-	std::string backgroundPath = "../sprites/bacgrounds/MainMenu_bg.png";
+	std::string backgroundPath = "../sprites/backgrounds/MainMenu_bg.png";
 	sf::IntRect backgroundArea({ 0, 0 }, { 1280, 720 });
 	sf::Texture& backgroundTexture = resourceManager.GetTexture(backgroundPath, false, backgroundArea);
 	background = new sf::Sprite(backgroundTexture);

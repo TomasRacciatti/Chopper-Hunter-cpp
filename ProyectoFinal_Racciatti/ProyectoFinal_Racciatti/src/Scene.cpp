@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene(sf::RenderWindow& window) 
-	: window(window)
+	: _window(window)
 {
 	wantsChange = false;
 }
