@@ -7,7 +7,7 @@ Game::Game()
 	, _sceneManager(_window, resourceManager)
 {
 	_window.setFramerateLimit(60);
-	_window.setView(_view);
+	_view = _window.getDefaultView();
 }
 Game::~Game() = default;
 
@@ -28,6 +28,7 @@ void Game::Run()
 				_window.close();
 				continue;
 			}
+
 			if (auto* scene = _sceneManager.Current())
 				scene->HandleEvents(*ev);
 		}
@@ -41,6 +42,7 @@ void Game::Run()
 			_window.setView(_view);
 
 			scene->Draw();
+			_window.display();
 		}
 		else
 		{
