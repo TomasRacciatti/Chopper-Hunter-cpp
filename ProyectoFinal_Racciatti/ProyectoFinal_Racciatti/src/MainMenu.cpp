@@ -10,12 +10,14 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
 	background = new sf::Sprite(backgroundTexture);
 
 	std::string buttonPath = "../sprites/UI/button.png";
-	sf::IntRect buttonArea({ 0, 0 }, { 361, 88 });
+	sf::IntRect buttonArea({ 0, 0 }, { 366, 159 });
 	sf::Texture& startButtonTexture = resourceManager.GetTexture(buttonPath, false, buttonArea);
 	startButton = new sf::Sprite(startButtonTexture);
 
 	startButton->setOrigin({ startButton->getTexture().getSize().x * 0.5f,
 							 startButton->getTexture().getSize().y * 0.5f });
+
+	startButton->setScale(sf::Vector2f(0.5f, 0.5f));
 
 	startButton->setPosition({ 1280 * 0.5f, 720 * 0.5f });
 
