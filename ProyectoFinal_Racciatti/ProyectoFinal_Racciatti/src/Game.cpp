@@ -41,6 +41,13 @@ void Game::Run()
 			_window.clear();
 			_window.setView(_view);
 
+			if (scene->GetWantsChange()) 
+			{
+				_sceneManager.SetScene(scene->GetNextSceneID());
+				scene = _sceneManager.Current();
+				continue;
+			}
+
 			scene->Draw();
 			_window.display();
 		}
