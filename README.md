@@ -1,4 +1,4 @@
-# 💥 Chopper Wrangler  
+# 💥 Chopper Hunter  
 
 _A personal project inspired by the classic **Heli Attack 2** by SquareCircleCo. Built to test and improve my C++ skills._  
 
