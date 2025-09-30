@@ -22,7 +22,7 @@ private:
 	ResourceManager& resourceManager;
 
 	// Pools
-	size_t poolCapacity = 128;
+	size_t poolCapacity = 64;
 	Pool<Bullet> _playerBulletPool{
 	  poolCapacity, [](Bullet& b) { b.SetRadius(4.f); b.SetColor(sf::Color(240,225,60)); b.SetOutline(1.f, sf::Color::Black); }
 	};

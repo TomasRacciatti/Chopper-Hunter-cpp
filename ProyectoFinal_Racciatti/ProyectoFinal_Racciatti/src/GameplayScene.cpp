@@ -46,10 +46,17 @@ void GameplayScene::Input()
 
 void GameplayScene::Update(float dt)
 {
-    if (_player) 
+    if (_player)
     {
         _player->SetInput(_playerInput);
         _player->Update(dt, _level);
+
+        if (!_player->IsAlive())
+        {
+            wantsChange = true;
+            nextSceneID = SceneID::MainMenu;
+            return;
+        }
     }
 
     if (_heli && _heli->IsAlive()) 
@@ -63,6 +70,7 @@ void GameplayScene::Update(float dt)
     {
         SpawnHelicopter();
     }
+
 
     // ===== Combat =====
     // Bullet Player a Helicopteros

@@ -37,14 +37,11 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 	}
 
 	// Reciclo el pool
-	for (auto& b : _pool->Items()) 
+	for (auto& bullet : _pool->Items()) 
 	{
-		if (!b.Alive()) 
-			continue;
-
-		b.Update(dt, lvl);
-		if (!b.Alive()) 
-			_pool->Despawn(&b);
+		bullet.Update(dt, lvl);
+		if (!bullet.Alive()) 
+			_pool->Despawn(&bullet);
 	}
 }
 

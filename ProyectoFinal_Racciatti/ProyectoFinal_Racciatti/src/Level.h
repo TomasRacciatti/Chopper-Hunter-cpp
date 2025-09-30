@@ -17,6 +17,13 @@ public:
 
     void Draw(sf::RenderTarget& rt) const;
 
+    sf::FloatRect Bounds() const
+    {
+        return sf::FloatRect(sf::Vector2f{ 0.f, 0.f },
+                             sf::Vector2f{ static_cast<float>(_windowSize.x),
+                                           static_cast<float>(_windowSize.y) });
+    }
+
     // Colisiones
     const std::vector<sf::FloatRect>& Colliders() const { return _colliders;  }
     const sf::FloatRect& FloorRect() const { return _floor; }

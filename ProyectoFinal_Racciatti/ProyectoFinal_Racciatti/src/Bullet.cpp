@@ -19,9 +19,16 @@ void Bullet::Update(float dt, const Level& lvl)
         return;
     }
 
+    // Destruccion en off screen
+    const auto myRect = _shape.getGlobalBounds();
+    auto bounds = lvl.Bounds();
+    if (!Utils::RectIntersects(myRect, bounds))
+    {
+        _alive = false;
+    }
+
     // "Destruir" en colision
     const auto& solids = lvl.Colliders();
-    const auto myRect = _shape.getGlobalBounds();
     for (const auto& coll : solids)
     {
         if (Utils::RectIntersects(myRect, coll))
