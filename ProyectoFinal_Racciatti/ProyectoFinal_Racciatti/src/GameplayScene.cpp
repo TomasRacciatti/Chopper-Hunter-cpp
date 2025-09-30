@@ -134,7 +134,7 @@ void GameplayScene::SpawnHelicopter()
 
     // Torreta
     auto turret = std::make_unique<Pistol>(
-        0.65f,     // cooldown
+        0.5f,     // cooldown
         350.f,    // bullet speed
         5.f,      // bullet life
         1,        // damage

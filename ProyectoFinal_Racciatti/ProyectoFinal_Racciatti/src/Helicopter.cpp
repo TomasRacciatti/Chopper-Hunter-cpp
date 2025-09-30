@@ -71,7 +71,7 @@ void Helicopter::EnterHover()
 {
     _state = State::Hover;
     _firing = true;
-    _hoverDuration = Utils::RandomFloat(1.f, 4.f);
+    _hoverDuration = Utils::RandomFloat(_minHoverDuration, _maxHoverDuration);
     _hoverTimer = 0.f;
     _bobTime = 0.f;
 }

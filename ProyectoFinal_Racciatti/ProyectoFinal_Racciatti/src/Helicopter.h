@@ -26,7 +26,7 @@ private:
 
 
     // ==== Movement ====
-    float _altitude = 120.f;     // Altura a la que va a estar
+    float _altitude = 160.f;     // Altura a la que va a estar
     float _minX = 32.f;          // Limites para el movimiento de lado a lado
     float _maxX = 0.f;
 
@@ -35,13 +35,15 @@ private:
     bool _entryTargetReady = false;
     
     // Patrol
-    float _minSpeed = 200.f;
-    float _maxSpeed = 300.f;
+    float _minSpeed = 250.f;
+    float _maxSpeed = 350.f;
     float _patrolSpeed = 250.f;
     float _patrolTargetX = 0.f; // Punto en ventana a donde se va a mover el heli
 
     // Hover
-    float _hoverDuration = 2.f; // Esto lo vamos a randomizar entre 1 y 4
+    float _minHoverDuration = 0.5f;
+    float _maxHoverDuration = 3.5f;
+    float _hoverDuration = 2.f; // Esto lo vamos a randomizar
     float _hoverTimer = 0.f;
     float _hoverHorizontalSpeed = 14.f;
     float _hoverBobSpeed = 2.4f;
