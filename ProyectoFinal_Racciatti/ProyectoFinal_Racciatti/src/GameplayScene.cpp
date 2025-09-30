@@ -122,14 +122,14 @@ void GameplayScene::SpawnHelicopter()
 {
     const auto win = _window.getSize();
 
-    constexpr float kOffX = 80.f;
-    const float minSpawnX = -kOffX;
-    const float maxSpawnX = static_cast<float>(win.x) + kOffX;
+    constexpr float offsetX = 80.f;
+    const float minSpawnX = -offsetX;
+    const float maxSpawnX = static_cast<float>(win.x) + offsetX;
 
-    constexpr float kMinOffY = 80.f;
-    constexpr float kMaxOffY = 220.f;
+    constexpr float minOffY = 80.f;
+    constexpr float maxOffY = 220.f;
     const float spawnX = Utils::RandomFloat(minSpawnX, maxSpawnX);
-    const float spawnY = -Utils::RandomFloat(kMinOffY, kMaxOffY);
+    const float spawnY = -Utils::RandomFloat(minOffY, maxOffY);
     sf::Vector2f heliSpawn{ spawnX, spawnY };
 
     // Torreta
