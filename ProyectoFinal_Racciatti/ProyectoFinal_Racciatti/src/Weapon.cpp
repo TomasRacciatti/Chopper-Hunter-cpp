@@ -25,6 +25,10 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 	// Rotar el visual
 	_sprite->setPosition(origin);
 	_sprite->setRotation(sf::degrees(_angleDeg));
+
+	// Flip
+	const float spriteScale = _baseScale;
+	_sprite->setScale({ spriteScale, (dir.x < 0.f ? -spriteScale : spriteScale) });
 	
 	// Disparo
 	_timer -= dt;

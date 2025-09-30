@@ -31,7 +31,8 @@ public:
 	{
 		_sprite = std::make_unique<sf::Sprite>(tex);
 		_sprite->setOrigin(originPx);
-		_sprite->setScale({ spriteScale, spriteScale });
+		_baseScale = spriteScale;
+		_sprite->setScale({ _baseScale, _baseScale });
 	}
 	void SetMuzzleDistance(float d) { _muzzleDistance = d; }
 
@@ -55,6 +56,7 @@ private:
 	float _cooldown; // (Fire rate)
 	float _timer = 0.f;
 	
+	float _baseScale = 1.f;
 
 	Pool<Bullet>* _pool = nullptr;
 };
