@@ -157,23 +157,23 @@ void MainMenu::Draw()
 
 void MainMenu::HandleEvents(const sf::Event& ev)
 {
+	if (_options->IsOpen())
+	{
+		_options->HandleEvent(ev);
+		if (_options->BackRequested())
+		{
+			_options->ClearBackRequest();
+			_options->Close();
+		}
+		return;
+	}
+	
 	if (const auto* mouse = ev.getIf<sf::Event::MouseButtonPressed>())
 	{
 		if (mouse->button == sf::Mouse::Button::Left)
 		{
 			sf::Vector2i pixelPos = sf::Mouse::getPosition(_window);
 			sf::Vector2f worldPos = _window.mapPixelToCoords(pixelPos);
-
-			if (_options->IsOpen())
-			{
-				_options->HandleEvent(ev);
-				if (_options->BackRequested()) 
-				{
-					_options->ClearBackRequest();
-					_options->Close();
-				}
-				return;
-			}
 
 			if (startButton->getGlobalBounds().contains(worldPos))
 			{
