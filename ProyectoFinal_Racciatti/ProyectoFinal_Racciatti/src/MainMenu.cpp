@@ -1,8 +1,9 @@
 #include "MainMenu.h"
 #include "OptionsPanel.h"
 
-MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
+MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
 	: Scene(window)
+	, _audio(audio)
 	, text(resourceManager.GetFont("../fonts/MilitaryPoster.ttf"), "PLAY", 48)
 {
 	// BG
@@ -77,8 +78,8 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
 
 	// =============== Opciones =========================
 	
-	_options = new OptionsPanel(resourceManager, _window);
-	_options->SetVolume(100.f);
+	_options = new OptionsPanel(resourceManager, _window, _audio);
+	_options->SetVolume(_audio.master);
 
 	// ============== Music ===================
 	std::string musicPath = "../audio/music/MainMenuTheme.mp3";
@@ -86,7 +87,7 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
 	music.openFromFile(musicPath);
 
 	music.setLooping(true);
-	music.setVolume(100);
+	music.setVolume(_audio.master);
 	music.play();
 }
 

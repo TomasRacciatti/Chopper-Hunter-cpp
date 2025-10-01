@@ -1,7 +1,8 @@
 #include "OptionsPanel.h"
 
-OptionsPanel::OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& window)
+OptionsPanel::OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
     : _window(window)
+    , _audio (audio)
     , text(resourceManager.GetFont("../fonts/MilitaryPoster.ttf"), "VOLUME", 48)
 {
     // BG
@@ -66,14 +67,14 @@ OptionsPanel::OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& w
     _track->setFillColor(sf::Color(60, 60, 60));
 
     // Fill
-    _fill->setSize(sf::Vector2f(trackW * (_volume / 100.f), trackH));
+    _fill->setSize(sf::Vector2f(trackW * (_audio.master / 100.f), trackH));
     _fill->setPosition(trackPos);
     _fill->setFillColor(textColor);
 
     // Knob
     _knob->setRadius(14.f);
     _knob->setOrigin(sf::Vector2f(14.f, 14.f));
-    const float knobX = trackPos.x + trackW * (_volume / 100.f);
+    const float knobX = trackPos.x + trackW * (_audio.master / 100.f);
     const float knobY = trackPos.y + trackH * 0.5f;
     _knob->setPosition(sf::Vector2f(knobX, knobY));
     _knob->setFillColor(sf::Color(235, 235, 90));
@@ -99,22 +100,9 @@ void OptionsPanel::SetVolume(float value)
     if (value < 0.f)   value = 0.f;
     if (value > 100.f) value = 100.f;
 
-    _volume = value;
-    const float fillValue = _volume / 100.f;
-
-    // visual
-    _fill->setSize({ _trackRect.size.x * fillValue, _trackRect.size.y });
-    const float knobPos = _trackRect.position.x + _trackRect.size.x * fillValue;
-    _knob->setPosition({ knobPos, _knob->getPosition().y });
-
-    if (_value) 
-    {
-        _value->setString(std::to_string(static_cast<int>(_volume + 0.5f)));
-        CenterText(_value);
-        _value->setPosition({
-            _window.getSize().x * 0.5f + 75.f,
-            _window.getSize().y * 0.5f - _spacingY * 0.8f });
-    }
+    _audio.master = value;
+    
+    UpdateVisualSlider();
 }
 
 void OptionsPanel::HandleEvent(const sf::Event& ev)
@@ -216,4 +204,22 @@ void OptionsPanel::SetVolumeFromX(float worldX)
 
     const float t = (worldX - x0) / (x1 - x0);
     OptionsPanel::SetVolume(t * 100.f);
+}
+
+void OptionsPanel::UpdateVisualSlider()
+{
+    const float fillValue = _audio.master / 100.f;
+    
+    _fill->setSize({ _trackRect.size.x * fillValue, _trackRect.size.y });
+    const float knobPos = _trackRect.position.x + _trackRect.size.x * fillValue;
+    _knob->setPosition({ knobPos, _knob->getPosition().y });
+
+    if (_value)
+    {
+        _value->setString(std::to_string(static_cast<int>(_audio.master + 0.5f)));
+        CenterText(_value);
+        _value->setPosition({
+            _window.getSize().x * 0.5f + 75.f,
+            _window.getSize().y * 0.5f - _spacingY * 0.8f });
+    }
 }

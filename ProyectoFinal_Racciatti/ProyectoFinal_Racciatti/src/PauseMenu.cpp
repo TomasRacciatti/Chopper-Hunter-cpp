@@ -2,8 +2,9 @@
 
 #include "PauseMenu.h"
 
-PauseMenu::PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
+PauseMenu::PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
     : _window(window)
+    , _audio(audio)
     , text(resourceManager.GetFont("../fonts/MilitaryPoster.ttf"), "PAUSED", 48)
 {
     // Font data
@@ -47,7 +48,7 @@ PauseMenu::PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
     _toMenuTxt->setPosition({ center.x, center.y + _spacingY * 2.0f });
 
     // Reuso de OptionsPanel
-    _optionsPanel = new OptionsPanel(resourceManager, _window);
+    _optionsPanel = new OptionsPanel(resourceManager, _window, _audio);
     _optionsPanel->SetVolume(_optionsPanel->GetVolume());
 }
 
@@ -112,11 +113,12 @@ void PauseMenu::Draw(sf::RenderTarget& rt) const
 {
     if (!_open) return;
 
-    if (_panel)    rt.draw(*_panel);
-    if (_titleTxt) rt.draw(*_titleTxt);
+    if (_panel)    
+        rt.draw(*_panel);
 
     if (!_optionsPanel || !_optionsPanel->IsOpen())
     {
+        if (_titleTxt) rt.draw(*_titleTxt);
         if (_resumeTxt) rt.draw(*_resumeTxt);
         if (_optionsTxt) rt.draw(*_optionsTxt);
         if (_toMenuTxt) rt.draw(*_toMenuTxt);

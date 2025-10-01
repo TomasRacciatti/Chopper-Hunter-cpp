@@ -1,11 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
+#include "AudioSettings.h"
 
 class OptionsPanel
 {
 public:
-    OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& win);
+    OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& win, AudioSettings& audio);
     ~OptionsPanel();
 
     void Open() { _open = true; }
@@ -20,7 +21,7 @@ public:
     bool BackRequested() const { return _backRequested; }
     void ClearBackRequest() { _backRequested = false; }
 
-    float GetVolume() const { return _volume; }
+    float GetVolume() const { return _audio.master; }
     void  SetVolume(float value);
 
 private:
@@ -45,7 +46,8 @@ private:
     bool  _open = false;
     bool  _backRequested = false;
     bool  _dragging = false;
-    float _volume = 100.f;
+    
+    AudioSettings& _audio;
 
     float _buttonScale = 0.5f;
     float _spacingY = 100.f;
@@ -54,5 +56,7 @@ private:
     void CenterSprite(sf::Sprite* sprite) const;
     void CenterText(sf::Text* text) const;
     void SetVolumeFromX(float worldX);
+
+    void UpdateVisualSlider();
 };
 

@@ -193,6 +193,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClCompile Include="src\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AudioSettings.h" />
     <ClInclude Include="src\Bullet.h" />
     <ClInclude Include="src\Combat.h" />
     <ClInclude Include="src\Entity.h" />

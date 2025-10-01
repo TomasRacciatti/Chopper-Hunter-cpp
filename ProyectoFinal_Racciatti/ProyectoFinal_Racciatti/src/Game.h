@@ -16,6 +16,8 @@ private:
 	// Resources
 	ResourceManager resourceManager;
 
+	AudioSettings audio;
+
 	// Window
 	sf::RenderWindow _window;
 	sf::View _view;

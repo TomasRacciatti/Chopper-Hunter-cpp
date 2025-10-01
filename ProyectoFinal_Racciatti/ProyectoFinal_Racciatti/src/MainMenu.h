@@ -9,7 +9,7 @@ class OptionsPanel;
 class MainMenu : public Scene
 {
 public:
-	MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window);
+	MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio);
 	~MainMenu() override;
 
 	void Input() override;
@@ -20,6 +20,7 @@ public:
 
 private:
 	sf::Music music;
+	AudioSettings& _audio;
 
 	sf::Text text;
 

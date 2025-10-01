@@ -4,7 +4,8 @@
 
 Game::Game()
 	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
-	, _sceneManager(_window, resourceManager)
+	, audio()
+	, _sceneManager(_window, resourceManager, audio)
 {
 	_window.setFramerateLimit(60);
 	_view = _window.getDefaultView();

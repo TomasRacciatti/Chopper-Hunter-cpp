@@ -3,15 +3,16 @@
 
 static constexpr const char* bgPath = "../sprites/backgrounds/Game_bg.png";
 
-GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow& _window)
+GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow& _window, AudioSettings& audio)
     : Scene(_window)
     , resourceManager(resourceManager)
+    , _audio(audio)
     , _level(_window.getSize(), resourceManager, bgPath)
 {
     CreatePlayer();
     SpawnHelicopter();
 
-    _pause = new PauseMenu(resourceManager, _window);
+    _pause = new PauseMenu(resourceManager, _window, _audio);
 
     // ============== Music ===================
     std::string musicPath = "../audio/music/GameplayMusic.mp3";
@@ -19,7 +20,7 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
     music.openFromFile(musicPath);
 
     music.setLooping(true);
-    //music.setVolume(_optionsPanel->GetVolume());
+    music.setVolume(_audio.master);
     music.play();
 }
 

@@ -2,11 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
 #include "OptionsPanel.h"
+#include "AudioSettings.h"
 
 class PauseMenu
 {
 public:
-    PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window);
+    PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio);
     ~PauseMenu();
 
     void Open() { _open = true; }
@@ -22,6 +23,8 @@ public:
     void ClearRequests() { _resumeRequested = false; _menuRequested = false; }
 
 private:
+    AudioSettings& _audio;
+    
     sf::RenderWindow& _window;
 
     sf::Text text;

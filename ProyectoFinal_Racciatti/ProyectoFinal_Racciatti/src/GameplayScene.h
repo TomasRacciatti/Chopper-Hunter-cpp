@@ -11,7 +11,7 @@
 class GameplayScene : public Scene
 {
 public:
-	GameplayScene(ResourceManager& resource, sf::RenderWindow& window);
+	GameplayScene(ResourceManager& resource, sf::RenderWindow& window, AudioSettings& audio);
 	~GameplayScene() override;
 
 	void HandleEvents(const sf::Event& ev) override;
@@ -45,6 +45,7 @@ private:
 
 	// Audio
 	sf::Music music;
+	AudioSettings& _audio;
 
 	// helpers
 	void CreatePlayer();
