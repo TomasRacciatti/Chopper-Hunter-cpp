@@ -33,6 +33,24 @@ private:
 	sf::Sprite* creditsButton;
 	sf::Sprite* exitButton;
 
+	// Options
+	bool _optionsOpen = false;
+
+	sf::Sprite* backButton = nullptr;
+	sf::Text * backText = nullptr;
+
+	sf::Text* volumeLabel = nullptr;
+	sf::Text* volumeValue = nullptr;
+	sf::RectangleShape * sliderTrack = nullptr;
+	sf::RectangleShape * sliderFill = nullptr;
+	sf::CircleShape * sliderKnob = nullptr;
+	bool _draggingKnob = false;
+	float _volume = 100.f;
+	sf::FloatRect _sliderRect;
+
+	// Credits
+	bool _creditsOpen = false;
+
 	// Helpers
 	static void CenterSprite(sf::Sprite* sprite);
 	static void CenterText(sf::Text* text);
