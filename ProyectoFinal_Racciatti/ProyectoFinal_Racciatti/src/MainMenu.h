@@ -41,9 +41,9 @@ private:
 
 	sf::Text* volumeLabel = nullptr;
 	sf::Text* volumeValue = nullptr;
-	sf::RectangleShape * sliderTrack = nullptr;
-	sf::RectangleShape * sliderFill = nullptr;
-	sf::CircleShape * sliderKnob = nullptr;
+	sf::RectangleShape* sliderTrack = nullptr;
+	sf::RectangleShape* sliderFill = nullptr;
+	sf::CircleShape* sliderKnob = nullptr;
 	bool _draggingKnob = false;
 	float _volume = 100.f;
 	sf::FloatRect _sliderRect;

@@ -312,7 +312,7 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 			}
 		}
 	}
-	else if (const auto* mouseUp = ev.getIf<sf::Event::MouseButtonReleased>()) // [ADDED]
+	else if (const auto* mouseUp = ev.getIf<sf::Event::MouseButtonReleased>())
 	{
 		if (mouseUp->button == sf::Mouse::Button::Left)
 		{
