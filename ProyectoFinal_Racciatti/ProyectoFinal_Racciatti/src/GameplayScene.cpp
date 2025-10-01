@@ -20,7 +20,7 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
     music.openFromFile(musicPath);
 
     music.setLooping(true);
-    music.setVolume(_audio.master * _audio.music / 100.f);
+    music.setVolume(_audio.GetMusicVolume());
     music.play();
 }
 
@@ -80,7 +80,7 @@ void GameplayScene::Update(float dt)
     if (music.getStatus() == sf::SoundSource::Status::Stopped)
         music.play();
 
-    music.setVolume(_audio.master);
+    music.setVolume(_audio.GetMusicVolume());
 
 
     // Pause

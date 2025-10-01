@@ -67,14 +67,14 @@ OptionsPanel::OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& w
     _track->setFillColor(sf::Color(60, 60, 60));
 
     // Fill
-    _fill->setSize(sf::Vector2f(trackW * (_audio.master / 100.f), trackH));
+    _fill->setSize(sf::Vector2f(trackW * (_audio.GetMasterVolume() / 100.f), trackH));
     _fill->setPosition(trackPos);
     _fill->setFillColor(textColor);
 
     // Knob
     _knob->setRadius(14.f);
     _knob->setOrigin(sf::Vector2f(14.f, 14.f));
-    const float knobX = trackPos.x + trackW * (_audio.master / 100.f);
+    const float knobX = trackPos.x + trackW * (_audio.GetMasterVolume() / 100.f);
     const float knobY = trackPos.y + trackH * 0.5f;
     _knob->setPosition(sf::Vector2f(knobX, knobY));
     _knob->setFillColor(sf::Color(235, 235, 90));
@@ -100,7 +100,7 @@ void OptionsPanel::SetVolume(float value)
     if (value < 0.f)   value = 0.f;
     if (value > 100.f) value = 100.f;
 
-    _audio.master = value;
+    _audio.SetMasterVolume(value);
     
     UpdateVisualSlider();
 }
@@ -208,7 +208,7 @@ void OptionsPanel::SetVolumeFromX(float worldX)
 
 void OptionsPanel::UpdateVisualSlider()
 {
-    const float fillValue = _audio.master / 100.f;
+    const float fillValue = _audio.GetMasterVolume() / 100.f;
     
     _fill->setSize({ _trackRect.size.x * fillValue, _trackRect.size.y });
     const float knobPos = _trackRect.position.x + _trackRect.size.x * fillValue;
@@ -216,7 +216,7 @@ void OptionsPanel::UpdateVisualSlider()
 
     if (_value)
     {
-        _value->setString(std::to_string(static_cast<int>(_audio.master + 0.5f)));
+        _value->setString(std::to_string(static_cast<int>(_audio.GetMasterVolume() + 0.5f)));
         CenterText(_value);
         _value->setPosition({
             _window.getSize().x * 0.5f + 75.f,

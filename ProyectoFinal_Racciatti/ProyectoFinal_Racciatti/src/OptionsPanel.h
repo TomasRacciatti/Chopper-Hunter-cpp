@@ -21,7 +21,7 @@ public:
     bool BackRequested() const { return _backRequested; }
     void ClearBackRequest() { _backRequested = false; }
 
-    float GetVolume() const { return _audio.master; }
+    float GetVolume() const { return _audio.GetMasterVolume(); }
     void  SetVolume(float value);
 
 private:

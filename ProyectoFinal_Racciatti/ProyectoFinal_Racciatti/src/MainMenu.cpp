@@ -79,7 +79,7 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	// =============== Opciones =========================
 	
 	_options = new OptionsPanel(resourceManager, _window, _audio);
-	_options->SetVolume(_audio.master);
+	_options->SetVolume(_audio.GetMusicVolume());
 
 	// ============== Music ===================
 	std::string musicPath = "../audio/music/MainMenuTheme.mp3";
@@ -87,7 +87,7 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	music.openFromFile(musicPath);
 
 	music.setLooping(true);
-	music.setVolume(_audio.master);
+	music.setVolume(_audio.GetMusicVolume());
 	music.play();
 }
 
