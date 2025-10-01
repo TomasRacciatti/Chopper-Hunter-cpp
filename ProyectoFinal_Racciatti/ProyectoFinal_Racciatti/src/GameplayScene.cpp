@@ -76,6 +76,35 @@ void GameplayScene::Input()
 
 void GameplayScene::Update(float dt)
 {
+    // === Musica ===
+    if (music.getStatus() == sf::SoundSource::Status::Stopped)
+        music.play();
+
+    music.setVolume(_audio.master);
+
+
+    // Pause
+    if (_pause && _pause->IsOpen())
+    {
+        _pause->Update(dt);
+
+        if (_pause->ResumeRequested())
+        {
+            _pause->ClearRequests();
+            _pause->Close();
+        }
+
+        if (_pause->MainMenuRequested())
+        {
+            _pause->ClearRequests();
+            wantsChange = true;
+            nextSceneID = SceneID::MainMenu;
+        }
+
+        return;
+    }
+
+
     if (_player)
     {
         _player->SetInput(_playerInput);
@@ -110,32 +139,6 @@ void GameplayScene::Update(float dt)
     // Bullet de Helis le pegan al Player
     if (_player && _player->IsAlive())
         Combat::ResolveHits(_enemyBulletPool, _player.get());
-
-    // === Musica ===
-    if (music.getStatus() == sf::SoundSource::Status::Stopped)
-        music.play();
-
-
-    // Pause
-    if (_pause && _pause->IsOpen())
-    {
-        _pause->Update(dt);
-
-        if (_pause->ResumeRequested())
-        {
-            _pause->ClearRequests();
-            _pause->Close();
-        }
-
-        if (_pause->MainMenuRequested())
-        {
-            _pause->ClearRequests();
-            wantsChange = true;
-            nextSceneID = SceneID::MainMenu;
-        }
-
-        return;
-    }
 }
 
 void GameplayScene::Draw()

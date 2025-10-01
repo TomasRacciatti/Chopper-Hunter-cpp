@@ -17,7 +17,7 @@ PauseMenu::PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window,
 
     // Overlay
     _panel = new sf::RectangleShape();
-    const sf::Vector2f panelSize(winSize.x * 0.85f, winSize.y * 0.6f);
+    const sf::Vector2f panelSize(winSize.x * 0.6f, winSize.y * 0.85f);
     _panel->setSize(panelSize);
     _panel->setFillColor(sf::Color(0, 0, 0, 180));
     _panel->setOutlineThickness(2.f);
@@ -105,8 +105,10 @@ void PauseMenu::HandleEvent(const sf::Event& ev)
 void PauseMenu::Update(float dt)
 {
     if (!_open) return;
-    if (_optionsPanel) 
+    if (_optionsPanel)
+    {
         _optionsPanel->Update(dt);
+    }
 }
 
 void PauseMenu::Draw(sf::RenderTarget& rt) const
