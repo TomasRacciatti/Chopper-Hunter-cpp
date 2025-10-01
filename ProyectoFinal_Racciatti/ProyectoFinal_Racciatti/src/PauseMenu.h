@@ -44,6 +44,6 @@ private:
     float _spacingY = 100.f;
 
     // Helper
-    void CenterText(sf::Text* t) const;
+    void CenterText(sf::Text* text) const;
 };
 

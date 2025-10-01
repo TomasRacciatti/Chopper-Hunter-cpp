@@ -10,9 +10,23 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
 {
     CreatePlayer();
     SpawnHelicopter();
+
+    _pause = new PauseMenu(resourceManager, _window);
+
+    // ============== Music ===================
+    std::string musicPath = "../audio/music/GameplayMusic.mp3";
+
+    music.openFromFile(musicPath);
+
+    music.setLooping(true);
+    //music.setVolume(_optionsPanel->GetVolume());
+    music.play();
 }
 
-GameplayScene::~GameplayScene() = default;
+GameplayScene::~GameplayScene()
+{
+    delete _pause;
+}
 
 void GameplayScene::HandleEvents(const sf::Event& ev)
 {
@@ -21,6 +35,15 @@ void GameplayScene::HandleEvents(const sf::Event& ev)
         if (key->scancode == sf::Keyboard::Scancode::A) _playerInput.left = true;
         if (key->scancode == sf::Keyboard::Scancode::D) _playerInput.right = true;
         if (key->scancode == sf::Keyboard::Scancode::S) _playerInput.crouch = true;
+
+        if (key->scancode == sf::Keyboard::Scancode::Escape)
+        {
+            if (_pause && _pause->IsOpen()) 
+                _pause->Close();
+            else if (_pause)                 
+                _pause->Open();
+            return;
+        }
     }
     else if (ev.is<sf::Event::KeyReleased>()) {
         auto key = ev.getIf<sf::Event::KeyReleased>();
@@ -35,6 +58,12 @@ void GameplayScene::HandleEvents(const sf::Event& ev)
     else if (ev.is<sf::Event::MouseButtonReleased>()) {
         auto mouse = ev.getIf<sf::Event::MouseButtonReleased>();
         if (mouse->button == sf::Mouse::Button::Left) _playerInput.fireHeld = false;
+    }
+
+    if (_pause && _pause->IsOpen())
+    {
+        _pause->HandleEvent(ev);
+        return;
     }
 }
 
@@ -80,6 +109,32 @@ void GameplayScene::Update(float dt)
     // Bullet de Helis le pegan al Player
     if (_player && _player->IsAlive())
         Combat::ResolveHits(_enemyBulletPool, _player.get());
+
+    // === Musica ===
+    if (music.getStatus() == sf::SoundSource::Status::Stopped)
+        music.play();
+
+
+    // Pause
+    if (_pause && _pause->IsOpen())
+    {
+        _pause->Update(dt);
+
+        if (_pause->ResumeRequested())
+        {
+            _pause->ClearRequests();
+            _pause->Close();
+        }
+
+        if (_pause->MainMenuRequested())
+        {
+            _pause->ClearRequests();
+            wantsChange = true;
+            nextSceneID = SceneID::MainMenu;
+        }
+
+        return;
+    }
 }
 
 void GameplayScene::Draw()
@@ -87,6 +142,11 @@ void GameplayScene::Draw()
     _level.Draw(_window);
     if (_player) _player->Draw(_window);
     if (_heli)   _heli->Draw(_window);
+
+    if (_pause && _pause->IsOpen())
+    {
+        _pause->Draw(_window);
+    }
 }
 
 

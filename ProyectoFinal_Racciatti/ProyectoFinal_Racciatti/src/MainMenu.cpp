@@ -86,7 +86,7 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
 	music.openFromFile(musicPath);
 
 	music.setLooping(true);
-	music.setVolume(50);
+	music.setVolume(100);
 	music.play();
 }
 
@@ -118,7 +118,8 @@ void MainMenu::Update(float dt)
 	if (music.getStatus() == sf::SoundSource::Status::Stopped)
 		music.play();
 
-	if (_options) {
+	if (_options) 
+	{
 		_options->Update(dt);
 		music.setVolume(_options->GetVolume());
 	}

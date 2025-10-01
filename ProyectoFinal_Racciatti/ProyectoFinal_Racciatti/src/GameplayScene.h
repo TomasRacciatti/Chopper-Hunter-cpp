@@ -6,6 +6,7 @@
 #include "Helicopter.h"
 #include "Pistol.h"
 #include "Combat.h"
+#include "PauseMenu.h"
 
 class GameplayScene : public Scene
 {
@@ -37,6 +38,13 @@ private:
 
 	// Input
 	Player::Input _playerInput{};
+
+	// Pause
+	PauseMenu* _pause = nullptr;
+	bool _wasPaused = false;
+
+	// Audio
+	sf::Music music;
 
 	// helpers
 	void CreatePlayer();
