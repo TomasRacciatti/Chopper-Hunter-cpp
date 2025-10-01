@@ -4,6 +4,8 @@
 #include "ResourceManager.h"
 #include <vector>
 
+class OptionsPanel;
+
 class MainMenu : public Scene
 {
 public:
@@ -34,19 +36,7 @@ private:
 	sf::Sprite* exitButton;
 
 	// Options
-	bool _optionsOpen = false;
-
-	sf::Sprite* backButton = nullptr;
-	sf::Text * backText = nullptr;
-
-	sf::Text* volumeLabel = nullptr;
-	sf::Text* volumeValue = nullptr;
-	sf::RectangleShape* sliderTrack = nullptr;
-	sf::RectangleShape* sliderFill = nullptr;
-	sf::CircleShape* sliderKnob = nullptr;
-	bool _draggingKnob = false;
-	float _volume = 100.f;
-	sf::FloatRect _sliderRect;
+	OptionsPanel* _options = nullptr;
 
 	// Credits
 	bool _creditsOpen = false;

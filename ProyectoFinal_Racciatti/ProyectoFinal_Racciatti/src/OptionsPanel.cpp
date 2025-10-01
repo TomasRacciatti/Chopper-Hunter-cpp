@@ -25,7 +25,7 @@ OptionsPanel::OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& w
     const sf::Vector2f center(winSize.x * 0.5f, winSize.y * 0.5f);
 
     // Title
-    _title = new sf::Text(font, "OPTIONS", 64); // Analizar si dejar options o el titulo del juego
+    _title = new sf::Text(font, "OPTIONS", 100); // Analizar si dejar options o el titulo del juego
     _title->setFillColor(textColor);
     CenterText(_title);
     _title->setPosition({ center.x, center.y - _spacingY * 2.f });

@@ -1,4 +1,5 @@
 #include "MainMenu.h"
+#include "OptionsPanel.h"
 
 MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
 	: Scene(window)
@@ -75,55 +76,9 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window)
 
 
 	// =============== Opciones =========================
-	// Back button
-	backButton = new sf::Sprite(btnTex);
-	CenterSprite(backButton);
-	backButton->setScale(sf::Vector2f(buttonScale * 0.9f, buttonScale * 0.9f));
-	backButton->setPosition({ center.x, center.y + spacingY * 2.5f });
 	
-	backText = new sf::Text(font, "BACK", 48);
-	backText->setFillColor(textColor);
-	CenterText(backText);
-	backText->setPosition(backButton->getPosition());
-
-	// Volume label y value
-	volumeLabel = new sf::Text(font, "VOLUME", 48);
-	volumeLabel->setFillColor(textColor);
-	CenterText(volumeLabel);
-	volumeLabel->setPosition({ center.x - 25.f, center.y - spacingY * 0.8f });
-	
-	volumeValue = new sf::Text(font, "100", 42);
-	volumeValue->setFillColor(textColor);
-	CenterText(volumeValue);
-	volumeValue->setPosition({ center.x + 75.f, center.y - spacingY * 0.8f });
-
-	// ---- Slider ----
-	sliderTrack = new sf::RectangleShape();
-	sliderFill = new sf::RectangleShape();
-	sliderKnob = new sf::CircleShape();
-
-	// Track
-	const float trackW = 420.f;
-	const float trackH = 16.f;
-	const sf::Vector2f trackPos(center.x - trackW * 0.5f, center.y - spacingY * 0.1f);
-	sliderTrack->setSize(sf::Vector2f(trackW, trackH));
-	sliderTrack->setPosition(trackPos);
-	sliderTrack->setFillColor(sf::Color(60, 60, 60));
-
-	// Fill
-	sliderFill->setSize(sf::Vector2f(trackW * (_volume / 100.f), trackH));
-	sliderFill->setPosition(trackPos);
-	sliderFill->setFillColor(textColor);
-
-	// Knob
-	sliderKnob->setRadius(14.f);
-	sliderKnob->setOrigin(sf::Vector2f(14.f, 14.f));
-	const float knobX = trackPos.x + trackW * (_volume / 100.f);
-	const float knobY = trackPos.y + trackH * 0.5f;
-	sliderKnob->setPosition(sf::Vector2f(knobX, knobY));
-	sliderKnob->setFillColor(sf::Color(235, 235, 90));
-
-	_sliderRect = sf::FloatRect(sliderTrack->getPosition(),sliderTrack->getSize());
+	_options = new OptionsPanel(resourceManager, _window);
+	_options->SetVolume(100.f);
 
 	// ============== Music ===================
 	std::string musicPath = "../audio/music/MainMenuTheme.mp3";
@@ -149,13 +104,7 @@ MainMenu::~MainMenu()
 	delete exitButton;
 
 	// Options
-	delete backButton;
-	delete backText;
-	delete volumeLabel;
-	delete volumeValue;
-	delete sliderTrack;
-	delete sliderFill;
-	delete sliderKnob;
+	delete _options;
 }
 
 void MainMenu::Input()
@@ -169,25 +118,21 @@ void MainMenu::Update(float dt)
 	if (music.getStatus() == sf::SoundSource::Status::Stopped)
 		music.play();
 
-	music.setVolume(_volume);
+	if (_options) {
+		_options->Update(dt);
+		music.setVolume(_options->GetVolume());
+	}
 }
 
 void MainMenu::Draw()
 {
 	_window.draw(*background);
 
-	_window.draw(*titleText);
+	
 
-	if (_optionsOpen)
+	if (_options->IsOpen())
 	{
-		_window.draw(*volumeLabel);
-		_window.draw(*sliderTrack);
-		_window.draw(*sliderFill);
-		_window.draw(*sliderKnob);
-		_window.draw(*backButton);
-		_window.draw(*backText);
-		if (volumeValue)
-			_window.draw(*volumeValue);
+		_options->Draw(_window);
 	}
 	else if (_creditsOpen)
 	{
@@ -195,6 +140,8 @@ void MainMenu::Draw()
 	}
 	else
 	{
+		_window.draw(*titleText);
+
 		_window.draw(*startButton);
 		_window.draw(*optionsButton);
 		_window.draw(*creditsButton);
@@ -217,44 +164,13 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 			sf::Vector2i pixelPos = sf::Mouse::getPosition(_window);
 			sf::Vector2f worldPos = _window.mapPixelToCoords(pixelPos);
 
-			if (_optionsOpen)
+			if (_options->IsOpen())
 			{
-				const bool onTrack =
-					worldPos.x >= _sliderRect.position.x &&
-					worldPos.x <= _sliderRect.position.x + _sliderRect.size.x &&
-					worldPos.y >= _sliderRect.position.y - 10.f &&
-					worldPos.y <= _sliderRect.position.y + _sliderRect.size.y + 10.f;
-
-				const bool onKnob = sliderKnob->getGlobalBounds().contains(worldPos);
-
-				// Back
-				if (backButton->getGlobalBounds().contains(worldPos))
+				_options->HandleEvent(ev);
+				if (_options->BackRequested()) 
 				{
-					_optionsOpen = false;
-					_draggingKnob = false;
-					return;
-				}
-
-				if (onKnob || onTrack)
-				{
-					_draggingKnob = true;
-
-					const float x0 = _sliderRect.position.x;
-					const float x1 = _sliderRect.position.x + _sliderRect.size.x;
-					float clampedX = std::max(x0, std::min(worldPos.x, x1));
-					float t = (clampedX - x0) / (x1 - x0); 
-					_volume = t * 100.f;
-					sliderFill->setSize(sf::Vector2f(_sliderRect.size.x * t, _sliderRect.size.y));
-					sliderKnob->setPosition(sf::Vector2f(clampedX, sliderKnob->getPosition().y));
-					if (volumeValue)
-					{
-						int val = static_cast<int>(_volume + 0.5f);
-						volumeValue->setString(std::to_string(val));
-						CenterText(volumeValue);
-						volumeValue->setPosition({
-									_window.getSize().x * 0.5f + 75.f,
-									_window.getSize().y * 0.5f - spacingY * 0.8f});
-					}
+					_options->ClearBackRequest();
+					_options->Close();
 				}
 				return;
 			}
@@ -269,7 +185,7 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 
 			if (optionsButton->getGlobalBounds().contains(worldPos))
 			{
-				_optionsOpen = true;
+				_options->Open();
 				return;
 			}
 
@@ -284,39 +200,6 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 				_window.close();
 				return;
 			}
-		}
-	}
-	else if (const auto* mouseMove = ev.getIf<sf::Event::MouseMoved>())
-	{
-		if (_optionsOpen && _draggingKnob)
-		{
-			// Slider se cambia con drag
-			sf::Vector2f world = _window.mapPixelToCoords(sf::Mouse::getPosition(_window));
-			const float x0 = _sliderRect.position.x;
-			const float x1 = _sliderRect.position.x + _sliderRect.size.x;
-			float clampedX = std::max(x0, std::min(world.x, x1));
-			float t = (clampedX - x0) / (x1 - x0); 
-			_volume = t * 100.f;
-
-			// Modificamos los visuales
-			sliderFill->setSize(sf::Vector2f(_sliderRect.size.x * t, _sliderRect.size.y));
-			sliderKnob->setPosition(sf::Vector2f(clampedX, sliderKnob->getPosition().y));
-			if (volumeValue) 
-			{
-				int val = static_cast<int>(_volume + 0.5f);
-				volumeValue->setString(std::to_string(val));
-				CenterText(volumeValue);
-				volumeValue->setPosition({ 
-										_window.getSize().x * 0.5f + 75.f,
-										_window.getSize().y * 0.5f - spacingY * 0.8f });
-			}
-		}
-	}
-	else if (const auto* mouseUp = ev.getIf<sf::Event::MouseButtonReleased>())
-	{
-		if (mouseUp->button == sf::Mouse::Button::Left)
-		{
-			_draggingKnob = false;
 		}
 	}
 }
