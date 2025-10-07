@@ -5,6 +5,7 @@
 #include <vector>
 
 class OptionsPanel;
+class CreditsPanel;
 
 class MainMenu : public Scene
 {
@@ -36,8 +37,9 @@ private:
 	sf::Sprite* creditsButton;
 	sf::Sprite* exitButton;
 
-	// Options
+	// Panels
 	OptionsPanel* _options = nullptr;
+	CreditsPanel* _credits = nullptr;
 
 	// Credits
 	bool _creditsOpen = false;

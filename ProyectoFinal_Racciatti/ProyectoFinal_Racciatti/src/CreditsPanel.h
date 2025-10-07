@@ -13,7 +13,6 @@ public:
     bool IsOpen() const { return _open; }
 
     void HandleEvent(const sf::Event& ev);
-    void Update(float dt);
     void Draw(sf::RenderTarget& rt) const;
 
     bool BackRequested() const { return _backRequested; }
@@ -28,7 +27,7 @@ private:
     sf::Text* _bodyTxt = nullptr; // Uno solo con multiples lineas
     sf::Text* _backTxt = nullptr;
     sf::Sprite* _backBtn = nullptr;
-    sf::Sprite* background;
+    sf::Sprite* _background = nullptr;
 
     bool  _open = false;
     bool  _backRequested = false;

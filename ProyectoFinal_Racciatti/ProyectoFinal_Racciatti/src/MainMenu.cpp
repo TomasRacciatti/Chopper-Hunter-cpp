@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "OptionsPanel.h"
+#include "CreditsPanel.h"
 
 MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
 	: Scene(window)
@@ -81,6 +82,10 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	_options = new OptionsPanel(resourceManager, _window, _audio);
 	_options->SetVolume(_audio.GetMusicVolume());
 
+
+	// ============== Credits ==================
+	_credits = new CreditsPanel(resourceManager, _window);
+
 	// ============== Music ===================
 	std::string musicPath = "../audio/music/MainMenuTheme.mp3";
 
@@ -104,8 +109,9 @@ MainMenu::~MainMenu()
 	delete creditsButton;
 	delete exitButton;
 
-	// Options
+	// Panels
 	delete _options;
+	delete _credits;
 }
 
 void MainMenu::Input()
@@ -138,7 +144,7 @@ void MainMenu::Draw()
 	}
 	else if (_creditsOpen)
 	{
-		// Placeholder
+		_credits->Draw(_window);
 	}
 	else
 	{
@@ -169,6 +175,17 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 		}
 		return;
 	}
+
+	if (_credits->IsOpen()) 
+	{
+		_credits->HandleEvent(ev);
+		if (_credits->BackRequested()) 
+		{
+			_credits->ClearBackRequest();
+			_credits->Close();
+		}
+		return;
+	}
 	
 	if (const auto* mouse = ev.getIf<sf::Event::MouseButtonPressed>())
 	{
@@ -193,7 +210,7 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 
 			if (creditsButton->getGlobalBounds().contains(worldPos))
 			{
-				_creditsOpen = true;
+				_credits->Open();
 				return;
 			}
 
