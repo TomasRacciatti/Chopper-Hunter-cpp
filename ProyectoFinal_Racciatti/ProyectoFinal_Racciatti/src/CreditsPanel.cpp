@@ -26,18 +26,19 @@ CreditsPanel::CreditsPanel(ResourceManager& resourceManager, sf::RenderWindow& w
 
     const auto winSize = _window.getSize();
     const sf::Vector2f center(winSize.x * 0.5f, winSize.y * 0.5f);
+    const int xOffset = 400;
 
     // Title
     _titleTxt = new sf::Text(titleFont, "CREDITS", 100);
     _titleTxt->setFillColor(textColor);
     CenterText(_titleTxt);
-    _titleTxt->setPosition({ center.x, center.y - _spacingY * 2.f });
+    _titleTxt->setPosition({ center.x + xOffset, center.y - _spacingY * 3.5f });
 
     // Back btn
     _backBtn = new sf::Sprite(btnTex);
     CenterSprite(_backBtn);
     _backBtn->setScale(sf::Vector2f(_buttonScale * 0.9f, _buttonScale * 0.9f));
-    _backBtn->setPosition({ center.x, center.y + _spacingY * 2.5f });
+    _backBtn->setPosition({ center.x + xOffset, center.y + _spacingY * 3.5f });
 
     _backTxt = new sf::Text(titleFont, "BACK", 48);
     _backTxt->setFillColor(textColor);

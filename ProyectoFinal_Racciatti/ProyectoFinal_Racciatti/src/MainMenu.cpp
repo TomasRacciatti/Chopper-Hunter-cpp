@@ -142,7 +142,7 @@ void MainMenu::Draw()
 	{
 		_options->Draw(_window);
 	}
-	else if (_creditsOpen)
+	else if (_credits->IsOpen())
 	{
 		_credits->Draw(_window);
 	}
