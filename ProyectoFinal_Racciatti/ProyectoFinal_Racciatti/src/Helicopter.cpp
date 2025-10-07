@@ -1,15 +1,18 @@
 #include "Helicopter.h"
 #include "Level.h"
 #include "Utils.h"
+#include "AudioSettings.h"
 #include <algorithm>
 #include <cmath>
 
-Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, ResourceManager& resources,
+Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, AudioSettings& audio, ResourceManager& resources,
     const std::string& sheetPath, int hp)
-    : Entity(spawnPos, { 140.f, 51.f }, hp)
+    : Entity(spawnPos, { 140.f, 51.f }, audio, hp)
     , _turret(std::move(turret))
     , _tex(&resources.GetTexture(sheetPath, false, {}))
     , _sprite(*_tex)
+    , _resources(resources)
+    , _explosionSfx(resources.GetSound("../audio/sfx/ExplosionHeli.mp3"))
 {
     _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
     
@@ -26,6 +29,24 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Re
 
 void Helicopter::Update(float dt, const Level& lvl)
 {
+    if (!_dying && _health <= 0)
+        StartExplosion();
+
+    if (_dying)
+    {
+        if (_explosion)
+        {
+            _explosion->Update(dt);
+            _explosion->SetPosition(_sprite.getPosition());
+
+            _explosionSfx.setVolume(_audio.GetSfxVolume());
+
+            if (_explosion->Finished())
+                _alive = false;
+        }
+        return;
+    }
+    
     switch (_state) 
     {
         case State::Entering: UpdateEntering(dt, lvl); break;
@@ -51,8 +72,32 @@ void Helicopter::Update(float dt, const Level& lvl)
 
 void Helicopter::Draw(sf::RenderTarget& rt) const
 {
+    if (_dying)
+    {
+        if (!_explosion || !_explosion->ShouldHideSource())
+            rt.draw(_sprite);
+
+        if (_explosion)
+            _explosion->Draw(rt);
+        return;
+    }
+    
     if (_turret) _turret->Draw(rt);
     rt.draw(_sprite);
+}
+
+void Helicopter::TakeDamage(int dmg)
+{
+    if (_dying) return;
+
+    const int before = _health; // Controlador para que se corra la anim de muerte
+    Entity::TakeDamage(dmg);
+
+    if (before > 0 && _health <= 0)
+    {
+        _alive = true; // Lo sobreescribimos para que no lo mate antes de la anim
+        StartExplosion();
+    }
 }
 
 
@@ -215,6 +260,35 @@ void Helicopter::UpdateDamageVisual()
     if (desiredRow >= _animRows) desiredRow = _animRows - 1;
 
     _animRow = desiredRow;
+}
+
+// ===== Explosions =====
+
+void Helicopter::StartExplosion()
+{
+    if (_dying) return;
+    _dying = true;
+
+    const sf::Vector2i frameSize(32, 32);
+    const int   frames = 9;
+    const int   hideAt = 3;
+    const float scale = 5.5f;
+    const char* texPath = "../sprites/enemies/HeliExplosion.png";
+    const char* sfxPath = "../audio/sfx/ExplosionHeli.mp3";
+
+    _explosion = std::make_unique<ExplosionEffect>(
+        _resources, 
+        texPath, 
+        _sprite.getPosition(),
+        frameSize, 
+        frames, 
+        hideAt, 
+        scale);
+
+    sf::SoundBuffer& buffer = _resources.GetSound(sfxPath);
+    _explosionSfx.setBuffer(buffer);
+    _explosionSfx.setVolume(_audio.GetSfxVolume());
+    _explosionSfx.play();
 }
 
 // ==== Turret ====

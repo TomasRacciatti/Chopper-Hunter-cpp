@@ -1,8 +1,8 @@
 #include "Entity.h"
 
 
-Entity::Entity(sf::Vector2f pos, sf::Vector2f size, int health)
-    : _health(health), _maxHealth(health)
+Entity::Entity(sf::Vector2f pos, sf::Vector2f size, AudioSettings& audio, int health)
+    : _audio(audio), _health(health), _maxHealth(health)
 {
     _body.setSize(size);
     _body.setPosition(pos);

@@ -2,14 +2,16 @@
 #include "Entity.h"
 #include "Weapon.h"
 #include "ResourceManager.h"
+#include "ExplosionEffect.h"
 #include <memory>
+#include <SFML/Audio.hpp> 
 
 class Player;
 
 class Helicopter : public Entity
 {
 public:
-    explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, ResourceManager& resources,
+    explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, AudioSettings& audio, ResourceManager& resources,
         const std::string& sheetPath, int hp = 10);
 
     void Update(float dt, const Level& lvl) override;
@@ -19,7 +21,13 @@ public:
 
     sf::FloatRect GetBounds() const override;
 
+    void TakeDamage(int dmg) override;
+    bool IsDying() const { return _dying && _explosion && !_explosion->Finished(); }
+
+
 private:
+    ResourceManager& _resources;
+    
     // FSM
     enum class State { Entering, Patrol, Hover };
     State _state = State::Entering;
@@ -48,7 +56,7 @@ private:
     float _hoverHorizontalSpeed = 14.f;
     float _hoverBobSpeed = 2.4f;
     float _hoverBobAmp = 8.f;
-    float _bobTime = 0.f;       // Control del seno
+    float _bobTime = 0.f; // Control del seno
 
 
     // Aim
@@ -71,6 +79,11 @@ private:
     float _frameTime = 0.12f;
     float _animTimer = 0.f;
 
+    // Explosion
+    bool _dying = false;
+    std::unique_ptr<ExplosionEffect> _explosion;
+    sf::Sound _explosionSfx;
+
     // Helpers
     void EnterPatrol(const Level& lvl);
     void EnterHover();
@@ -86,5 +99,7 @@ private:
     sf::Vector2f Muzzle() const;
 
     void SetFiring(bool canFire) { _firing = canFire; }
+
+    void StartExplosion();
 };
 

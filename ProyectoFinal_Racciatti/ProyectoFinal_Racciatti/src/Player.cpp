@@ -3,8 +3,8 @@
 #include "Utils.h"
 #include <SFML/Window/Keyboard.hpp>
 
-Player::Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager& resourceManager)
-    : Entity(startPos, { 34.f, 84.f }, /*hp*/10)
+Player::Player(sf::Vector2f startPos, std::string imageFilePath, AudioSettings& audio, ResourceManager& resourceManager)
+    : Entity(startPos, { 34.f, 84.f }, audio, /*hp*/10)
     , _tex(&resourceManager.GetTexture(imageFilePath, /*mipmap*/false, {}))
     , _sprite(*_tex)
 {

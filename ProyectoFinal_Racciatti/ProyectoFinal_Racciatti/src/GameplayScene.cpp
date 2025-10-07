@@ -118,14 +118,14 @@ void GameplayScene::Update(float dt)
         }
     }
 
-    if (_heli && _heli->IsAlive()) 
+    if (_heli && (_heli->IsAlive() || _heli->IsDying())) 
     {
         if (_player && _player->IsAlive())
             _heli->SetTarget(_player->Center());
 
         _heli->Update(dt, _level);
     }
-    else 
+    else if (_heli && !_heli->IsAlive() && !_heli->IsDying())
     {
         SpawnHelicopter();
     }
@@ -163,7 +163,7 @@ void GameplayScene::CreatePlayer()
     const sf::Vector2f spawnPos(window.x * 0.5f, window.y - 64.f);
 
     std::string path = "../sprites/player/SoldierSpriteSheet.png";
-    _player = std::make_unique<Player>(spawnPos, path, resourceManager);
+    _player = std::make_unique<Player>(spawnPos, path, _audio, resourceManager);
 
     // Spawn de arma
     auto pistol = std::make_unique<Pistol>(
@@ -209,5 +209,5 @@ void GameplayScene::SpawnHelicopter()
     turret->SetMuzzleDistance(25.f);
 
     std::string path = "../sprites/enemies/HelicopterSpriteSheet_Damaged.png";
-    _heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), resourceManager, path);
+    _heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), _audio, resourceManager, path);
 }

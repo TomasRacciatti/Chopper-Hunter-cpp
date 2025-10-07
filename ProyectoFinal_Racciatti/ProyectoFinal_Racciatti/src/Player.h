@@ -7,7 +7,7 @@
 class Player: public Entity
 {
 public:
-	Player(sf::Vector2f startPos, std::string imageFilePath, ResourceManager& resourceManager);
+	Player(sf::Vector2f startPos, std::string imageFilePath, AudioSettings& audio, ResourceManager& resourceManager);
 
 	struct Input
 	{
