@@ -48,8 +48,7 @@ void Helicopter::Update(float dt, const Level& lvl)
 
         _explosionSfx.setVolume(_audio.GetSfxVolume());
 
-        if (!_explosion &&
-            _explosionSfx.getStatus() != sf::SoundSource::Status::Playing)
+        if (!_explosion && _explosionSfx.getStatus() != sf::SoundSource::Status::Playing)
         {
             _alive = false;
         }
