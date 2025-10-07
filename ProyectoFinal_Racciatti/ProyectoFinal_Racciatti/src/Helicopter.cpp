@@ -38,13 +38,22 @@ void Helicopter::Update(float dt, const Level& lvl)
         {
             _explosion->Update(dt);
             _explosion->SetPosition(_sprite.getPosition());
-            _explosionSfx.setVolume(_audio.GetSfxVolume());
 
-            if (_turret) _turret->UpdateProjectiles(dt, lvl);
+            if (_turret) 
+                _turret->UpdateProjectiles(dt, lvl);
 
             if (_explosion->Finished())
                 _alive = false;
         }
+
+        _explosionSfx.setVolume(_audio.GetSfxVolume());
+
+        if (!_explosion &&
+            _explosionSfx.getStatus() != sf::SoundSource::Status::Playing)
+        {
+            _alive = false;
+        }
+
         return;
     }
     
@@ -290,6 +299,7 @@ void Helicopter::StartExplosion()
 
     sf::SoundBuffer& buffer = _resources.GetSound(sfxPath);
     _explosionSfx.setBuffer(buffer);
+    _explosionSfx.setLooping(false);
     _explosionSfx.setVolume(_audio.GetSfxVolume());
     _explosionSfx.play();
 }
