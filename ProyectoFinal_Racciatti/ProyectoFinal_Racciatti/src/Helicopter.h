@@ -66,6 +66,8 @@ private:
     sf::Vector2i _frameSize{ 177, 51 };
     int _frameCount = 4;
     int _frame = 0;
+    int  _animRows = 3;
+    int  _animRow = 0;
     float _frameTime = 0.12f;
     float _animTimer = 0.f;
 
@@ -79,6 +81,7 @@ private:
     void UpdateHover(float dt, const Level& lvl);
 
     void UpdateAnimation(float dt);
+    void UpdateDamageVisual();
 
     sf::Vector2f Muzzle() const;
 

@@ -208,6 +208,6 @@ void GameplayScene::SpawnHelicopter()
     turret->SetVisualSprite(turretTex, { 25.f, 26.5f }, 1.0f);
     turret->SetMuzzleDistance(25.f);
 
-    std::string path = "../sprites/enemies/HelicopterSpriteSheet.png";
+    std::string path = "../sprites/enemies/HelicopterSpriteSheet_Damaged.png";
     _heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), resourceManager, path);
 }

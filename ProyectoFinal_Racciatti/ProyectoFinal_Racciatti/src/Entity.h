@@ -29,6 +29,7 @@ protected:
 	sf::RectangleShape _body;
 	float _visualScale = 1.f;
 
+	int _maxHealth = 10;
 	int _health = 10;
 	bool _alive = true;
 

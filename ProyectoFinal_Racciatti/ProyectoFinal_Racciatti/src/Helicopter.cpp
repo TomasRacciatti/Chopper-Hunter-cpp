@@ -35,6 +35,7 @@ void Helicopter::Update(float dt, const Level& lvl)
 
     // Anim
     _sprite.setPosition(_body.getPosition());
+    UpdateDamageVisual();
     UpdateAnimation(dt);
 
     // Turret 
@@ -182,8 +183,38 @@ void Helicopter::UpdateAnimation(float dt)
     {
         _animTimer -= _frameTime;
         _frame = (_frame + 1) % _frameCount;
-        _sprite.setTextureRect(sf::IntRect({ _frame * _frameSize.x, 0 }, { _frameSize.x, _frameSize.y }));
+        
     }
+
+    const sf::IntRect frameRect = Utils::FrameRect(
+        _frame,
+        _animRow,
+        _frameSize.x,
+        _frameSize.y
+    );
+
+    _sprite.setTextureRect(frameRect);
+}
+
+void Helicopter::UpdateDamageVisual()
+{
+    const float hp = static_cast<float>(_health);
+    const float maxHp = static_cast<float>(_maxHealth);
+    const float ratio = (maxHp > 0.f) ? hp / maxHp : 0.f;
+
+    int desiredRow;
+    if (ratio > 2.f / 3.f)
+        desiredRow = 0; // 100% a 66% de la vida
+    else if (ratio > 1.f / 3.f)
+        desiredRow = 1; // 66% a 33%
+    else
+        desiredRow = 2; // menos de 33%
+
+    // clamp manual
+    if (desiredRow < 0) desiredRow = 0;
+    if (desiredRow >= _animRows) desiredRow = _animRows - 1;
+
+    _animRow = desiredRow;
 }
 
 // ==== Turret ====

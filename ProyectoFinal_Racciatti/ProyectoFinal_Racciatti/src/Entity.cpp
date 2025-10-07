@@ -2,7 +2,7 @@
 
 
 Entity::Entity(sf::Vector2f pos, sf::Vector2f size, int health)
-    : _health(health)
+    : _health(health), _maxHealth(health)
 {
     _body.setSize(size);
     _body.setPosition(pos);
