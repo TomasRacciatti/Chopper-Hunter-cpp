@@ -36,6 +36,10 @@ public:
 	}
 	void SetMuzzleDistance(float d) { _muzzleDistance = d; }
 
+	// necesario para que no se cuelguen las balas cuando se muere
+	void UpdateProjectiles(float dt, const Level& lvl);
+	void DrawProjectiles(sf::RenderTarget& rt) const;
+
 protected:
 	// Disparo particular de cada arma
 	virtual void Shoot(sf::Vector2f origin, sf::Vector2f dir) = 0;

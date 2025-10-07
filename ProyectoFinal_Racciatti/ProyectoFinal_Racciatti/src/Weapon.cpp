@@ -80,3 +80,20 @@ Bullet* Weapon::EmitBullet(sf::Vector2f origin, sf::Vector2f dirUnit)
 	}
 	return nullptr; // pool agotada
 }
+
+void Weapon::UpdateProjectiles(float dt, const Level& lvl)
+{
+	for (auto& bullet : _pool->Items())
+	{
+		bullet.Update(dt, lvl);
+		if (!bullet.Alive())
+			_pool->Despawn(&bullet);
+	}
+}
+
+void Weapon::DrawProjectiles(sf::RenderTarget& rt) const
+{
+	for (const auto& bullet : _pool->Items())
+		if (bullet.Alive())
+			bullet.Draw(rt);
+}

@@ -38,8 +38,9 @@ void Helicopter::Update(float dt, const Level& lvl)
         {
             _explosion->Update(dt);
             _explosion->SetPosition(_sprite.getPosition());
-
             _explosionSfx.setVolume(_audio.GetSfxVolume());
+
+            if (_turret) _turret->UpdateProjectiles(dt, lvl);
 
             if (_explosion->Finished())
                 _alive = false;
@@ -74,6 +75,8 @@ void Helicopter::Draw(sf::RenderTarget& rt) const
 {
     if (_dying)
     {
+        if (_turret) _turret->DrawProjectiles(rt);
+
         if (!_explosion || !_explosion->ShouldHideSource())
             rt.draw(_sprite);
 
