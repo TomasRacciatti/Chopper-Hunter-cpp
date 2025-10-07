@@ -28,7 +28,7 @@ private:
     sf::Text* _bodyTxt = nullptr; // Uno solo con multiples lineas
     sf::Text* _backTxt = nullptr;
     sf::Sprite* _backBtn = nullptr;
-    sf::Sprite* background;
+    sf::Sprite* _background;
 
     bool  _open = false;
     bool  _backRequested = false;
