@@ -178,6 +178,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
   <ItemGroup>
     <ClCompile Include="src\Bullet.cpp" />
     <ClCompile Include="src\CreditsPanel.cpp" />
+    <ClCompile Include="src\Drone.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameplayScene.cpp" />
@@ -199,6 +200,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClInclude Include="src\Bullet.h" />
     <ClInclude Include="src\Combat.h" />
     <ClInclude Include="src\CreditsPanel.h" />
+    <ClInclude Include="src\Drone.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\ExplosionEffect.h" />
     <ClInclude Include="src\Game.h" />
