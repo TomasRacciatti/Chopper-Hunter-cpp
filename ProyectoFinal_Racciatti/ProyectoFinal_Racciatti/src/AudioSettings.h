@@ -14,7 +14,7 @@ public:
 
 
 private:
-    float _master = 50.f;
+    float _master = 20.f;
     float _music = 100.f;
     float _sfx = 100.f;
 
