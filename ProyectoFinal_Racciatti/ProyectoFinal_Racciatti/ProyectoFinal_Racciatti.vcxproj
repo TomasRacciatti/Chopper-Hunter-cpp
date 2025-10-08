@@ -176,6 +176,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Artillery.cpp" />
     <ClCompile Include="src\Bullet.cpp" />
     <ClCompile Include="src\CreditsPanel.cpp" />
     <ClCompile Include="src\Drone.cpp" />
@@ -196,6 +197,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClCompile Include="src\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Artillery.h" />
     <ClInclude Include="src\AudioSettings.h" />
     <ClInclude Include="src\Bullet.h" />
     <ClInclude Include="src\Combat.h" />
