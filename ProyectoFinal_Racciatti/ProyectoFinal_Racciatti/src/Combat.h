@@ -40,4 +40,17 @@ namespace Combat
             }
         }
     }
+
+    inline void ExplosionAoE(const sf::Vector2f& center, float radius, int damage, Entity* target)
+    {
+        if (!target || !target->IsAlive()) return;
+
+        const sf::Vector2f dist = target->Center() - center;
+        const float distSquared = dist.x * dist.x + dist.y * dist.y;
+
+        if (distSquared <= radius * radius)
+        {
+            target->TakeDamage(damage);
+        }
+    }
 }
