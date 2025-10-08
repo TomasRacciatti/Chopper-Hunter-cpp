@@ -82,7 +82,10 @@ private:
     // Explosion
     bool _dying = false;
     std::unique_ptr<ExplosionEffect> _explosion;
+
+    // Audio
     sf::Sound _explosionSfx;
+    sf::Sound _flightSfx;
 
     // Helpers
     void EnterPatrol(const Level& lvl);

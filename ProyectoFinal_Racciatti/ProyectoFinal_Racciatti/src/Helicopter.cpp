@@ -13,6 +13,7 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Au
     , _sprite(*_tex)
     , _resources(resources)
     , _explosionSfx(resources.GetSound("../audio/sfx/ExplosionHeli.mp3"))
+    , _flightSfx(resources.GetSound("../audio/sfx/helicopter.mp3"))
 {
     _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
     
@@ -25,12 +26,18 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Au
     _body.setOrigin(_body.getSize() * 0.5f);
     _body.setPosition(spawnPos);
     _sprite.setPosition(spawnPos);
+
+    _flightSfx.setLooping(true);
+    _flightSfx.setVolume(_audio.GetSfxVolume());
+    _flightSfx.play();
 }
 
 void Helicopter::Update(float dt, const Level& lvl)
 {
     if (!_dying && _health <= 0)
         StartExplosion();
+
+    _flightSfx.setVolume(_audio.GetSfxVolume());
 
     if (_dying)
     {
@@ -279,6 +286,8 @@ void Helicopter::StartExplosion()
 {
     if (_dying) return;
     _dying = true;
+
+    _flightSfx.stop();
 
     const sf::Vector2i frameSize(32, 32);
     const int   frames = 9;
