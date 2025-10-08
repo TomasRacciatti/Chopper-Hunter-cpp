@@ -49,7 +49,7 @@ private:
    
     // Explosion parameters
     bool _exploding = false;
-    int _damage = 20;
+    int _damage = 2;
     float _aoeRadius = 0.f;
     std::unique_ptr<ExplosionEffect> _explosionFx;
     Entity* _aoeTarget = nullptr;

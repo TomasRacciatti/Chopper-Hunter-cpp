@@ -45,12 +45,17 @@ namespace Combat
     {
         if (!target || !target->IsAlive()) return;
 
-        const sf::Vector2f dist = target->Center() - center;
-        const float distSquared = dist.x * dist.x + dist.y * dist.y;
+        const float safeRadius = radius + 1.f;
 
-        if (distSquared <= radius * radius)
-        {
+        const sf::FloatRect rect = target->GetBounds();
+
+        const float closestX = std::clamp(center.x, rect.position.x, rect.position.x + rect.size.x);
+        const float closestY = std::clamp(center.y, rect.position.y, rect.position.y + rect.size.y);
+
+        const float distX = center.x - closestX;
+        const float distY = center.y - closestY;
+
+        if (distX * distX + distY * distY <= safeRadius * safeRadius)
             target->TakeDamage(damage);
-        }
     }
 }
