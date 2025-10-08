@@ -33,10 +33,10 @@ public:
 private:
     sf::Texture* _tex = nullptr;
     
-    int _hp = 1;
+    static constexpr int hp = 1;
     
     // Movement
-    float _speed = 220.f;
+    float _speed = 320.f;
     sf::Vector2f _target{ 0.f, 0.f };
     sf::Vector2f _vel{ 0.f, 0.f };
 
@@ -49,7 +49,7 @@ private:
    
     // Explosion parameters
     bool _exploding = false;
-    int _damage = 2;
+    int _damage = 20;
     float _aoeRadius = 0.f;
     std::unique_ptr<ExplosionEffect> _explosionFx;
     Entity* _aoeTarget = nullptr;
@@ -66,7 +66,7 @@ private:
     float _explosionFrameTime = 0.05f;
     int _explosionFrameCount = 6;
     int _hideSourceFromFrame = 2;
-    float _explosionScale = 1.0f;
+    float _explosionScale = 3.0f;
 
     // Audio
     sf::Sound _buzzSfx;

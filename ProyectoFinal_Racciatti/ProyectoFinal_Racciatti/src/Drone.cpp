@@ -15,7 +15,7 @@ Drone::Drone(const sf::Vector2f& spawnPos,
     const std::string& spritePath,
     const sf::Vector2i& spriteFrameSize,
     float visualScale)
-    : Entity(spawnPos, { spriteFrameSize.x * visualScale, spriteFrameSize.y * visualScale }, audio, _hp)
+    : Entity(spawnPos, { spriteFrameSize.x * visualScale, spriteFrameSize.y * visualScale }, audio, hp)
     , _resourceManager(resources)
     , _frameSize(spriteFrameSize)
     , _scale(visualScale)
@@ -26,7 +26,7 @@ Drone::Drone(const sf::Vector2f& spawnPos,
 {
     _body.setOrigin(_body.getSize() * 0.5f);
     _body.setPosition(spawnPos);
-    _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
+    _sprite.setTextureRect(Utils::FrameRect(0, 0, _frameSize.x, _frameSize.y));
 
     _sprite.setOrigin({ _frameSize.x * 0.5f, _frameSize.y * 0.5f });
     _sprite.setScale({ _scale, _scale });
@@ -101,7 +101,7 @@ void Drone::TakeDamage(int dmg)
 
 sf::FloatRect Drone::GetBounds() const
 {
-    sf::FloatRect body = _body.getGlobalBounds();
+    sf::FloatRect body = _sprite.getGlobalBounds();
 
     // Le sacamos 10% de cada borde al cuerpo, para que la bala no colisione con un espacio vacio
     const float insetX = body.size.x * 0.10f;
