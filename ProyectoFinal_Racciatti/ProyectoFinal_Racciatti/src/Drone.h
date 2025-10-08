@@ -31,6 +31,10 @@ public:
     bool IsExploding() const { return _exploding; }
 
 private:
+    sf::Texture* _tex = nullptr;
+    
+    int _hp = 1;
+    
     // Movement
     float _speed = 220.f;
     sf::Vector2f _target{ 0.f, 0.f };
@@ -38,7 +42,7 @@ private:
 
     // Visuals
     ResourceManager& _resourceManager;
-    sf::Sprite   _sprite;
+    sf::Sprite _sprite;
     sf::Vector2i _frameSize{ 40, 29 };
     float _scale = 1.0f;
     bool _faceLeft = false;
