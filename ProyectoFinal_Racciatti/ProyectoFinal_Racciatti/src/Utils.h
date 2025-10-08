@@ -34,13 +34,13 @@ namespace Utils
         return sf::IntRect({ col * w, row * h }, { w, h });
     }
 
-    inline sf::Vector2f Normalize(const sf::Vector2f& v)
+    inline sf::Vector2f Normalize(const sf::Vector2f& velocity)
     {
-        const float m2 = v.x * v.x + v.y * v.y;
-        if (m2 <= 0.0001f) return { 0.f, 0.f };
+        const float magnitude2 = velocity.x * velocity.x + velocity.y * velocity.y;
+        if (magnitude2 <= 0.0001f) return { 0.f, 0.f };
 
-        const float inv = 1.0f / std::sqrt(m2);
+        const float inv = 1.0f / std::sqrt(magnitude2);
 
-        return { v.x * inv, v.y * inv };
+        return { velocity.x * inv, velocity.y * inv };
     }
 }
