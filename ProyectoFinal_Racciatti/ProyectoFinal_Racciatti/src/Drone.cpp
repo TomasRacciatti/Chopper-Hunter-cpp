@@ -26,6 +26,7 @@ Drone::Drone(const sf::Vector2f& spawnPos,
 {
     _body.setOrigin(_body.getSize() * 0.5f);
     _body.setPosition(spawnPos);
+    _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
 
     _sprite.setOrigin({ _frameSize.x * 0.5f, _frameSize.y * 0.5f });
     _sprite.setScale({ _scale, _scale });
@@ -70,6 +71,7 @@ void Drone::Update(float dt, const Level& lvl)
 
     _sprite.setPosition(pos);
     _body.setPosition(pos);
+    UpdateAnimation(dt);
 }
 
 void Drone::Draw(sf::RenderTarget& rt) const
@@ -111,6 +113,26 @@ sf::FloatRect Drone::GetBounds() const
     body.size.y -= 2.f * insetY;
 
     return body;
+}
+
+void Drone::UpdateAnimation(float dt)
+{
+    _animTimer += dt;
+    if (_animTimer >= _frameTime)
+    {
+        _animTimer -= _frameTime;
+        _frame = (_frame + 1) % _frameCount;
+
+    }
+
+    const sf::IntRect frameRect = Utils::FrameRect(
+        _frame,
+        _animRow,
+        _frameSize.x,
+        _frameSize.y
+    );
+
+    _sprite.setTextureRect(frameRect);
 }
 
 void Drone::UpdateMotion(float dt)

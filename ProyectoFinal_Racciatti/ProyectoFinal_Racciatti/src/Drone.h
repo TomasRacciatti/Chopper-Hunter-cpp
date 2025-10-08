@@ -54,6 +54,13 @@ private:
     std::unique_ptr<ExplosionEffect> _explosionFx;
     Entity* _aoeTarget = nullptr;
 
+    // Anim
+    int _frame = 0;
+    int _frameCount = 8;
+    float _frameTime = 0.1f;
+    float _animTimer = 0.f;
+    int _animRow = 0;
+
     // Explosion anim
     sf::Vector2i _explosionFrameSize{ 48, 48 };
     float _explosionFrameTime = 0.05f;
@@ -69,5 +76,6 @@ private:
     void UpdateMotion(float dt);
     void UpdateFlipFromVelocity();
     void StartExplosion();
+    void UpdateAnimation(float dt);
 };
 

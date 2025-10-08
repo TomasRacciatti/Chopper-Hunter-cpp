@@ -169,8 +169,7 @@ void GameplayScene::Update(float dt)
             Combat::ResolveHits(_playerBulletPool, drone.get());
 
         // Drones le pegan al player
-        if (drone->IsAlive() && _player && _player->IsAlive() &&
-            Utils::RectIntersects(_player->GetBounds(), drone->GetBounds()))
+        if (Utils::RectIntersects(_player->GetBounds(), drone->GetBounds()))
         {
             // Esto esta hardcodeado y corre peligro si quisieramos cambiarle la vida al drone
             // Exagero en el valor para asegurarme que siempre muera de una
