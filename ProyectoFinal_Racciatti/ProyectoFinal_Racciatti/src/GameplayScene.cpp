@@ -134,7 +134,12 @@ void GameplayScene::Update(float dt)
     }
 
     // Drones
-    if (_drones.size() < static_cast<size_t>(_maxDronesOnScene)) 
+    const size_t aliveDrones = std::count_if(
+        _drones.begin(), _drones.end(),
+        [](const std::unique_ptr<Drone>& drone) { return drone && drone->IsAlive(); }
+    );
+
+    if (aliveDrones < static_cast<size_t>(_maxDronesOnScene))
     {
         _droneSpawnTimer -= dt;
         if (_droneSpawnTimer <= 0.f) 
@@ -175,6 +180,11 @@ void GameplayScene::Update(float dt)
             // Exagero en el valor para asegurarme que siempre muera de una
             drone->TakeDamage(100); // Matar al drone lo hace explotar. 
         }
+
+        // Elimino de la lista los drones muertos
+        _drones.erase(std::remove_if(_drones.begin(), _drones.end(),
+            [](const std::unique_ptr<Drone>& drone) { return !drone || !drone->IsAlive(); }),
+            _drones.end());
     }
 
     // Bullet de Helis le pegan al Player

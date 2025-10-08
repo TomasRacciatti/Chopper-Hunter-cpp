@@ -36,7 +36,7 @@ private:
     static constexpr int hp = 1;
     
     // Movement
-    float _speed = 320.f;
+    float _speed = 350.f;
     sf::Vector2f _target{ 0.f, 0.f };
     sf::Vector2f _vel{ 0.f, 0.f };
 
