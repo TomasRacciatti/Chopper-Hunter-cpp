@@ -7,6 +7,7 @@
 #include "Pistol.h"
 #include "Combat.h"
 #include "PauseMenu.h"
+#include "Drone.h"
 
 class GameplayScene : public Scene
 {
@@ -35,6 +36,7 @@ private:
 	Level _level;
 	std::unique_ptr<Player> _player;
 	std::unique_ptr<Helicopter> _heli;
+	std::vector<std::unique_ptr<Drone>> _drones;
 
 	// Input
 	Player::Input _playerInput{};
@@ -47,8 +49,17 @@ private:
 	sf::Music music;
 	AudioSettings& _audio;
 
+	// ---- Suba de dificultad ----
+
+	// Drone
+	float _droneSpawnMin = 10.f; 
+	float _droneSpawnMax = 15.f; 
+	float _droneSpawnTimer = 0.f;
+	int   _maxDronesOnScene = 1;
+
 	// helpers
 	void CreatePlayer();
 	void SpawnHelicopter();
+	void SpawnDrone();
 };
 
