@@ -11,6 +11,16 @@ namespace Utils
             b.position.y + b.size.y <= a.position.y);
     }
 
+    inline bool CircleIntersectsRect(const sf::Vector2f& center, float radius, const sf::FloatRect& rect, float guard = 1.0f)
+    {
+        const float centerX = std::clamp(center.x, rect.position.x, rect.position.x + rect.size.x);
+        const float centerY = std::clamp(center.y, rect.position.y, rect.position.y + rect.size.y);
+        const float distX = center.x - centerX;
+        const float distY = center.y - centerY;
+        const float modRadius = (radius + guard) * (radius + guard);
+        return distX * distX + distY * distY <= modRadius;
+    }
+
     inline float Length(sf::Vector2f v) { return std::sqrt(v.x * v.x + v.y * v.y); }
 
     inline sf::Vector2f SafeNormalize(sf::Vector2f v)
