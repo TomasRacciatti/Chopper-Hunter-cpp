@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <array>
 #include "Entity.h"
 #include "Level.h"
 #include "ResourceManager.h"
@@ -44,7 +45,6 @@ private:
     // Explosion parameters
     bool _exploding = false;
     int   _damage = 5;
-    float _aoeRadius = 0.f;
     std::unique_ptr<ExplosionEffect> _explosionFx;
     Entity* _aoeTarget = nullptr;
 
@@ -59,7 +59,15 @@ private:
     sf::Sound _whistleSfx;
     sf::Sound _explosionSfx;
 
+    // AoE por frame
+    std::array<float, 6> _aoeRadii{ 17.f, 23.f, 28.f, 41.f, 45.f, 51.f };
+    int _aoeLastFrame = 5;
+    bool _aoeApplied = false;
+    float _explosionElapsed = 0.f;
+    sf::Vector2f _explosionCenterPixel{ 64.f, 102.f };
+
     // Helpers
     void StartExplosion();
+    sf::Vector2f ExplosionAoECenterWorld() const;
 };
 
