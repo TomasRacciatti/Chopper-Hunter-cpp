@@ -9,6 +9,15 @@ Level::Level(const sf::Vector2u& windowSize, ResourceManager& resourceManager, c
     _bgTex = &resourceManager.GetTexture(bgPath, false, {});
     _bgSprite.setTexture(*_bgTex);
     FitBackground();
+
+    _floorTex = &resourceManager.GetTexture("../sprites/tiles/Ground.png", false, {});
+    _wallTex = &resourceManager.GetTexture("../sprites/tiles/Wall.png", false, {});
+
+    const auto floorSize = _floorTex->getSize();
+    const auto wallSize = _wallTex->getSize();
+    _floorScale = 64.f / static_cast<float>(floorSize.x);
+    _wallScale = 64.f / static_cast<float>(wallSize.x);
+
     BuildTiles(_windowSize, 64);
 }
 
@@ -32,21 +41,16 @@ void Level::BuildTiles(const sf::Vector2u& win, unsigned tileSize)
     const float height = static_cast<float>(win.y);
     const float ts = static_cast<float>(tileSize);
 
-    const sf::Color tileColor(85, 60, 30); // Esto es solo ahora porque no tengo sprite del piso y paredes
-    const sf::Color outline(150, 150, 150); // Esto es solo para debuggear y ver como se arma el mapita
-
     // ===== Piso =====
     const int floorColumns = width / ts;
     const float floorTop = height - ts;
 
     for (int i = 0; i < floorColumns; i++)
     {
-        sf::RectangleShape tile({ ts, ts });
-        tile.setPosition(sf::Vector2f{ i * ts, floorTop });
-        tile.setFillColor(tileColor);
-        tile.setOutlineThickness(1.f);
-        tile.setOutlineColor(outline);
-        _tiles.push_back(tile);
+        _tiles.emplace_back(*_floorTex);
+        auto& spr = _tiles.back();
+        spr.setScale(sf::Vector2f{ _floorScale, _floorScale });
+        spr.setPosition(sf::Vector2f{ i * ts, floorTop });
     }
 
     _floor = sf::FloatRect{ sf::Vector2f{ 0.f, floorTop }, sf::Vector2f{ width, ts } };
@@ -68,12 +72,10 @@ void Level::BuildTiles(const sf::Vector2u& win, unsigned tileSize)
     // Visual
     for (int i = 0; i < wallRows; i++)
     {
-        sf::RectangleShape tile({ ts, ts });
-        tile.setPosition(sf::Vector2f{0.f, floorTop - ts * (i + 1) });
-        tile.setFillColor(tileColor);
-        tile.setOutlineThickness(1.f);
-        tile.setOutlineColor(outline);
-        _tiles.push_back(tile);
+        _tiles.emplace_back(*_wallTex);
+        auto& spr = _tiles.back();
+        spr.setScale(sf::Vector2f{ _wallScale, _wallScale });
+        spr.setPosition(sf::Vector2f{ 0.f, floorTop - ts * (i + 1) });
     }
 
     // Pared derecha
@@ -87,12 +89,10 @@ void Level::BuildTiles(const sf::Vector2u& win, unsigned tileSize)
     // Visual
     for (int i = 0; i < wallRows; i++)
     {
-        sf::RectangleShape tile({ ts, ts });
-        tile.setPosition(sf::Vector2f{ rightSide, floorTop - ts * (i + 1) });
-        tile.setFillColor(tileColor);
-        tile.setOutlineThickness(1.f);
-        tile.setOutlineColor(outline);
-        _tiles.push_back(tile);
+        _tiles.emplace_back(*_wallTex);
+        auto& spr = _tiles.back();
+        spr.setScale(sf::Vector2f{ _wallScale, _wallScale });
+        spr.setPosition(sf::Vector2f{ rightSide, floorTop - ts * (i + 1) });
     }
 }
 

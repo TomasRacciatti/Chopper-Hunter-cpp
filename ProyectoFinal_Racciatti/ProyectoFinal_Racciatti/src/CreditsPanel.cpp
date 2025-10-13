@@ -56,6 +56,7 @@ CreditsPanel::CreditsPanel(ResourceManager& resourceManager, sf::RenderWindow& w
         "Drone by CraftPix\n"
         "Explosions by Ansimuz\n"
         "Misiles by Anim86\n"
+        "Tileset by Cainos\n"
         "\n"
         "Music\n"
         "Goliath by Scott Buckley\n"

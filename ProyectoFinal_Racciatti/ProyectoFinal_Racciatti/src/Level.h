@@ -38,7 +38,11 @@ private:
     sf::Sprite _bgSprite;
 
     // Piso y paredes momentaneas
-    std::vector<sf::RectangleShape> _tiles;
+    std::vector<sf::Sprite> _tiles;
+    const sf::Texture* _floorTex = nullptr;
+    const sf::Texture* _wallTex = nullptr; 
+    float _floorScale = 1.f;
+    float _wallScale = 1.f;
 
     void BuildTiles(const sf::Vector2u& window, unsigned tileSize = 64);
     void FitBackground();
