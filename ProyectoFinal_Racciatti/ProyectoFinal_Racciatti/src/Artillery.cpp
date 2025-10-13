@@ -50,7 +50,7 @@ void Artillery::Update(float dt, const Level& lvl)
             _explosionElapsed += dt;
 
             const int frame = std::min(_explosionFrameCount - 1,
-                static_cast<int>(_explosionElapsed / _explosionFrameTime));
+                                       static_cast<int>(_explosionElapsed / _explosionFrameTime));
 
             if (!_aoeApplied && frame <= _aoeLastFrame && _aoeTarget && _aoeTarget->IsAlive())
             {
@@ -63,14 +63,100 @@ void Artillery::Update(float dt, const Level& lvl)
                     Combat::ExplosionAoE(center, radius, _damage, _aoeTarget);
                     _aoeApplied = true;
                 }
-
+            }
                 _explosionFx->Update(dt);
-                _explosionFx->SetPosition(_sprite.getPosition());
+                _explosionFx->SetPosition(_explosionWorldPos);
 
                 if (_explosionFx->Finished())
                     _alive = false;
-            }
         }
         return;
     }
+
+    _whistleSfx.setVolume(_audio.GetSfxVolume());
+
+    const sf::Vector2f delta = _vel * dt;
+    _sprite.move(delta);
+    _body.move(delta);
+
+    const auto floor = lvl.FloorRect();
+    const float floorY = floor.position.y;
+
+    const sf::FloatRect bounds = _sprite.getGlobalBounds();
+    const float bottom = bounds.position.y + bounds.size.y;
+
+    if (bottom >= floorY - groundSafety)
+    {
+        const float correction = (floorY - groundSafety) - bottom;
+        _sprite.move({ 0.f, correction });
+        _body.setPosition(_sprite.getPosition());
+        StartExplosion();
+    }
+}
+
+void Artillery::Draw(sf::RenderTarget& rt) const
+{
+    const bool hideSource = _explosionFx && _explosionFx->ShouldHideSource();
+
+    if (!hideSource)
+        rt.draw(_sprite);
+
+    if (_explosionFx)
+        _explosionFx->Draw(rt);
+}
+
+sf::FloatRect Artillery::GetBounds() const
+{
+    sf::FloatRect bounds = _sprite.getGlobalBounds();
+    const float insetX = bounds.size.x * 0.10f;
+    const float insetY = bounds.size.y * 0.10f;
+
+    bounds.position.x += insetX;
+    bounds.position.y += insetY;
+    bounds.size.x -= 2.f * insetX;
+    bounds.size.y -= 2.f * insetY;
+
+    return bounds;
+}
+
+void Artillery::TakeDamage(int dmg)
+{
+    // Lo sobreescribimos de entity para que no pueda tomar daño
+}
+
+void Artillery::StartExplosion()
+{
+    if (_exploding) return;
+    _exploding = true;
+
+    _whistleSfx.stop();
+
+    sf::Vector2f fxPos = _sprite.getPosition();
+    fxPos.y += explosionYOffset;
+    _explosionWorldPos = fxPos;
+
+    const std::string explosionPath = "../sprites/enemies/ArtilleryExplosion.png";
+
+    _explosionFx = std::make_unique<ExplosionEffect>(
+        _resourceManager,
+        explosionPath,
+        _explosionWorldPos,
+        _explosionFrameSize,
+        _explosionFrameCount,
+        _hideSourceFromFrame,
+        _explosionScale
+    );
+
+    _explosionSfx.setLooping(false);
+    _explosionSfx.setVolume(_audio.GetSfxVolume());
+    _explosionSfx.play();
+
+    _explosionElapsed = 0.f;
+    _aoeApplied = false;
+}
+
+sf::Vector2f Artillery::ExplosionAoECenterWorld() const
+{
+    const float deltaY = (_explosionCenterPixel.y - _explosionFrameSize.y * 0.5f) * _explosionScale;
+    return { _explosionWorldPos.x, _explosionWorldPos.y + deltaY };
 }

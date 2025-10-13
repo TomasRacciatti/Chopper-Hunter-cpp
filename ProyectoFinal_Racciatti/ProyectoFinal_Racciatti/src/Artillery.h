@@ -54,6 +54,7 @@ private:
     int _explosionFrameCount = 12;
     int _hideSourceFromFrame = 2;
     float _explosionScale = 1.0f;
+    sf::Vector2f _explosionWorldPos{ 0.f, 0.f }; // Esto es para alinear la anim de la explosion al piso
 
     // Audio
     sf::Sound _whistleSfx;
