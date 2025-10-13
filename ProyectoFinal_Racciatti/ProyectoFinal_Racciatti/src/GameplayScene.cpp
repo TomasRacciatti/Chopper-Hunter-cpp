@@ -15,6 +15,7 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
     _pause = new PauseMenu(resourceManager, _window, _audio);
 
     _droneSpawnTimer = Utils::RandomFloat(_droneSpawnMin, _droneSpawnMax);
+    _artillerySpawnTimer = Utils::RandomFloat(_artillerySpawnMin, _artillerySpawnMax);
 
     // ============== Music ===================
     std::string musicPath = "../audio/music/GameplayMusic.mp3";
@@ -160,6 +161,31 @@ void GameplayScene::Update(float dt)
         drone->Update(dt, _level);
     }
 
+    // Arti
+    const size_t aliveArtillery = std::count_if(
+        _artilleryRounds.begin(), _artilleryRounds.end(),
+        [](const std::unique_ptr<Artillery>& a) { return a && a->IsAlive(); }
+    );
+
+    if (aliveArtillery < static_cast<size_t>(_maxArtilleryOnScene))
+    {
+        _artillerySpawnTimer -= dt;
+        if (_artillerySpawnTimer <= 0.f)
+        {
+            SpawnArtillery();
+            _artillerySpawnTimer = Utils::RandomFloat(_artillerySpawnMin, _artillerySpawnMax);
+        }
+    }
+
+    for (auto& artiRound : _artilleryRounds)
+    {
+        if (!artiRound) continue;
+        artiRound->Update(dt, _level);
+    }
+
+    _artilleryRounds.erase(std::remove_if(_artilleryRounds.begin(), _artilleryRounds.end(),
+        [](const std::unique_ptr<Artillery>& a) { return !a || !a->IsAlive(); }),
+        _artilleryRounds.end());
 
     // ===== Combat =====
     // Bullet Player a Helicopteros
@@ -195,10 +221,13 @@ void GameplayScene::Update(float dt)
 void GameplayScene::Draw()
 {
     _level.Draw(_window);
+
     if (_player) _player->Draw(_window);
     if (_heli)   _heli->Draw(_window);
-    for (const auto& d : _drones)
-        if (d) d->Draw(_window);
+    for (const auto& drone : _drones)
+        if (drone) drone->Draw(_window);
+    for (const auto& artiRound : _artilleryRounds)
+        if (artiRound) artiRound->Draw(_window);
 
     if (_pause && _pause->IsOpen())
     {
@@ -325,4 +354,36 @@ void GameplayScene::SpawnDrone()
     drone->SetTarget(_player->Center());
     drone->SetAoETarget(_player.get());
     _drones.emplace_back(std::move(drone));
+}
+
+void GameplayScene::SpawnArtillery()
+{
+    if (!_player || !_player->IsAlive()) return;
+
+    const auto win = _level.WindowSize();
+    constexpr float offY = 64.f; // Va a aparecer 64 pixeles arriba del techo
+    constexpr float sideMargin = 96.f; // Este valor es para evitar que caigan en las paredes de los costados
+
+    const float minX = sideMargin;
+    const float maxX = win.x - sideMargin;
+
+    const float spawnX = Utils::RandomFloat(minX, maxX);
+    const float spawnY = -offY;
+
+    const std::string spritePath = "../sprites/enemies/Missile.png";
+
+    const sf::Vector2i frame{ 64, 64 };
+    const float scale = 1.0f;
+
+    auto artiRound = std::make_unique<Artillery>(
+        sf::Vector2f{ spawnX, spawnY },
+        _audio,
+        resourceManager,
+        spritePath,
+        frame,
+        scale
+    );
+
+    artiRound->SetAoETarget(_player.get());
+    _artilleryRounds.emplace_back(std::move(artiRound));
 }

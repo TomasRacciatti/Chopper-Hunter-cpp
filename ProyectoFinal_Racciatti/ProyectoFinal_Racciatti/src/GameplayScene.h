@@ -8,6 +8,7 @@
 #include "Combat.h"
 #include "PauseMenu.h"
 #include "Drone.h"
+#include "Artillery.h"
 
 class GameplayScene : public Scene
 {
@@ -37,6 +38,7 @@ private:
 	std::unique_ptr<Player> _player;
 	std::unique_ptr<Helicopter> _heli;
 	std::vector<std::unique_ptr<Drone>> _drones;
+	std::vector<std::unique_ptr<Artillery>> _artilleryRounds;
 
 	// Input
 	Player::Input _playerInput{};
@@ -57,9 +59,16 @@ private:
 	float _droneSpawnTimer = 0.f;
 	int   _maxDronesOnScene = 1;
 
+	// Arti
+	float _artillerySpawnMin = 15.f; 
+	float _artillerySpawnMax = 20.f;
+	float _artillerySpawnTimer = 0.f;
+	int   _maxArtilleryOnScene = 1;
+
 	// helpers
 	void CreatePlayer();
 	void SpawnHelicopter();
 	void SpawnDrone();
+	void SpawnArtillery();
 };
 
