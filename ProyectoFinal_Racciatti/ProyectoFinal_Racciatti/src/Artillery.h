@@ -53,7 +53,7 @@ private:
     float _explosionFrameTime = 0.05f;
     int _explosionFrameCount = 12;
     int _hideSourceFromFrame = 2;
-    float _explosionScale = 1.0f;
+    float _explosionScale = 3.0f;
     sf::Vector2f _explosionWorldPos{ 0.f, 0.f }; // Esto es para alinear la anim de la explosion al piso
 
     // Audio
@@ -68,7 +68,8 @@ private:
     sf::Vector2f _explosionCenterPixel{ 64.f, 102.f };
 
     // Helpers
-    void StartExplosion();
+    float _explosionGroundPixelY = 102.f;
+    void StartExplosion(float groundY);
     sf::Vector2f ExplosionAoECenterWorld() const;
 };
 

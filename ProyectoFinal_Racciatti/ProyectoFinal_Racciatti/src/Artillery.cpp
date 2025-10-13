@@ -87,10 +87,11 @@ void Artillery::Update(float dt, const Level& lvl)
 
     if (bottom >= floorY - groundSafety)
     {
-        const float correction = (floorY - groundSafety) - bottom;
+        const float groundY = floorY - groundSafety;
+        const float correction = groundY - bottom;
         _sprite.move({ 0.f, correction });
         _body.setPosition(_sprite.getPosition());
-        StartExplosion();
+        StartExplosion(groundY);
     }
 }
 
@@ -124,16 +125,16 @@ void Artillery::TakeDamage(int dmg)
     // Lo sobreescribimos de entity para que no pueda tomar daño
 }
 
-void Artillery::StartExplosion()
+void Artillery::StartExplosion(float groundY)
 {
     if (_exploding) return;
     _exploding = true;
 
     _whistleSfx.stop();
 
-    sf::Vector2f fxPos = _sprite.getPosition();
-    fxPos.y += explosionYOffset;
-    _explosionWorldPos = fxPos;
+    const float centerOffsetY = (_explosionGroundPixelY - _explosionFrameSize.y * 0.5f) * _explosionScale;
+    _explosionWorldPos.x = _sprite.getPosition().x;
+    _explosionWorldPos.y = groundY - centerOffsetY;
 
     const std::string explosionPath = "../sprites/enemies/ArtilleryExplosion.png";
 
