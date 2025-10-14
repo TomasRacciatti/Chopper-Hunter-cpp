@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "ResourceManager.h"
+#include "GameProgress.h" 
 #include "Level.h"
 #include "Player.h"
 #include "Helicopter.h"
@@ -23,6 +24,7 @@ public:
 
 private:
 	ResourceManager& resourceManager;
+	GameProgress _progress;
 
 	// Pools
 	size_t poolCapacity = 64;

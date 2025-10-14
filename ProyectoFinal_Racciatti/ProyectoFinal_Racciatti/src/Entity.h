@@ -20,6 +20,7 @@ public:
 
 	// Vida
 	int GetLife() const { return _health; }
+	int GetMaxLife() const { return _maxHealth; }
 	void SetLife(int value);
 	virtual void TakeDamage(int dmg);
 

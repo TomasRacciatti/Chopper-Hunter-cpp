@@ -9,6 +9,8 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
     , _audio(audio)
     , _level(_window.getSize(), resourceManager, bgPath)
 {
+    _progress.Reset();
+
     CreatePlayer();
     SpawnHelicopter();
 
@@ -106,6 +108,9 @@ void GameplayScene::Update(float dt)
 
         return;
     }
+
+    // Progreso
+    _progress.Update(dt);
 
     // Player
     if (_player)
@@ -292,6 +297,8 @@ void GameplayScene::SpawnHelicopter()
 
     std::string path = "../sprites/enemies/HelicopterSpriteSheet_Damaged.png";
     _heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), _audio, resourceManager, path);
+    
+    _heli->SetProgress(&_progress);
 }
 
 void GameplayScene::SpawnDrone()
@@ -351,6 +358,8 @@ void GameplayScene::SpawnDrone()
         scale
     );
 
+    drone->SetProgress(&_progress);
+
     drone->SetTarget(_player->Center());
     drone->SetAoETarget(_player.get());
     _drones.emplace_back(std::move(drone));
@@ -383,6 +392,8 @@ void GameplayScene::SpawnArtillery()
         frame,
         scale
     );
+
+    artiRound->SetProgress(&_progress);
 
     artiRound->SetAoETarget(_player.get());
     _artilleryRounds.emplace_back(std::move(artiRound));
