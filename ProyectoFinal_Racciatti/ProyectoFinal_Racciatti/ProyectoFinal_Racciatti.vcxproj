@@ -207,6 +207,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClInclude Include="src\ExplosionEffect.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameplayScene.h" />
+    <ClInclude Include="src\GameProgress.h" />
     <ClInclude Include="src\Helicopter.h" />
     <ClInclude Include="src\Level.h" />
     <ClInclude Include="src\MainMenu.h" />
