@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "GameProgress.h"
 
 
 Entity::Entity(sf::Vector2f pos, sf::Vector2f size, AudioSettings& audio, int health)
@@ -31,7 +32,20 @@ void Entity::TakeDamage(int dmg)
     if (_health <= 0) 
     { 
         _health = 0; 
-        _alive = false; 
+        
+        Die();
+    }
+}
+
+void Entity::Die()
+{
+    _alive = false;
+
+    if (!_rewarded)
+    {
+        if (_progress && _scoreReward > 0)
+            _progress->AddScore(_scoreReward);
+        _rewarded = true;
     }
 }
 

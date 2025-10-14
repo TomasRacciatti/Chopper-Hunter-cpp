@@ -12,7 +12,7 @@ class Helicopter : public Entity
 {
 public:
     explicit Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, AudioSettings& audio, ResourceManager& resources,
-        const std::string& sheetPath, int hp = 10);
+        const std::string& sheetPath);
 
     void Update(float dt, const Level& lvl) override;
     void Draw(sf::RenderTarget& rt) const override;
@@ -27,6 +27,9 @@ public:
 
 private:
     ResourceManager& _resources;
+
+    static constexpr int hp = 10;
+    static constexpr int scoreReward = 25;
     
     // FSM
     enum class State { Entering, Patrol, Hover };

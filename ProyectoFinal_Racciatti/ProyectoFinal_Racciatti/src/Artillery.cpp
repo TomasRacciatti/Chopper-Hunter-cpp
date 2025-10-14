@@ -22,6 +22,8 @@ Artillery::Artillery(const sf::Vector2f& spawnPos, AudioSettings& audio, Resourc
     , _explosionSfx(resources.GetSound("../audio/sfx/ExplosionArti.mp3"))
     , _whistleSfx(resources.GetSound("../audio/sfx/ArtilleryWhistle.mp3"))
 {
+    SetScoreReward(scoreReward);
+    
     _body.setOrigin(_body.getSize() * 0.5f);
     _body.setPosition(spawnPos);
     _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
@@ -68,7 +70,7 @@ void Artillery::Update(float dt, const Level& lvl)
                 _explosionFx->SetPosition(_explosionWorldPos);
 
                 if (_explosionFx->Finished())
-                    _alive = false;
+                    Die();
         }
         return;
     }

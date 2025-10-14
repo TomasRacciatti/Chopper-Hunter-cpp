@@ -3,6 +3,7 @@
 
 class Level;
 class AudioSettings;
+class GameProgress;
 
 class Entity
 {
@@ -13,6 +14,10 @@ public:
 	virtual void Update(float dt, const Level& lvl) = 0;
 	virtual void Draw(sf::RenderTarget& rt) const;
 
+	// Progress
+	void SetScoreReward(int value) { _scoreReward = value; }
+	void SetProgress(GameProgress* progress) { _progress = progress; }
+
 	// Vida
 	int GetLife() const { return _health; }
 	void SetLife(int value);
@@ -20,7 +25,7 @@ public:
 
 	// Lifetime
 	bool IsAlive() const { return _alive; }
-	void Die() { _alive = false; }
+	void Die();
 
 	// Helpers que nos van a ayudar con colisiones
 	sf::Vector2f Center() const;
@@ -35,6 +40,11 @@ protected:
 	bool _alive = true;
 
 	AudioSettings& _audio;
+
+	// Progress
+	int _scoreReward = 0;
+	bool _rewarded = false;
+	GameProgress* _progress = nullptr;
 
 private:
 

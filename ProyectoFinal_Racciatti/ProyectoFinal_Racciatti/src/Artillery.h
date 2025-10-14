@@ -30,9 +30,10 @@ public:
 
 private:
     static constexpr int hp = 1;
+    static constexpr int scoreReward = 5;
 
     // Movimiento puramente vertical
-    float _speedY = 400.f;
+    float _speedY = 450.f;
     sf::Vector2f _vel{ 0.f, 0.f };
 
     // Visual

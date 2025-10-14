@@ -34,6 +34,7 @@ private:
     sf::Texture* _tex = nullptr;
     
     static constexpr int hp = 1;
+    static constexpr int scoreReward = 10;
     
     // Movement
     float _speed = 350.f;

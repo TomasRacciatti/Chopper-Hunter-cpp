@@ -24,6 +24,8 @@ Drone::Drone(const sf::Vector2f& spawnPos,
     , _explosionSfx(resources.GetSound("../audio/sfx/ExplosionDrone.mp3"))
     , _buzzSfx(resources.GetSound("../audio/sfx/DroneFly.mp3"))
 {
+    SetScoreReward(scoreReward);
+    
     _body.setOrigin(_body.getSize() * 0.5f);
     _body.setPosition(spawnPos);
     _sprite.setTextureRect(Utils::FrameRect(0, 0, _frameSize.x, _frameSize.y));
@@ -51,7 +53,7 @@ void Drone::Update(float dt, const Level& lvl)
             _explosionFx->SetPosition(_sprite.getPosition());
 
             if (_explosionFx->Finished())
-                _alive = false;
+                Die();
         }
         return;
     }

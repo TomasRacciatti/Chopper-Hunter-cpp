@@ -6,7 +6,7 @@
 #include <cmath>
 
 Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, AudioSettings& audio, ResourceManager& resources,
-    const std::string& sheetPath, int hp)
+    const std::string& sheetPath)
     : Entity(spawnPos, { 140.f, 51.f }, audio, hp)
     , _turret(std::move(turret))
     , _tex(&resources.GetTexture(sheetPath, false, {}))
@@ -15,6 +15,8 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Au
     , _explosionSfx(resources.GetSound("../audio/sfx/ExplosionHeli.mp3"))
     , _flightSfx(resources.GetSound("../audio/sfx/helicopter.mp3"))
 {
+    SetScoreReward(scoreReward);
+
     _sprite.setTextureRect(sf::IntRect({ 0, 0 }, { _frameSize.x, _frameSize.y }));
     
     _visualScale = 2.f;
@@ -50,14 +52,14 @@ void Helicopter::Update(float dt, const Level& lvl)
                 _turret->UpdateProjectiles(dt, lvl);
 
             if (_explosion->Finished())
-                _alive = false;
+                Die();
         }
 
         _explosionSfx.setVolume(_audio.GetSfxVolume());
 
         if (!_explosion && _explosionSfx.getStatus() != sf::SoundSource::Status::Playing)
         {
-            _alive = false;
+            Die();
         }
 
         return;
