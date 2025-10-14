@@ -1,15 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <string>
+#include "ResourceManager.h"
 
 class GameProgress;
 class Entity;
-class ResourceManager;
 
 class GameplayUI
 {
 public:
 	GameplayUI(ResourceManager& resources, const sf::Vector2u& winSize);
+	~GameplayUI();
 
 	void SetProgress(GameProgress* progress) { _progress = progress; }
 	void SetPlayer(Entity* player) { _player = player; }
@@ -25,19 +25,21 @@ private:
 	Entity* _player = nullptr;
 
 	// Text
-	sf::Text _timeText;
-	sf::Text _scoreText;
-	const sf::Font* _font = nullptr;
+	const sf::Font& _font;
+	sf::Text text;
+
+	sf::Text* _timeText = nullptr;
+	sf::Text* _scoreText = nullptr;
+	static constexpr int _characterSize = 28;
 
 	// hp bar
-	const sf::Texture* _hpEmptyTex = nullptr;
-	const sf::Texture* _hpFullTex = nullptr;
-	sf::Sprite _hpEmpty;
-	sf::Sprite _hpFull;
+	sf::Sprite* _hpEmpty = nullptr;
+	sf::Sprite* _hpFull = nullptr;
 
 	// Layout
 	float _margin = 10.f;
 	float _hpScale = 1.0f;
+	float _bottomY = 0.f;
 
 	// Helpers
 	static std::string FormatTime(float seconds);
