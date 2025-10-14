@@ -221,12 +221,12 @@ void GameplayScene::Update(float dt)
 			// Exagero en el valor para asegurarme que siempre muera de una
 			drone->TakeDamage(100); // Matar al drone lo hace explotar. 
 		}
-
-		// Elimino de la lista los drones muertos
-		_drones.erase(std::remove_if(_drones.begin(), _drones.end(),
-			[](const std::unique_ptr<Drone>& drone) { return !drone || !drone->IsAlive(); }),
-			_drones.end());
 	}
+
+	// Elimino de la lista los drones muertos
+	_drones.erase(std::remove_if(_drones.begin(), _drones.end(),
+		[](const std::unique_ptr<Drone>& drone) { return !drone || !drone->IsAlive(); }),
+		_drones.end());
 
 	// Bullet de Helis le pegan al Player
 	if (_player && _player->IsAlive())
