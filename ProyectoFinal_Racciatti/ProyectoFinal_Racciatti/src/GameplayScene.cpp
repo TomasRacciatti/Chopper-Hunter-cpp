@@ -420,8 +420,8 @@ void GameplayScene::CheckAdvanceDifficulty()
 		ApplyDifficultyStep();
 		_difficultyStage++;
 
-		_difficultyIncrement = std::round(_difficultyIncrement * _difficultyMultpr);
-		_nextDifficultyScore += static_cast<int>(_difficultyIncrement);
+		_difficultyIncrement += _incrementAddition;
+		_nextDifficultyScore += _difficultyIncrement;
 	}
 }
 

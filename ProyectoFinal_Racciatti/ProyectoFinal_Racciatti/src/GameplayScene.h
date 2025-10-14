@@ -58,8 +58,8 @@ private:
 	// ---- Suba de dificultad ----
 
 	int _difficultyStage = 0;
-	float _difficultyMultpr = 1.5f;
-	float _difficultyIncrement = 100.f;
+	int _incrementAddition = 150;
+	int _difficultyIncrement = 100;
 	int _nextDifficultyScore = 100;
 	float _spawnMinClamp = 0.5f;
 
