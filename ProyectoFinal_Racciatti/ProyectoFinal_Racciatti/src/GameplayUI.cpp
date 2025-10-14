@@ -7,19 +7,21 @@
 GameplayUI::GameplayUI(ResourceManager& resources, const sf::Vector2u& winSize)
     : _resourceManager(resources)
     , _win(winSize)
-    , _font(_resourceManager.GetFont("../fonts/MilitaryPoster.ttf"))
-    , text (_font, "", 28)
+    , text (_resourceManager.GetFont("../fonts/soldier.ttf"), "", 28)
 {
+    const std::string fontPath = "../fonts/soldier.ttf";
+    sf::Font& font = _resourceManager.GetFont(fontPath);
+
     sf::Color textColor = sf::Color(sf::Color::White);
     sf::Color outlineColor = sf::Color(sf::Color::Black);
     float outlineThickness = 1.f;
 
-    _timeText = new sf::Text(_font, "00:00", _characterSize);
+    _timeText = new sf::Text(font, "00:00", _characterSize);
     _timeText->setFillColor(textColor);
     _timeText->setOutlineColor(outlineColor);
     _timeText->setOutlineThickness(outlineThickness);
 
-    _scoreText = new sf::Text(_font, "0", _characterSize);
+    _scoreText = new sf::Text(font, "0", _characterSize);
     _scoreText->setFillColor(textColor);
     _scoreText->setOutlineColor(outlineColor);
     _scoreText->setOutlineThickness(outlineThickness);
@@ -109,6 +111,7 @@ void GameplayUI::UpdateHpBar()
     const sf::Vector2f base = _hpEmpty->getPosition();
     _hpFull->setPosition({ base.x, base.y + static_cast<float>(top) * _hpScale });
 }
+
 
 std::string GameplayUI::FormatTime(float seconds)
 {

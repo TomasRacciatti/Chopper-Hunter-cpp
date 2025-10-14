@@ -10,6 +10,7 @@
 #include "PauseMenu.h"
 #include "Drone.h"
 #include "Artillery.h"
+#include "GameplayUI.h"
 
 class GameplayScene : public Scene
 {
@@ -25,6 +26,7 @@ public:
 private:
 	ResourceManager& resourceManager;
 	GameProgress _progress;
+	GameplayUI* _gameplayUI = nullptr;
 
 	// Pools
 	size_t poolCapacity = 64;
@@ -54,6 +56,16 @@ private:
 	AudioSettings& _audio;
 
 	// ---- Suba de dificultad ----
+
+	int _difficultyStage = 0;
+	float _difficultyMultpr = 1.5f;
+	float _difficultyIncrement = 100.f;
+	int _nextDifficultyScore = 100;
+	float _spawnMinClamp = 0.5f;
+
+	void CheckAdvanceDifficulty();
+	void ApplyDifficultyStep();
+	void ClampSpawnWindows(); 
 
 	// Drone
 	float _droneSpawnMin = 10.f; 

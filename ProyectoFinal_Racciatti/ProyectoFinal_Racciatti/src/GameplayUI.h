@@ -25,7 +25,6 @@ private:
 	Entity* _player = nullptr;
 
 	// Text
-	const sf::Font& _font;
 	sf::Text text;
 
 	sf::Text* _timeText = nullptr;
@@ -38,7 +37,7 @@ private:
 
 	// Layout
 	float _margin = 10.f;
-	float _hpScale = 1.0f;
+	float _hpScale = 2.0f;
 	float _bottomY = 0.f;
 
 	// Helpers
