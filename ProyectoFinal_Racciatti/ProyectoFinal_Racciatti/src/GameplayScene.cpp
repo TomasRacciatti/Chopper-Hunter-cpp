@@ -415,7 +415,7 @@ void GameplayScene::SpawnArtillery()
 // ======= Cambios de dificultad ========
 void GameplayScene::CheckAdvanceDifficulty()
 {
-	while (_difficultyStage < 4 && _progress.GetScore() >= _nextDifficultyScore)
+	while (_difficultyStage < 5 && _progress.GetScore() >= _nextDifficultyScore)
 	{
 		ApplyDifficultyStep();
 		_difficultyStage++;
