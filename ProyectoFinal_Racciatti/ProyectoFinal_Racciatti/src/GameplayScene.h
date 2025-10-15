@@ -52,6 +52,7 @@ private:
 	// Pause
 	PauseMenu* _pause = nullptr;
 	bool _wasPaused = false;
+	bool _freezeOneFrame = false;
 
 	// Audio
 	sf::Music music;

@@ -63,9 +63,18 @@ void GameplayScene::HandleEvents(const sf::Event& ev)
 		if (key->scancode == sf::Keyboard::Scancode::Escape)
 		{
 			if (_pause && _pause->IsOpen())
+			{
+				_audio.SetMusicController(1.f);
+				_audio.SetSfxController(1.f);
 				_pause->Close();
+			}
 			else if (_pause)
+			{
 				_pause->Open();
+				_audio.SetMusicController(0.5f);
+				_audio.SetSfxController(0.f);
+				_freezeOneFrame = true;
+			}
 			return;
 		}
 	}
@@ -108,13 +117,30 @@ void GameplayScene::Update(float dt)
 	// Muerte
 	if (_death && _death->IsOpen())
 	{
-		_death->Update(dt);
-
-		if (_death->WantsReturnToMenu())
+		if (_freezeOneFrame)
 		{
-			wantsChange = true;
-			nextSceneID = SceneID::MainMenu;
-			return;
+			const float dt0 = 0.f;
+			
+			if (_player)_player->Update(dt0, _level);
+			if (_heli) _heli->Update(dt0, _level);
+			for (auto& drone : _drones) drone->Update(dt0, _level);
+			for (auto& arti : _artilleryRounds) arti->Update(dt0, _level);
+
+			_freezeOneFrame = false;
+		}
+		else
+		{
+			_death->Update(dt);
+
+			if (_death->WantsReturnToMenu())
+			{
+				_audio.SetMusicController(1.f);
+				_audio.SetSfxController(1.f);
+
+				wantsChange = true;
+				nextSceneID = SceneID::MainMenu;
+				return;
+			}
 		}
 		return;
 	}
@@ -123,21 +149,40 @@ void GameplayScene::Update(float dt)
 	// Pause
 	if (_pause && _pause->IsOpen())
 	{
-		_pause->Update(dt);
-
-		if (_pause->ResumeRequested())
+		if (_freezeOneFrame)
 		{
-			_pause->ClearRequests();
-			_pause->Close();
-		}
+			const float dt0 = 0.f;
 
-		if (_pause->MainMenuRequested())
+			if (_player)_player->Update(dt0, _level);
+			if (_heli) _heli->Update(dt0, _level);
+			for (auto& drone : _drones) drone->Update(dt0, _level);
+			for (auto& arti : _artilleryRounds) arti->Update(dt0, _level);
+
+			_freezeOneFrame = false;
+		}
+		else
 		{
-			_pause->ClearRequests();
-			wantsChange = true;
-			nextSceneID = SceneID::MainMenu;
-		}
+			_pause->Update(dt);
 
+			if (_pause->ResumeRequested())
+			{
+				_audio.SetMusicController(1.f);
+				_audio.SetSfxController(1.f);
+
+				_pause->ClearRequests();
+				_pause->Close();
+			}
+
+			if (_pause->MainMenuRequested())
+			{
+				_audio.SetMusicController(1.f);
+				_audio.SetSfxController(1.f);
+
+				_pause->ClearRequests();
+				wantsChange = true;
+				nextSceneID = SceneID::MainMenu;
+			}
+		}
 		return;
 	}
 
@@ -165,6 +210,9 @@ void GameplayScene::Update(float dt)
 				music.setLooping(true);
 				music.setVolume(_audio.GetMusicVolume());
 				music.play();
+
+				_audio.SetSfxController(0.f);
+				_freezeOneFrame = true;
 
 				_death->Open(_progress.GetScore(), _progress.GetTimeElapsed(), &_scores);
 			}
