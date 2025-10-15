@@ -56,12 +56,13 @@ private:
 
     bool  _open = false;
     bool  _backRequested = false;
-    //bool  _dragging = false;
     
     AudioSettings& _audio;
 
     float _buttonScale = 0.5f;
     float _spacingY = 100.f;
+    const float trackW = 460.f;
+    const float trackH = 16.f;
 
     // Helpers
     void CenterSprite(sf::Sprite* sprite) const;

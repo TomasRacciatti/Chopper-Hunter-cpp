@@ -182,7 +182,7 @@ void OptionsPanel::CreateSliders(ResourceManager& rm)
         {
             auto* r = new sf::RectangleShape();
             r->setFillColor(sf::Color(60, 60, 60));
-            r->setSize({ 460.f, 16.f });
+            r->setSize({ trackW, trackH });
             return r;
         };
     auto makeFill = [&]()->sf::RectangleShape*
@@ -206,7 +206,7 @@ void OptionsPanel::CreateSliders(ResourceManager& rm)
     // Master
     {
         Slider s;
-        s._label = makeText("MASTER", 48);
+        s._label = makeText("MASTER", 42);
         s._value = makeText("100", 42);
         s._track = makeTrack();
         s._fill = makeFill();
@@ -219,7 +219,7 @@ void OptionsPanel::CreateSliders(ResourceManager& rm)
     // Music
     {
         Slider s;
-        s._label = makeText("MUSIC", 48);
+        s._label = makeText("MUSIC", 42);
         s._value = makeText("100", 42);
         s._track = makeTrack();
         s._fill = makeFill();
@@ -232,7 +232,7 @@ void OptionsPanel::CreateSliders(ResourceManager& rm)
     // Sfx
     {
         Slider s;
-        s._label = makeText("SFX", 48);
+        s._label = makeText("SFX", 42);
         s._value = makeText("100", 42);
         s._track = makeTrack();
         s._fill = makeFill();
@@ -262,23 +262,22 @@ void OptionsPanel::LayoutSliders()
     const auto win = _window.getSize();
     const sf::Vector2f center(win.x * 0.5f, win.y * 0.5f);
 
-    const float firstRowY = center.y - _spacingY * 0.6f;
-    const float rowGap = _spacingY * 0.95f;
+    const float labelTrackGap = 30.f;
+    const float rowGap = 60.f;
 
-    const float trackW = 460.f;
-    const float trackH = 16.f;
+    const float firstRowY = center.y - _spacingY * 0.9f;
+    float labelY = firstRowY;
 
     for (int i = 0; i < static_cast<int>(_sliders.size()); ++i)
     {
-        auto& s = _sliders[i];
-        const float rowY = firstRowY + i * rowGap;
+        Slider& s = _sliders[i];
 
         // Label y valor
-        if (s._label) { CenterText(s._label); s._label->setPosition({ center.x - 90.f, rowY }); }
-        if (s._value) { CenterText(s._value); s._value->setPosition({ center.x + 110.f, rowY }); }
+        if (s._label) { CenterText(s._label); s._label->setPosition({ center.x - 90.f, labelY }); }
+        if (s._value) { CenterText(s._value); s._value->setPosition({ center.x + 110.f, labelY }); }
 
         // Track y knobb
-        const sf::Vector2f trackPos(center.x - trackW * 0.5f, rowY + _spacingY * 0.55f);
+        const sf::Vector2f trackPos(center.x - trackW * 0.5f, labelY + labelTrackGap);
         if (s._track) 
         {
             s._track->setSize({ trackW, trackH });
@@ -289,6 +288,8 @@ void OptionsPanel::LayoutSliders()
         s._trackRect = sf::FloatRect(trackPos, { trackW, trackH });
 
         UpdateSliderVisual(s);
+
+        labelY = trackPos.y + trackH + rowGap;
     }
 }
 
