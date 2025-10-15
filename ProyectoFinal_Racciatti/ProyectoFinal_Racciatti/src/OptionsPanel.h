@@ -12,7 +12,7 @@ public:
     ~OptionsPanel();
 
     void Open() { _open = true; }
-    void Close() { _open = false; _dragging = false; }
+    void Close() { _open = false; for(Slider& s : _sliders) s._dragging = false; }
     bool IsOpen() const { return _open; }
 
     void HandleEvent(const sf::Event& ev);
@@ -46,7 +46,7 @@ private:
         sf::RectangleShape* _fill = nullptr;
         sf::CircleShape* _knob = nullptr;
         sf::FloatRect _trackRect;
-        bool dragging = false;
+        bool _dragging = false;
 
         std::function<float()> getter; 
         std::function<void(float)> setter;

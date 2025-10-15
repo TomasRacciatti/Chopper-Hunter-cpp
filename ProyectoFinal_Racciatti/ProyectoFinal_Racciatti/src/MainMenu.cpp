@@ -80,8 +80,6 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	// =============== Opciones =========================
 	
 	_options = new OptionsPanel(resourceManager, _window, _audio);
-	_options->SetVolume(_audio.GetMusicVolume());
-
 
 	// ============== Credits ==================
 	_credits = new CreditsPanel(resourceManager, _window);
@@ -128,7 +126,7 @@ void MainMenu::Update(float dt)
 	if (_options) 
 	{
 		_options->Update(dt);
-		music.setVolume(_options->GetVolume());
+		music.setVolume(_audio.GetMusicVolume());
 	}
 }
 

@@ -8,9 +8,11 @@ public:
 
     float GetMusicVolume() const { return (_master * _music / 100.f) * _musicController; }
     void  SetMusicVolume(float value) { _music = Clamp100(value); }
+    float GetMusicSlider() const { return _music; }
 
     float GetSfxVolume() const { return (_master * _sfx / 100.f) * _sfxController; }
     void  SetSfxVolume(float value) { _sfx = Clamp100(value); }
+    float GetSfxSlider()   const { return _sfx; }
 
     void  SetMusicController(float value) { _musicController = Clamp01(value); }
     void  SetSfxController(float value) { _sfxController = Clamp01(value); }
