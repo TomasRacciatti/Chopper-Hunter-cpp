@@ -10,7 +10,7 @@ struct ScoreEntry;
 class DeathPanel
 {
 public:
-	DeathPanel(ResourceManager& resources, const sf::Vector2u& winSize);
+	DeathPanel(ResourceManager& resources, sf::RenderWindow& window);
 	~DeathPanel();
 
 	void Open(int finalScore, float finalTimeSeconds, HighScores* board);
@@ -29,7 +29,7 @@ private:
 	enum class State { Input, Board };
 
 	ResourceManager& _rm;
-	sf::Vector2u _win{ 0,0 };
+	sf::RenderWindow& _window;
 	HighScores* _highscores = nullptr;
 
 	// --- State ---
@@ -66,9 +66,6 @@ private:
 	sf::Sprite* _saveBtn = nullptr; 
 	sf::Text* _saveTxt = nullptr;
 
-	sf::Sprite* _skipBtn = nullptr; 
-	sf::Text* _skipTxt = nullptr;
-
 	sf::Sprite* _menuBtn = nullptr; 
 	sf::Text* _menuTxt = nullptr;
 
@@ -95,8 +92,6 @@ private:
 	void LayoutBoard();        
 	void UpdateNameVisual();   
 	void TrySaveAndShowBoard();
-	void OnSkip();             
-	void OnMainMenu();         
 
 	bool IsOver(const sf::Sprite* s, sf::Vector2f pt) const;
 
