@@ -3,7 +3,7 @@
 
 
 Game::Game()
-	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter")
+	: _window(sf::VideoMode({ 1280u, 720u }), "Chopper Hunter", sf::Style::None)
 	, audio()
 	, _sceneManager(_window, resourceManager, audio)
 {

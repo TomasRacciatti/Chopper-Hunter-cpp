@@ -60,6 +60,7 @@ CreditsPanel::CreditsPanel(ResourceManager& resourceManager, sf::RenderWindow& w
         "\n"
         "Music\n"
         "Goliath by Scott Buckley\n"
+        "Honor by Whitesand\n"
         "Lock and Load by Hayden Folker";
 
     _bodyTxt = new sf::Text(bodyFont, body, 36);
