@@ -1,6 +1,7 @@
 #include "GameplayUI.h"
 #include "GameProgress.h"
 #include "Entity.h"
+#include "Utils.h"
 #include <algorithm>
 #include <cstdio>
 
@@ -49,7 +50,7 @@ void GameplayUI::Update(float dt)
 {
     // Time
     const float time = _progress ? _progress->GetTimeElapsed() : 0.f;
-    _timeText->setString(FormatTime(time));
+    _timeText->setString(Utils::FormatTime(time));
 
     // Score
     const int score = _progress ? _progress->GetScore() : 0;
@@ -110,17 +111,4 @@ void GameplayUI::UpdateHpBar()
 
     const sf::Vector2f base = _hpEmpty->getPosition();
     _hpFull->setPosition({ base.x, base.y + static_cast<float>(top) * _hpScale });
-}
-
-
-std::string GameplayUI::FormatTime(float seconds)
-{
-    if (seconds < 0.f) seconds = 0.f;
-    int s = static_cast<int>(seconds + 0.5f);
-    int m = s / 60;
-    s = s % 60;
-
-    char buf[16];
-    std::snprintf(buf, sizeof(buf), "%02d:%02d", m, s);
-    return std::string(buf);
 }

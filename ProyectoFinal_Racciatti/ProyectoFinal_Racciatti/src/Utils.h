@@ -53,4 +53,16 @@ namespace Utils
 
         return { velocity.x * inv, velocity.y * inv };
     }
+
+    inline std::string FormatTime(float seconds)
+    {
+        if (seconds < 0.f) seconds = 0.f;
+        int s = static_cast<int>(seconds + 0.5f);  // round to nearest second
+        int m = s / 60;
+        s = s % 60;
+
+        char buf[16];
+        std::snprintf(buf, sizeof(buf), "%02d:%02d", m, s);
+        return std::string(buf);
+    }
 }

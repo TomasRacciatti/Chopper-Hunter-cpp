@@ -41,7 +41,6 @@ private:
 	float _bottomY = 0.f;
 
 	// Helpers
-	static std::string FormatTime(float seconds);
 	void Layout();
 	void UpdateHpBar();
 };
