@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
 #include "AudioSettings.h"
+#include <functional>
+#include <vector>
 
 class OptionsPanel
 {
@@ -32,20 +34,29 @@ private:
     sf::Text text;
 
     sf::Text* _title;
-    sf::Text* _label;
-    sf::Text* _value;
     sf::Text* _backTxt;
     sf::Sprite* _backBtn;
     sf::Sprite* background;
 
-    sf::RectangleShape* _track;
-    sf::RectangleShape* _fill;
-    sf::CircleShape*    _knob;
+    struct Slider
+    {
+        sf::Text* _label = nullptr;
+        sf::Text* _value = nullptr;
+        sf::RectangleShape* _track = nullptr;
+        sf::RectangleShape* _fill = nullptr;
+        sf::CircleShape* _knob = nullptr;
+        sf::FloatRect _trackRect;
+        bool dragging = false;
 
-    sf::FloatRect _trackRect;
+        std::function<float()> getter; 
+        std::function<void(float)> setter;
+    };
+
+    std::vector<Slider> _sliders;
+
     bool  _open = false;
     bool  _backRequested = false;
-    bool  _dragging = false;
+    //bool  _dragging = false;
     
     AudioSettings& _audio;
 
@@ -55,8 +66,10 @@ private:
     // Helpers
     void CenterSprite(sf::Sprite* sprite) const;
     void CenterText(sf::Text* text) const;
-    void SetVolumeFromX(float worldX);
 
-    void UpdateVisualSlider();
+    void CreateSliders(ResourceManager& rm);
+    void LayoutSliders();
+    void UpdateSliderVisual(Slider& slider);
+    void SetSliderFromX(Slider& slider, float worldX);
 };
 
