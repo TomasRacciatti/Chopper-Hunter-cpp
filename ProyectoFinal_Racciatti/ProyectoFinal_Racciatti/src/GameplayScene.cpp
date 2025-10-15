@@ -32,21 +32,33 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
 	_gameplayUI = new GameplayUI(resourceManager, _window.getSize());
 	_gameplayUI->SetProgress(&_progress);
 	_gameplayUI->SetPlayer(_player.get());
+
+	// Highscore
+	_scores.Load();
+	_death = new DeathPanel(resourceManager, _window);
 }
 
 GameplayScene::~GameplayScene()
 {
 	delete _pause;
 	delete _gameplayUI;
+	delete _death;
 }
 
 void GameplayScene::HandleEvents(const sf::Event& ev)
 {
+	if (_death && _death->IsOpen())
+	{
+		_death->HandleEvent(ev);
+		return;
+	}
+
 	if (ev.is<sf::Event::KeyPressed>()) {
 		auto key = ev.getIf<sf::Event::KeyPressed>();
 		if (key->scancode == sf::Keyboard::Scancode::A) _playerInput.left = true;
 		if (key->scancode == sf::Keyboard::Scancode::D) _playerInput.right = true;
 		if (key->scancode == sf::Keyboard::Scancode::S) _playerInput.crouch = true;
+
 
 		if (key->scancode == sf::Keyboard::Scancode::Escape)
 		{
@@ -93,6 +105,20 @@ void GameplayScene::Update(float dt)
 
 	music.setVolume(_audio.GetMusicVolume());
 
+	// Muerte
+	if (_death && _death->IsOpen())
+	{
+		_death->Update(dt);
+
+		if (_death->WantsReturnToMenu())
+		{
+			wantsChange = true;
+			nextSceneID = SceneID::MainMenu;
+			return;
+		}
+		return;
+	}
+
 
 	// Pause
 	if (_pause && _pause->IsOpen())
@@ -128,8 +154,12 @@ void GameplayScene::Update(float dt)
 
 		if (!_player->IsAlive())
 		{
-			wantsChange = true;
-			nextSceneID = SceneID::MainMenu;
+			if (_death && !_death->IsOpen())
+			{
+				// ACA VOY A TENER QUE CORTAR LA MUSICA Y EL SFX MANIPULANDO EL MULTIPLICADOR
+
+				_death->Open(_progress.GetScore(), _progress.GetTimeElapsed(), &_scores);
+			}
 			return;
 		}
 	}
@@ -237,6 +267,7 @@ void GameplayScene::Draw()
 {
 	_level.Draw(_window);
 
+	// Entities
 	if (_player) _player->Draw(_window);
 	if (_heli)   _heli->Draw(_window);
 	for (const auto& drone : _drones)
@@ -244,12 +275,16 @@ void GameplayScene::Draw()
 	for (const auto& artiRound : _artilleryRounds)
 		if (artiRound) artiRound->Draw(_window);
 
+	// UI
 	if (_gameplayUI) _gameplayUI->Draw(_window);
 
+	// Pause
 	if (_pause && _pause->IsOpen())
-	{
 		_pause->Draw(_window);
-	}
+
+	// Death
+	if (_death && _death->IsOpen())
+		_death->Draw(_window);
 }
 
 

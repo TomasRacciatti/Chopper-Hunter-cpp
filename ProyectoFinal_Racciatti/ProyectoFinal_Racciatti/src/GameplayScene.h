@@ -11,6 +11,8 @@
 #include "Drone.h"
 #include "Artillery.h"
 #include "GameplayUI.h"
+#include "DeathPanel.h"
+#include "HighScores.h"
 
 class GameplayScene : public Scene
 {
@@ -78,6 +80,10 @@ private:
 	float _artillerySpawnMax = 20.f;
 	float _artillerySpawnTimer = 0.f;
 	int   _maxArtilleryOnScene = 1;
+
+	// Highscore
+	HighScores _scores;
+	DeathPanel* _death = nullptr;
 
 	// helpers
 	void CreatePlayer();
