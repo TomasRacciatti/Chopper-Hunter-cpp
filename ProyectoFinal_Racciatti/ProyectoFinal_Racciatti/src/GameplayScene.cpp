@@ -390,6 +390,30 @@ void GameplayScene::CreatePlayer()
 	);
 
 	_player->EquipWeapon(std::move(pistol));
+
+
+	// Shotgun
+	float sgCooldown = 1.9f;
+	float sgBulletSpeed = 350.f;
+	float sgBullLifetime = 5.f;
+	int sgBullDamage = 1;
+	int sgStartingAmmo = 4;
+	auto shotgunSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/shotgun.mp3"));
+
+	auto shotgun = MakeWith<Shotgun>(
+		[&](Shotgun& w) {
+			std::string shotgunPath = "../sprites/player/Shotgun.png";
+			sf::Texture& shotgunTex = resourceManager.GetTexture(shotgunPath, false, {});
+			w.SetVisualSprite(shotgunTex, { 25.f, 26.5f }, 1.5f);
+			w.SetMuzzleDistance(18.f);
+
+			w.SetAmmo(sgStartingAmmo);
+		},
+		sgCooldown, sgBulletSpeed, sgBullLifetime, sgBullDamage,
+		&_playerBulletPool, _audio, std::move(shotgunSfx)
+	);
+
+	_player->EquipWeapon(std::move(shotgun));
 }
 
 
