@@ -8,7 +8,7 @@ static inline sf::Vector2f RotDeg(sf::Vector2f vel, float deg)
     return { vel.x * cos - vel.y * sin, vel.x * sin + vel.y * cos };
 }
 
-bool Shotgun::Shoot(sf::Vector2f origin, sf::Vector2f dir)
+bool Shotgun::Shoot(sf::Vector2f origin, sf::Vector2f shotDir)
 {
 	// Guardrails
 	if (_pellets <= 0) return false;
@@ -16,7 +16,7 @@ bool Shotgun::Shoot(sf::Vector2f origin, sf::Vector2f dir)
     int spawned = 0;
     if (_pellets == 1) // Nunca deberia entrar aca, pero lo dejo por seguridad
     {
-        if (EmitBullet(origin, dir)) ++spawned;
+        if (EmitBullet(origin, shotDir)) ++spawned;
         return spawned > 0;
     }
 
@@ -27,8 +27,8 @@ bool Shotgun::Shoot(sf::Vector2f origin, sf::Vector2f dir)
 
     for (int i = 0; i < _pellets; ++i, angle += stepAngle)
     {
-        const sf::Vector2f shotDir = RotDeg(dir, angle);
-        if (EmitBullet(origin, shotDir)) ++spawned;
+        const sf::Vector2f pelletDir = RotDeg(shotDir, angle);
+        if (EmitBullet(origin, pelletDir)) ++spawned;
     }
     return spawned > 0;
 }
