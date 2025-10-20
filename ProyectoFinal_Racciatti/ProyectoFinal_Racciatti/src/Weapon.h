@@ -1,17 +1,21 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Bullet.h"
 #include "Pool.h"
 #include <memory>
+#include <optional>
 
 class Level;
+class AudioSettings;
 
 class Weapon
 {
 public:
 	Weapon(float cooldown, float bulletSpeed,
 		float bulletLife, int bulletDamage,
-		Pool<Bullet>* sharedPool);
+		Pool<Bullet>* sharedPool, AudioSettings& audio,
+		std::unique_ptr<sf::Sound> fireSfx);
 
 	virtual ~Weapon() = default;
 
@@ -36,13 +40,26 @@ public:
 	}
 	void SetMuzzleDistance(float d) { _muzzleDistance = d; }
 
+	// Ammo
+	int  GetAmmo() const { return _ammo.has_value() ? *_ammo : 99; } // El numero es para el UI del de balas infinitas
+	void SetAmmo(int value) { _ammo = value; }
+	void SetInfiniteAmmo() { _ammo.reset(); }
+	bool HasAmmo() const { return !_ammo.has_value() || *_ammo > 0;}
+	void AddAmmo(int amount)
+	{
+		if (!_ammo.has_value() || amount == 0) return; 
+		*_ammo += amount;                              
+		if (*_ammo < 0) *_ammo = 0;                    
+	}
+
+
 	// necesario para que no se cuelguen las balas cuando se muere
 	void UpdateProjectiles(float dt, const Level& lvl);
 	void DrawProjectiles(sf::RenderTarget& rt) const;
 
 protected:
 	// Disparo particular de cada arma
-	virtual void Shoot(sf::Vector2f origin, sf::Vector2f dir) = 0;
+	virtual bool Shoot(sf::Vector2f origin, sf::Vector2f dir) = 0;
 
 	// Helper para spawnear una bullet del pool con los defaults del arma
 	Bullet* EmitBullet(sf::Vector2f origin, sf::Vector2f dirUnit);
@@ -56,6 +73,10 @@ protected:
 	float _muzzleDistance = 25.f;
 	float _angleDeg = 0.f;
 
+	// Audio
+	AudioSettings& _audio;
+	std::unique_ptr < sf::Sound> _fireSfx;
+
 private:
 	float _cooldown; // (Fire rate)
 	float _timer = 0.f;
@@ -63,5 +84,8 @@ private:
 	float _baseScale = 1.f;
 
 	Pool<Bullet>* _pool = nullptr;
+
+	// Ammo
+	std::optional<int> _ammo;
 };
 

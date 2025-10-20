@@ -376,6 +376,7 @@ void GameplayScene::CreatePlayer()
 	float pBulletSpeed = 350.f;
 	float pBullLifetime = 5.f;
 	int pBullDamage = 1;
+	auto pistolSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/gunshot.mp3"));
 
 	auto pistol = MakeWith<Pistol>(
 		[&](Pistol& w) {
@@ -384,7 +385,8 @@ void GameplayScene::CreatePlayer()
 			w.SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.5f);
 			w.SetMuzzleDistance(18.f);
 		},
-		pistolCooldown, pBulletSpeed, pBullLifetime, pBullDamage, &_playerBulletPool
+		pistolCooldown, pBulletSpeed, pBullLifetime, pBullDamage, 
+		&_playerBulletPool, _audio, std::move(pistolSfx)
 	);
 
 	_player->EquipWeapon(std::move(pistol));
@@ -410,6 +412,7 @@ void GameplayScene::SpawnHelicopter()
 	float tBulletSpeed = 350.f;
 	float tBullLifetime = 5.f;
 	int tBullDamage = 1;
+	auto turretSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/turret.mp3"));
 
 	auto turret = MakeWith<Pistol>(
 		[&](Pistol& w) {
@@ -418,7 +421,8 @@ void GameplayScene::SpawnHelicopter()
 			w.SetVisualSprite(turretTex, { 25.f, 26.5f }, 1.0f);
 			w.SetMuzzleDistance(25.f);
 		},
-		turretCooldown, tBulletSpeed, tBullLifetime, tBullDamage, &_enemyBulletPool);
+		turretCooldown, tBulletSpeed, tBullLifetime, tBullDamage, 
+		&_enemyBulletPool, _audio, std::move(turretSfx));
 	
 
 	std::string path = "../sprites/enemies/HelicopterSpriteSheet_Damaged.png";

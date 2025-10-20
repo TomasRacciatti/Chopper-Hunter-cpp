@@ -3,15 +3,19 @@
 #include "Utils.h"
 #include <algorithm>
 #include <cmath>
+#include <utility>
 
 Weapon::Weapon(float cooldown, float bulletSpeed,
 	float bulletLife, int bulletDamage,
-	Pool<Bullet>* sharedPool)
+	Pool<Bullet>* sharedPool, AudioSettings& audio,
+	std::unique_ptr<sf::Sound> fireSfx)
 	: _bulletSpeed(bulletSpeed)
 	, _bulletLifeTime(bulletLife)
 	, _bulletDamage(bulletDamage)
 	, _cooldown(cooldown)
 	, _pool(sharedPool)
+	, _audio(audio)
+	, _fireSfx(std::move(fireSfx))
 {
 	
 }
@@ -33,11 +37,19 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 	// Disparo
 	_timer -= dt;
 
-	if (fireHeld && _timer <= 0.f)
+	if (fireHeld && _timer <= 0.f && HasAmmo())
 	{
 		sf::Vector2f dir = Utils::SafeNormalize({ target.x - origin.x, target.y - origin.y });
-		Shoot(origin, dir);
-		_timer = _cooldown;
+		//Shoot(origin, dir);
+		if (Shoot(origin, dir))
+		{
+			_timer = _cooldown;
+
+			if (_ammo.has_value())
+				*_ammo -= 1;
+
+			if (_fireSfx) _fireSfx->play();
+		}
 	}
 
 	// Reciclo el pool
