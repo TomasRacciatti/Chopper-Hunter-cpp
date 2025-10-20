@@ -1,6 +1,7 @@
 #include "Weapon.h"
 #include "Level.h"
 #include "Utils.h"
+#include "AudioSettings.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>
@@ -48,7 +49,11 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 			if (_ammo.has_value())
 				*_ammo -= 1;
 
-			if (_fireSfx) _fireSfx->play();
+			if (_fireSfx) 
+			{
+				_fireSfx->setVolume(_audio.GetSfxVolume());
+				_fireSfx->play();
+			}
 		}
 	}
 

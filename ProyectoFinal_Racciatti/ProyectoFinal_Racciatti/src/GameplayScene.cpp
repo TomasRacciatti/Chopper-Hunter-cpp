@@ -422,8 +422,8 @@ void GameplayScene::SpawnHelicopter()
 			w.SetMuzzleDistance(25.f);
 		},
 		turretCooldown, tBulletSpeed, tBullLifetime, tBullDamage, 
-		&_enemyBulletPool, _audio, std::move(turretSfx));
-	
+		&_enemyBulletPool, _audio, std::move(turretSfx)
+	);
 
 	std::string path = "../sprites/enemies/HelicopterSpriteSheet_Damaged.png";
 	_heli = Make<Helicopter>(heliSpawn, std::move(turret), _audio, resourceManager, path);
