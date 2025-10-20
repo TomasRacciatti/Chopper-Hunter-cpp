@@ -216,7 +216,6 @@ void GameplayScene::Update(float dt)
 		{
 			if (_death && !_death->IsOpen())
 			{
-				// ACA VOY A TENER QUE CORTAR LA MUSICA Y EL SFX MANIPULANDO EL MULTIPLICADOR
 				// Cambio de musica
 				music.stop();
 				std::string deathMusicPath = "../audio/music/DeathMusic.mp3";
