@@ -19,7 +19,23 @@ Player::Player(sf::Vector2f startPos, std::string imageFilePath, AudioSettings& 
 
 void Player::EquipWeapon(std::unique_ptr<Weapon> weapon)
 {
-    _weapon = std::move(weapon);
+    if (!weapon) return;
+    _weapons.emplace_back(std::move(weapon));
+    if (_activeWeapon < 0) _activeWeapon = 0; // Selecciona la pistola automaticamente
+}
+
+bool Player::SelectWeapon(int slot)
+{
+    if (slot < 0 || slot >= static_cast<int>(_weapons.size())) return false;
+    _activeWeapon = slot;
+    return true;
+}
+
+Weapon* Player::CurrentWeapon()
+{
+    if (_activeWeapon < 0 || _activeWeapon >= static_cast<int>(_weapons.size()))
+        return nullptr;
+    return _weapons[_activeWeapon].get();
 }
 
 void Player::Update(float dt, const Level& lvl)
@@ -44,7 +60,7 @@ void Player::Update(float dt, const Level& lvl)
     SyncSpriteToBody();
 
     // Disparo
-    if (_weapon)
+    if (Weapon* weapon = CurrentWeapon())
     {
         const auto weaponBody = _body.getGlobalBounds();
         sf::Vector2f muzzle{
@@ -52,7 +68,7 @@ void Player::Update(float dt, const Level& lvl)
             weaponBody.position.y + weaponBody.size.y * 0.40f
         };
 
-        _weapon->Update(dt, _input.fireHeld, muzzle, _input.mouseWorld, lvl);
+        weapon->Update(dt, _input.fireHeld, muzzle, _input.mouseWorld, lvl);
     }
 }
 
@@ -62,8 +78,11 @@ void Player::Draw(sf::RenderTarget& rt) const
     rt.draw(_sprite);
 
     // Dibujamos el arma
-    if (_weapon)
-        _weapon->Draw(rt);
+    if (_activeWeapon >= 0 && _activeWeapon < static_cast<int>(_weapons.size()))
+    {
+        if (auto* weapon = _weapons[_activeWeapon].get())
+            weapon->Draw(rt);
+    }
 }
 
 void Player::HandleCrouch(const Level& lvl)
@@ -126,8 +145,10 @@ void Player::SnapToFloor(const Level& lvl) // Como no tenemos salto:
 // ===== Anim =====
 void Player::SelectAnim()
 {
-    if (_input.crouch) {
-        if (_anim != Anim::Crouch) {
+    if (_input.crouch) 
+    {
+        if (_anim != Anim::Crouch) 
+        {
             _anim = Anim::Crouch;
             ApplyFrame(0, _rowCrouch);
         }
@@ -135,16 +156,20 @@ void Player::SelectAnim()
     }
 
     const bool moving = _input.left || _input.right;
-    if (moving) {
-        if (_anim != Anim::Run) {
+    if (moving) 
+    {
+        if (_anim != Anim::Run) 
+        {
             _anim = Anim::Run;
             _frame = 0;
             _animTimer = 0.f;
             ApplyFrame(_frame, _rowRun);
         }
     }
-    else {
-        if (_anim != Anim::Idle) {
+    else 
+    {
+        if (_anim != Anim::Idle) 
+        {
             _anim = Anim::Idle;
             ApplyFrame(0, _rowIdle);
         }
@@ -174,6 +199,6 @@ void Player::UpdateRunAnim(float dt)
 
 void Player::SyncSpriteToBody() 
 {
-    const auto r = _body.getGlobalBounds();
-    _sprite.setPosition({ r.position.x + r.size.x * 0.5f, r.position.y + r.size.y });
+    const auto rect = _body.getGlobalBounds();
+    _sprite.setPosition({ rect.position.x + rect.size.x * 0.5f, rect.position.y + rect.size.y });
 }

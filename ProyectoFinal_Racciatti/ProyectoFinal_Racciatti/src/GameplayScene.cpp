@@ -74,6 +74,9 @@ void GameplayScene::HandleEvents(const sf::Event& ev)
 		if (key->scancode == sf::Keyboard::Scancode::D) _playerInput.right = true;
 		if (key->scancode == sf::Keyboard::Scancode::S) _playerInput.crouch = true;
 
+		if (key->scancode == sf::Keyboard::Scancode::Num1) { if (_player) _player->SelectWeapon(0); }
+		if (key->scancode == sf::Keyboard::Scancode::Num2) { if (_player) _player->SelectWeapon(1); }
+		if (key->scancode == sf::Keyboard::Scancode::Num3) { if (_player) _player->SelectWeapon(2); }
 
 		if (key->scancode == sf::Keyboard::Scancode::Escape)
 		{

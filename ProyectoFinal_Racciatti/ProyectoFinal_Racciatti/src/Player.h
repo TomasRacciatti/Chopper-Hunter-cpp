@@ -3,6 +3,7 @@
 #include <memory>
 #include "Weapon.h"
 #include "ResourceManager.h"
+#include <vector>
 
 class Player: public Entity
 {
@@ -19,6 +20,9 @@ public:
 	};
 
 	void EquipWeapon(std::unique_ptr<Weapon> weapon);
+	bool SelectWeapon(int slot);
+	int  CurrentWeaponIndex() const { return _activeWeapon; }
+	Weapon* CurrentWeapon();
 
 	void SetInput(const Input& input) { _input = input; }
 
@@ -36,7 +40,8 @@ private:
 	sf::Vector2f _crouchSize{ 34.f, 58.f }; // Esto probablemente vuele cuando usemos las anims
 
 	// Weapon
-	std::unique_ptr<Weapon> _weapon;
+	std::vector<std::unique_ptr<Weapon>> _weapons;
+	int _activeWeapon = -1;
 
 	// input
 	Input _input;

@@ -1,4 +1,5 @@
 #include "Shotgun.h"
+#include <cmath>
 
 static inline sf::Vector2f RotDeg(sf::Vector2f vel, float deg)
 {
@@ -26,8 +27,8 @@ bool Shotgun::Shoot(sf::Vector2f origin, sf::Vector2f dir)
 
     for (int i = 0; i < _pellets; ++i, angle += stepAngle)
     {
-        const sf::Vector2f dir = RotDeg(dir, angle);
-        if (EmitBullet(origin, dir)) ++spawned;
+        const sf::Vector2f shotDir = RotDeg(dir, angle);
+        if (EmitBullet(origin, shotDir)) ++spawned;
     }
     return spawned > 0;
 }
