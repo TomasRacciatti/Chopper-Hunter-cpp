@@ -27,6 +27,8 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 	sf::Vector2f dir = Utils::SafeNormalize({ target.x - origin.x, target.y - origin.y });
 	_angleDeg = std::atan2(dir.y, dir.x) * 180.f / 3.14159265f;
 
+	_lastTarget = target;
+
 	// Rotar el visual
 	_sprite->setPosition(origin);
 	_sprite->setRotation(sf::degrees(_angleDeg));
@@ -64,6 +66,8 @@ void Weapon::Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f t
 		if (!bullet.Alive()) 
 			_pool->Despawn(&bullet);
 	}
+
+	PostUpdate(dt, lvl); // Permite guiar el misil
 }
 
 void Weapon::Draw(sf::RenderTarget& rt) const
@@ -74,6 +78,8 @@ void Weapon::Draw(sf::RenderTarget& rt) const
 	// Visual de balas
 	for (const auto& bullet : _pool->Items())
 		if (bullet.Alive()) bullet.Draw(rt);
+
+	PostDraw(rt);
 }
 
 Bullet* Weapon::EmitBullet(sf::Vector2f origin, sf::Vector2f dirUnit)

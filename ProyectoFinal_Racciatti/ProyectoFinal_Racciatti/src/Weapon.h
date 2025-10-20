@@ -64,6 +64,12 @@ protected:
 	// Helper para spawnear una bullet del pool con los defaults del arma
 	Bullet* EmitBullet(sf::Vector2f origin, sf::Vector2f dirUnit);
 
+	// Para el RPG
+	virtual void PostUpdate(float /*dt*/, const Level& /*lvl*/) {}
+	virtual void PostDraw(sf::RenderTarget& /*rt*/) const {}
+
+	sf::Vector2f _lastTarget{ 0.f, 0.f };
+
 	float _bulletSpeed;
 	float _bulletLifeTime;
 	int   _bulletDamage;

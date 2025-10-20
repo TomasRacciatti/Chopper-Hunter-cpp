@@ -195,6 +195,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClCompile Include="src\Pistol.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
+    <ClCompile Include="src\Rpg.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Shotgun.cpp" />
@@ -224,6 +225,7 @@ XCOPY "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Command>
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Pool.h" />
     <ClInclude Include="src\ResourceManager.h" />
+    <ClInclude Include="src\Rpg.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\ScoreEntry.h" />

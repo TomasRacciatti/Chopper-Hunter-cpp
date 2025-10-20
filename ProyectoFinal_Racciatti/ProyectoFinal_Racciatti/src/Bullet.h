@@ -16,6 +16,11 @@ public:
 
     int Damage() const { return _damage; }
 
+    // Getters & Setters
+    sf::Vector2f GetPosition() const { return _shape.getPosition(); }
+    sf::Vector2f GetVelocity() const { return _velocity; }
+    void SetVelocity(sf::Vector2f vel) { _velocity = vel; }
+
     // Pool
     void Activate(sf::Vector2f pos, sf::Vector2f vel, float life, int dmg) {
         _shape.setPosition(pos);

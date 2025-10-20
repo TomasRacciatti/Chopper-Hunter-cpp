@@ -377,7 +377,7 @@ void GameplayScene::CreatePlayer()
 	// Pistol
 	float pistolCooldown = 0.35f;
 	float pBulletSpeed = 350.f;
-	float pBullLifetime = 5.f;
+	float pBullLifetime = 2.f;
 	int pBullDamage = 1;
 	auto pistolSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/gunshot.mp3"));
 
@@ -394,11 +394,10 @@ void GameplayScene::CreatePlayer()
 
 	_player->EquipWeapon(std::move(pistol));
 
-
 	// Shotgun
 	float sgCooldown = 1.9f;
 	float sgBulletSpeed = 350.f;
-	float sgBullLifetime = 5.f;
+	float sgBullLifetime = 2.f;
 	int sgBullDamage = 1;
 	int sgStartingAmmo = 4;
 	auto shotgunSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/shotgun.mp3"));
@@ -408,7 +407,7 @@ void GameplayScene::CreatePlayer()
 			std::string shotgunPath = "../sprites/player/Shotgun.png";
 			sf::Texture& shotgunTex = resourceManager.GetTexture(shotgunPath, false, {});
 			w.SetVisualSprite(shotgunTex, { 25.f, 26.5f }, 1.5f);
-			w.SetMuzzleDistance(18.f);
+			w.SetMuzzleDistance(25.f);
 
 			w.SetAmmo(sgStartingAmmo);
 		},
@@ -417,6 +416,34 @@ void GameplayScene::CreatePlayer()
 	);
 
 	_player->EquipWeapon(std::move(shotgun));
+
+	// RPG
+	const float rpgCooldown = 1.2f;  
+	const float rpgSpeed = 300.f;
+	const float rpgLifetime = 5.f;  
+	const int rpgDamage = 6;
+	int rpgStartingAmmo = 2;
+	auto rpgSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/rpg.mp3"));
+
+	auto rpg = MakeWith<Rpg>(
+		[&](Rpg& w) {
+			std::string rpgPath = "../sprites/player/RPG.png";
+			sf::Texture& rpgTex = resourceManager.GetTexture(rpgPath, false, {});
+			w.SetVisualSprite(rpgTex, { 25.f, 26.5f }, 1.5f);
+			w.SetMuzzleDistance(25.f);
+
+			// Textura distinta para la bala
+			const std::string missilePath = "../sprites/player/RpgRound.png";
+			sf::Texture& missileTex = resourceManager.GetTexture(missilePath, false, {});
+			w.SetMissileSprite(missileTex, { 9.f, 5.5f }, 1.5f);
+
+			w.SetAmmo(rpgStartingAmmo);
+		},
+		rpgCooldown, rpgSpeed, rpgLifetime, rpgDamage,
+		&_playerBulletPool, _audio, std::move(rpgSfx)
+	);
+
+	_player->EquipWeapon(std::move(rpg));
 }
 
 

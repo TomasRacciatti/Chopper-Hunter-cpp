@@ -7,6 +7,7 @@
 #include "Helicopter.h"
 #include "Pistol.h"
 #include "Shotgun.h"
+#include "Rpg.h"
 #include "Combat.h"
 #include "PauseMenu.h"
 #include "Drone.h"
