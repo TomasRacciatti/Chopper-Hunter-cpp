@@ -1,6 +1,21 @@
 #include "GameplayScene.h"
 #include "Utils.h"
 
+// Templates para la creacion de los unique_ptr que uso
+namespace {
+	template <typename T, typename... Args>
+	std::unique_ptr<T> Make(Args&&... args) {
+		return std::make_unique<T>(std::forward<Args>(args)...);
+	}
+
+	template <typename T, typename SetupFn, typename... Args>
+	std::unique_ptr<T> MakeWith(SetupFn&& setup, Args&&... args) {
+		auto obj = std::make_unique<T>(std::forward<Args>(args)...);
+		std::forward<SetupFn>(setup)(*obj);
+		return obj;
+	}
+}
+
 static constexpr const char* bgPath = "../sprites/backgrounds/Game_bg.png";
 
 GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow& _window, AudioSettings& audio)
@@ -353,21 +368,26 @@ void GameplayScene::CreatePlayer()
 	const sf::Vector2f spawnPos(window.x * 0.5f, window.y - 64.f);
 
 	std::string path = "../sprites/player/SoldierSpriteSheet.png";
-	_player = std::make_unique<Player>(spawnPos, path, _audio, resourceManager);
+	_player = Make<Player>(spawnPos, path, _audio, resourceManager);
 
 	// Spawn de arma
-	auto pistol = std::make_unique<Pistol>(
-		0.35f,						// Cooldown
-		350.f,						// Bullet speed
-		5.f,						// Bullet lifetime
-		1,							// Bullet damage
-		&_playerBulletPool
+
+	// Pistol
+	float pistolCooldown = 0.35f;
+	float pBulletSpeed = 350.f;
+	float pBullLifetime = 5.f;
+	int pBullDamage = 1;
+
+	auto pistol = MakeWith<Pistol>(
+		[&](Pistol& w) {
+			std::string pistolPath = "../sprites/player/Pistol.png";
+			sf::Texture& pistolTex = resourceManager.GetTexture(pistolPath, false, {});
+			w.SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.5f);
+			w.SetMuzzleDistance(18.f);
+		},
+		pistolCooldown, pBulletSpeed, pBullLifetime, pBullDamage, &_playerBulletPool
 	);
 
-	std::string pistolPath = "../sprites/player/Pistol.png";
-	sf::Texture& pistolTex = resourceManager.GetTexture(pistolPath, false, {});
-	pistol->SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.5f);
-	pistol->SetMuzzleDistance(18.f);
 	_player->EquipWeapon(std::move(pistol));
 }
 
@@ -387,19 +407,23 @@ void GameplayScene::SpawnHelicopter()
 	sf::Vector2f heliSpawn{ spawnX, spawnY };
 
 	// Torreta
-	auto turret = std::make_unique<Pistol>(
-		0.5f,     // cooldown
-		350.f,    // bullet speed
-		5.f,      // bullet life
-		1,        // damage
-		&_enemyBulletPool);
-	std::string turretPath = "../sprites/enemies/Turret.png";
-	sf::Texture& turretTex = resourceManager.GetTexture(turretPath, false, {});
-	turret->SetVisualSprite(turretTex, { 25.f, 26.5f }, 1.0f);
-	turret->SetMuzzleDistance(25.f);
+	float turretCooldown = 0.5f;
+	float tBulletSpeed = 350.f;
+	float tBullLifetime = 5.f;
+	int tBullDamage = 1;
+
+	auto turret = MakeWith<Pistol>(
+		[&](Pistol& w) {
+			std::string turretPath = "../sprites/enemies/Turret.png";
+			sf::Texture& turretTex = resourceManager.GetTexture(turretPath, false, {});
+			w.SetVisualSprite(turretTex, { 25.f, 26.5f }, 1.0f);
+			w.SetMuzzleDistance(25.f);
+		},
+		turretCooldown, tBulletSpeed, tBullLifetime, tBullDamage, &_enemyBulletPool);
+	
 
 	std::string path = "../sprites/enemies/HelicopterSpriteSheet_Damaged.png";
-	_heli = std::make_unique<Helicopter>(heliSpawn, std::move(turret), _audio, resourceManager, path);
+	_heli = Make<Helicopter>(heliSpawn, std::move(turret), _audio, resourceManager, path);
 
 	_heli->SetProgress(&_progress);
 }
@@ -452,7 +476,7 @@ void GameplayScene::SpawnDrone()
 
 	const std::string droneSpritePath = "../sprites/enemies/DroneSpriteSheet.png";
 
-	auto drone = std::make_unique<Drone>(
+	auto drone = Make<Drone>(
 		sf::Vector2f{ x, y },
 		_audio,
 		resourceManager,
@@ -487,7 +511,7 @@ void GameplayScene::SpawnArtillery()
 	const sf::Vector2i frame{ 64, 64 };
 	const float scale = 1.0f;
 
-	auto artiRound = std::make_unique<Artillery>(
+	auto artiRound = Make<Artillery>(
 		sf::Vector2f{ spawnX, spawnY },
 		_audio,
 		resourceManager,
