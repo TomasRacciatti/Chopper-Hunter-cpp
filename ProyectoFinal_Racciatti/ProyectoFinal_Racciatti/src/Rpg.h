@@ -28,7 +28,7 @@ private:
 
     // Hoaming
     sf::Vector2f _target{ 0.f,0.f };
-    float _turnRateDeg = 140.f; // Velocidad de rot
+    float _turnRateDeg = 180.f; // Velocidad de rot
 
 
 };

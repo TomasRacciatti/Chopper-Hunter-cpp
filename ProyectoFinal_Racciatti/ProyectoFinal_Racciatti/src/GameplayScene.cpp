@@ -418,7 +418,7 @@ void GameplayScene::CreatePlayer()
 	_player->EquipWeapon(std::move(shotgun));
 
 	// RPG
-	const float rpgCooldown = 1.2f;  
+	const float rpgCooldown = 5.f;  
 	const float rpgSpeed = 300.f;
 	const float rpgLifetime = 5.f;  
 	const int rpgDamage = 6;

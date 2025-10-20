@@ -13,9 +13,6 @@ bool Rpg::Shoot(sf::Vector2f origin, sf::Vector2f dir)
     _active = EmitBullet(origin, dir);
     if (!_active) return false;
 
-    // Escondemos el circulo amarillo original
-    _active->SetRadius(0.01f);
-
     return true;
 }
 

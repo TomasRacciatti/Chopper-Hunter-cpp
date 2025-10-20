@@ -341,7 +341,7 @@ void DeathPanel::LayoutBoard()
 	const sf::Vector2f center(_window.getSize().x * 0.5f, _window.getSize().y * 0.5f);
 
 	if (_titleTxt) {
-		_titleTxt->setString("LEADERBOARD");
+		_titleTxt->setString("SEMPER FIDELIS");
 		CenterText(_titleTxt);
 		_titleTxt->setPosition({ center.x, center.y - _overlay.getSize().y * 0.35f });
 	}
