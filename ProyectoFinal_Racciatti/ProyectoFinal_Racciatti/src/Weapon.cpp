@@ -1,7 +1,6 @@
 #include "Weapon.h"
 #include "Level.h"
 #include "Utils.h"
-#include "AudioSettings.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>

@@ -1,13 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "AudioSettings.h"
 #include "Bullet.h"
 #include "Pool.h"
 #include <memory>
 #include <optional>
 
 class Level;
-class AudioSettings;
 
 class Weapon
 {

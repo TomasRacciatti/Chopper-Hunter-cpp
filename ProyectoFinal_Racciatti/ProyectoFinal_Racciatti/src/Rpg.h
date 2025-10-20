@@ -2,6 +2,9 @@
 #include "Weapon.h"
 #include <memory>
 
+class ResourceManager;
+class ExplosionEffect;
+
 class Rpg : public Weapon
 {
 public:
@@ -15,6 +18,8 @@ public:
     }
 
     void SetTurnRate(float degPerSec) { _turnRateDeg = degPerSec; }
+
+    void SetupExplosion(ResourceManager& resources);
 
 protected:
     bool Shoot(sf::Vector2f origin, sf::Vector2f dir) override;
@@ -30,6 +35,17 @@ private:
     sf::Vector2f _target{ 0.f,0.f };
     float _turnRateDeg = 180.f; // Velocidad de rot
 
+    // Explosion
+    std::unique_ptr<ExplosionEffect> _explosionFx;
+    std::unique_ptr<sf::Sound> _explosionSfx;
+    ResourceManager* _resources = nullptr;
+    sf::Vector2f _lastPos{ 0.f, 0.f };
 
+    // Sprite explosion
+    const char* _explosionTexPath = "../sprites/enemies/DroneExplosion.png";
+    const sf::Vector2i _explosionFrameSize{ 48, 48 };
+    const int _explosionFrameCount = 6;
+    const int _hideSourceFromFrame = 2;
+    const float _explosionScale = 3.0f;
 };
 

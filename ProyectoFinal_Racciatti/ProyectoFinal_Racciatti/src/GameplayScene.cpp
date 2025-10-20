@@ -437,6 +437,8 @@ void GameplayScene::CreatePlayer()
 			sf::Texture& missileTex = resourceManager.GetTexture(missilePath, false, {});
 			w.SetMissileSprite(missileTex, { 9.f, 5.5f }, 1.5f);
 
+			w.SetupExplosion(resourceManager);
+
 			w.SetAmmo(rpgStartingAmmo);
 		},
 		rpgCooldown, rpgSpeed, rpgLifetime, rpgDamage,
