@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "OptionsPanel.h"
 #include "CreditsPanel.h"
+#include "HowToPlayPanel.h"
 
 MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
 	: Scene(window)
@@ -27,16 +28,19 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	// Button sprites
 	startButton = new sf::Sprite(btnTex);
 	optionsButton = new sf::Sprite(btnTex);
+	howToButton = new sf::Sprite(btnTex);
 	creditsButton = new sf::Sprite(btnTex);
 	exitButton = new sf::Sprite(btnTex);
 
 	CenterSprite(startButton);
 	CenterSprite(optionsButton);
+	CenterSprite(howToButton);
 	CenterSprite(creditsButton);
 	CenterSprite(exitButton);
 
 	startButton->setScale(sf::Vector2f(buttonScale, buttonScale));
 	optionsButton->setScale(sf::Vector2f(buttonScale, buttonScale));
+	howToButton->setScale(sf::Vector2f(buttonScale, buttonScale));
 	creditsButton->setScale(sf::Vector2f(buttonScale, buttonScale));
 	exitButton->setScale(sf::Vector2f(buttonScale, buttonScale));
 
@@ -45,28 +49,33 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 
 	startButton->setPosition({ center.x, center.y + spacingY * 0.f });
 	optionsButton->setPosition({ center.x, center.y + spacingY * 1.f });
-	creditsButton->setPosition({ center.x, center.y + spacingY * 2.f });
-	exitButton->setPosition({ center.x, center.y + spacingY * 3.f });
+	howToButton->setPosition({ center.x, center.y + spacingY * 2.f });
+	creditsButton->setPosition({ center.x, center.y + spacingY * 3.f });
+	exitButton->setPosition({ center.x, center.y + spacingY * 4.f });
 
 	// Text
 	playText = new sf::Text(font, "PLAY", 48);
 	optionsText = new sf::Text(font, "OPTIONS", 48);
+	howToText = new sf::Text(font, "HOW TO PLAY", 48);
 	creditsText = new sf::Text(font, "CREDITS", 48);
 	exitText = new sf::Text(font, "EXIT", 48);
 
 
 	playText->setFillColor(textColor);
 	optionsText->setFillColor(textColor);
+	howToText->setFillColor(textColor);
 	creditsText->setFillColor(textColor);
 	exitText->setFillColor(textColor);
 
 	CenterText(playText);
 	CenterText(optionsText);
+	CenterText(howToText);
 	CenterText(creditsText);
 	CenterText(exitText);
 
 	playText->setPosition(startButton->getPosition());
 	optionsText->setPosition(optionsButton->getPosition());
+	howToText->setPosition(howToButton->getPosition());
 	creditsText->setPosition(creditsButton->getPosition());
 	exitText->setPosition(exitButton->getPosition());
 
@@ -78,8 +87,10 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 
 
 	// =============== Opciones =========================
-	
 	_options = new OptionsPanel(resourceManager, _window, _audio);
+
+	// ============== HtP ==================
+	_howTo = new HowToPlayPanel(resourceManager, _window);
 
 	// ============== Credits ==================
 	_credits = new CreditsPanel(resourceManager, _window);
@@ -99,16 +110,19 @@ MainMenu::~MainMenu()
 	delete titleText;
 	delete playText;
 	delete optionsText;
+	delete howToText;
 	delete creditsText;
 	delete exitText;
 	delete background;
 	delete startButton;
 	delete optionsButton;
+	delete howToButton;
 	delete creditsButton;
 	delete exitButton;
 
 	// Panels
 	delete _options;
+	delete _howTo;
 	delete _credits;
 }
 
@@ -134,11 +148,13 @@ void MainMenu::Draw()
 {
 	_window.draw(*background);
 
-	
-
 	if (_options->IsOpen())
 	{
 		_options->Draw(_window);
+	}
+	else if (_howTo->IsOpen())
+	{
+		_howTo->Draw(_window);
 	}
 	else if (_credits->IsOpen())
 	{
@@ -150,11 +166,13 @@ void MainMenu::Draw()
 
 		_window.draw(*startButton);
 		_window.draw(*optionsButton);
+		_window.draw(*howToButton);
 		_window.draw(*creditsButton);
 		_window.draw(*exitButton);
 
 		_window.draw(*playText);
 		_window.draw(*optionsText);
+		_window.draw(*howToText);
 		_window.draw(*creditsText);
 		_window.draw(*exitText);
 	}
@@ -171,6 +189,17 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 			_options->ClearBackRequest();
 			_options->Close();
 		}
+		return;
+	}
+
+	if (_howTo->IsOpen())
+	{
+		_howTo->HandleEvent(ev);
+		if (_howTo->BackRequested())
+		{
+			_howTo->ClearBackRequest();
+			_howTo->Close();
+		}      
 		return;
 	}
 
@@ -203,6 +232,12 @@ void MainMenu::HandleEvents(const sf::Event& ev)
 			if (optionsButton->getGlobalBounds().contains(worldPos))
 			{
 				_options->Open();
+				return;
+			}
+
+			if (howToButton->getGlobalBounds().contains(worldPos)) 
+			{
+				_howTo->Open();
 				return;
 			}
 

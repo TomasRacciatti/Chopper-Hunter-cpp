@@ -6,6 +6,7 @@
 
 class OptionsPanel;
 class CreditsPanel;
+class HowToPlayPanel;
 
 class MainMenu : public Scene
 {
@@ -25,24 +26,28 @@ private:
 
 	sf::Text text;
 
-	sf::Text* titleText;
-	sf::Text* playText;
-	sf::Text* optionsText;
-	sf::Text* creditsText;
-	sf::Text* exitText;
+	sf::Text* titleText = nullptr;
+	sf::Text* playText = nullptr;
+	sf::Text* optionsText = nullptr;
+	sf::Text* howToText = nullptr;
+	sf::Text* creditsText = nullptr;
+	sf::Text* exitText = nullptr;
 
-	sf::Sprite* background;
-	sf::Sprite* startButton;
-	sf::Sprite* optionsButton;
-	sf::Sprite* creditsButton;
-	sf::Sprite* exitButton;
+	sf::Sprite* background = nullptr;
+	sf::Sprite* startButton = nullptr;
+	sf::Sprite* optionsButton = nullptr;
+	sf::Sprite* howToButton = nullptr;
+	sf::Sprite* creditsButton = nullptr;
+	sf::Sprite* exitButton = nullptr;
 
 	// Panels
 	OptionsPanel* _options = nullptr;
 	CreditsPanel* _credits = nullptr;
+	HowToPlayPanel* _howTo = nullptr;
 
 	// Credits
 	bool _creditsOpen = false;
+
 
 	// Helpers
 	static void CenterSprite(sf::Sprite* sprite);
