@@ -29,6 +29,18 @@ public:
 	void Update(float dt, const Level& lvl) override;
 	void Draw(sf::RenderTarget& rt) const override;
 
+	void Heal(int amount);
+	template<typename T> T* FindWeaponOfType();
+
+	template<typename T> T* FindWeaponOfType() 
+	{
+		for (auto& weapon : _weapons) 
+		{
+			if (auto ptr = dynamic_cast<T*>(w.get())) return ptr;
+		}
+		return nullptr;
+	}
+
 private:
 	// Movement
 	float _baseSpeed = 320.f;

@@ -91,6 +91,17 @@ void Player::Draw(sf::RenderTarget& rt) const
     }
 }
 
+void Player::Heal(int amount)
+{
+    const int hp = GetLife();
+    const int max = GetMaxLife();
+    const int newHp = std::min(max, hp + amount);
+
+    if (hp <= 0) return; // Por si se muere masomenos al mismo tiempo que no reviva
+
+    SetLife(newHp);
+}
+
 void Player::HandleCrouch(const Level& lvl)
 {
     if (_input.crouch == _crouched) return;
