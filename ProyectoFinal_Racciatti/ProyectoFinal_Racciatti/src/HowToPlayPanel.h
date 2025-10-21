@@ -65,7 +65,7 @@ private:
     std::string _crateRpgPath = "../sprites/player/RPGAmmo.png";
     std::string _pistolPath = "../sprites/player/Pistol.png";
     std::string _shotgunPath = "../sprites/player/Shotgun.png";
-    std::string _missilePath = "../sprites/player/RPG.png";
+    std::string _rpgPath = "../sprites/player/RPG.png";
 
     // Helpers
     void BuildCommonUI(ResourceManager& rm);

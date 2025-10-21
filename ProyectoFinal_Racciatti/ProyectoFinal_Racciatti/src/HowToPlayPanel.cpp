@@ -55,7 +55,7 @@ void HowToPlayPanel::BuildCommonUI(ResourceManager& rm)
 
     _backBtn = MakeButton(rm, _buttonScale * 0.9f);
     CenterSprite(_backBtn);
-    _backBtn->setPosition({ center.x, center.y + _spacingY * 3.5f });
+    _backBtn->setPosition({ center.x, center.y + _spacingY * 3.75f });
 
     _backTxt = new sf::Text(*_titleFont, "BACK", 48);
     _backTxt->setFillColor(textColor);
@@ -66,8 +66,8 @@ void HowToPlayPanel::BuildCommonUI(ResourceManager& rm)
     _nextBtn = MakeButton(rm, _buttonScale * 0.8f);
     CenterSprite(_prevBtn); CenterSprite(_nextBtn);
 
-    _prevBtn->setPosition({ center.x - 280.f, _backBtn->getPosition().y - 30.f });
-    _nextBtn->setPosition({ center.x + 280.f, _backBtn->getPosition().y - 30.f });
+    _prevBtn->setPosition({ center.x - 280.f, _backBtn->getPosition().y });
+    _nextBtn->setPosition({ center.x + 280.f, _backBtn->getPosition().y });
 
     _prevTxt = new sf::Text(*_titleFont, "PREV", 48);
     _nextTxt = new sf::Text(*_titleFont, "NEXT", 48);
@@ -123,46 +123,59 @@ void HowToPlayPanel::BuildControlsPage(ResourceManager& rm)
 void HowToPlayPanel::BuildEnemiesPage(ResourceManager& rm)
 {
     const auto win = _window.getSize();
-    const sf::Vector2f center(win.x * 0.5f, win.y * 0.5f);
+    const float col1 = win.x * 0.18f;
+    const float col2 = win.x * 0.50f;
+    const float col3 = win.x * 0.82f;
 
     {
         IconLabel t; t.icon = nullptr;
         t.text = new sf::Text(*_bodyFont, "Enemies:", 42);
         t.text->setFillColor(textColor);
         CenterText(t.text);
-        t.pos = { center.x, center.y - 150.f };
+        t.pos = { win.x * 0.5f, 200.f };
         _enemies.push_back(t);
     }
 
-    const float yRow = center.y - 60.f;
-    const float gapX = 260.f;
+    const float yIcons = 280.f;
+    const unsigned descSize = 28;
 
     // Enemies
-    auto AddEnemy = [&](const std::string& iconPath, const std::string& desc, float x)
+    auto AddEnemy = [&](const std::string& iconPath, float iconHeight, const std::string& desc, float x)
         {
             IconLabel enemy;
-            enemy.icon = MakeIcon(rm, iconPath, 96.f);
+            enemy.icon = MakeIcon(rm, iconPath, iconHeight);
             CenterSprite(enemy.icon);
-            enemy.icon->setPosition({ x, yRow });
+            enemy.icon->setPosition({ x, yIcons });
 
-            enemy.text = new sf::Text(*_bodyFont, desc, 36);
+            enemy.text = new sf::Text(*_bodyFont, desc, descSize);
             enemy.text->setFillColor(textColor);
             CenterText(enemy.text);
-            enemy.pos = { x, yRow + 90.f };
+
+            
+            enemy.pos = { x, yIcons + iconHeight * 0.9f + 20.f };
             _enemies.push_back(enemy);
         };
 
-    AddEnemy(_heliPath,
-        "Helicopters will attempt to shoot you.\nCan be shot down. May drop ammo/health crates.",
-        center.x - gapX);
+    AddEnemy(
+        _heliPath,
+        100.f,
+        "Helicopters.\nCan be destroyed.\nMay drop crates.",
+        col1
+    );
 
-    AddEnemy(_dronePath,
-        "Drones fly toward you and explode.\nCan be shot down.",
-        center.x);
+    AddEnemy(
+        _dronePath,
+        100.f,
+        "Drones.\nCan be destroyed.",
+        col2
+    );
 
-    AddEnemy(_artilleryPath,
-        "Artillery drops from the sky and explodes.\nCannot be destroyed.",
-        center.x + gapX);
+    AddEnemy(
+        _artilleryPath,
+        100.f,
+        "Artillery.\nCannot be destroyed.",
+        col3
+    );
 
     // Crates
     {
@@ -170,7 +183,7 @@ void HowToPlayPanel::BuildEnemiesPage(ResourceManager& rm)
         t.text = new sf::Text(*_bodyFont, "Crate Drops:", 42);
         t.text->setFillColor(textColor);
         CenterText(t.text);
-        t.pos = { center.x, center.y + 80.f };
+        t.pos = { win.x * 0.5f, 480.f };
         _enemies.push_back(t);
     }
 
@@ -179,76 +192,126 @@ void HowToPlayPanel::BuildEnemiesPage(ResourceManager& rm)
             IconLabel crate;
             crate.icon = MakeIcon(rm, iconPath, 64.f);
             CenterSprite(crate.icon);
-            crate.icon->setPosition({ x, center.y + 150.f });
+            crate.icon->setPosition({ x, 540.f });
 
-            crate.text = new sf::Text(*_bodyFont, label, 32);
+            crate.text = new sf::Text(*_bodyFont, label, 30);
             crate.text->setFillColor(textColor);
             CenterText(crate.text);
-            crate.pos = { x, center.y + 210.f };
+            crate.pos = { x, 590.f };
             _enemies.push_back(crate);
         };
 
-    AddCrate(_crateHealthPath, "Health", center.x - gapX);
-    AddCrate(_crateSgPath, "Shotgun Ammo", center.x);
-    AddCrate(_crateRpgPath, "Missiles", center.x + gapX);
+    AddCrate(_crateHealthPath, "Health Crate", col1);
+    AddCrate(_crateSgPath, "Shotgun Ammo", col2);
+    AddCrate(_crateRpgPath, "RPG Ammo", col3);
 }
 
 void HowToPlayPanel::BuildWeaponsPage(ResourceManager& rm)
 {
-    const auto win = _window.getSize();
-    const sf::Vector2f center(win.x * 0.5f, win.y * 0.5f);
+    const auto  win = _window.getSize();
+    const float col1 = win.x * 0.18f;
+    const float col2 = win.x * 0.50f;
+    const float col3 = win.x * 0.82f;
 
-    IconLabel t; t.icon = nullptr;
-    t.text = new sf::Text(*_bodyFont, "Weapons:", 42);
-    t.text->setFillColor(textColor);
-    CenterText(t.text);
-    t.pos = { center.x, center.y - 150.f };
-    _weapons.push_back(t);
+    {
+        IconLabel t; t.icon = nullptr;
+        t.text = new sf::Text(*_bodyFont, "Weapons:", 42);
+        t.text->setFillColor(textColor);
+        CenterText(t.text);
+        t.pos = { win.x * 0.5f, 200.f };
+        _weapons.push_back(t);
+    }
 
-    const float yIcon = center.y - 40.f;
-    const float yText1 = center.y + 40.f;
-    const float yText2 = center.y + 88.f;
-    const float gapX = 260.f;
+    const float yIcon = 270.f;
+    const unsigned nameSize = 34;
+    const unsigned descSize = 28;
+    const float lineGap = 36.f;
 
-    auto AddWeapon = [&](const std::string& wPath, const std::string& line1, const std::string& line2,
-        const std::string& cratePath, const std::string& crateLabel, float x)
+    auto AddWeapon = [&](const std::string& iconPath,
+        float iconHeight,
+        const std::string& name,
+        const std::vector<std::string>& descLines,
+        const std::string& cratePath,
+        const std::string& crateLabel,
+        float x)
         {
-            IconLabel w;
-            w.icon = MakeIcon(rm, wPath, 90.f);
-            CenterSprite(w.icon);
-            w.icon->setPosition({ x, yIcon });
+            // Icono
+            IconLabel weapIcon;
+            weapIcon.icon = MakeIcon(rm, iconPath, iconHeight);
+            CenterSprite(weapIcon.icon);
+            weapIcon.icon->setPosition({ x, yIcon });
+            _weapons.push_back(weapIcon);
 
-            w.text = new sf::Text(*_bodyFont, line1, 34);
-            w.text->setFillColor(textColor);
-            CenterText(w.text);
-            w.pos = { x, yText1 };
-            _weapons.push_back(w);
+            float y = yIcon + iconHeight * 0.55f; // baseline under icon
 
-            IconLabel w2;
-            w2.icon = nullptr;
-            w2.text = new sf::Text(*_bodyFont, line2, 28);
-            w2.text->setFillColor(textColor);
-            CenterText(w2.text);
-            w2.pos = { x, yText2 };
-            _weapons.push_back(w2);
+            // Nombre
+            IconLabel weapName;
+            weapName.icon = nullptr;
+            weapName.text = new sf::Text(*_bodyFont, name, nameSize);
+            weapName.text->setFillColor(textColor);
+            CenterText(weapName.text);
+            weapName.pos = { x, y };
+            _weapons.push_back(weapName);
+            y += lineGap;
 
+            // Descripcion
+            for (const auto& string : descLines)
+            {
+                IconLabel description;
+                description.icon = nullptr;
+                description.text = new sf::Text(*_bodyFont, string, descSize);
+                description.text->setFillColor(textColor);
+                CenterText(description.text);
+                description.pos = { x, y };
+                _weapons.push_back(description);
+                y += lineGap;
+            }
+
+            // Crate
             if (!cratePath.empty())
             {
-                IconLabel c;
-                c.icon = MakeIcon(rm, cratePath, 56.f);
-                CenterSprite(c.icon);
-                c.icon->setPosition({ x, yText2 + 60.f });
-                c.text = new sf::Text(*_bodyFont, crateLabel, 26);
-                c.text->setFillColor(textColor);
-                CenterText(c.text);
-                c.pos = { x, yText2 + 110.f };
-                _weapons.push_back(c);
+                IconLabel crateIcon;
+                crateIcon.icon = MakeIcon(rm, cratePath, 65.f);
+                CenterSprite(crateIcon.icon);
+                crateIcon.icon->setPosition({ x, y + 40.f });
+                _weapons.push_back(crateIcon);
+
+                IconLabel crateText;
+                crateText.icon = nullptr;
+                crateText.text = new sf::Text(*_bodyFont, crateLabel, 30);
+                crateText.text->setFillColor(textColor);
+                CenterText(crateText.text);
+                crateText.pos = { x, y + 100.f };
+                _weapons.push_back(crateText);
             }
         };
 
-    AddWeapon(_pistolPath, "Pistol", "Single rapid fire (hold LMB).", "", "", center.x - gapX);
-    AddWeapon(_shotgunPath, "Shotgun", "Fires 5 pellets.", _crateSgPath, "Shotgun Ammo", center.x);
-    AddWeapon(_missilePath, "Missile", "Single heavy missile.\nHold LMB to guide.", _crateRpgPath, "Missile Crate", center.x + gapX);
+    AddWeapon
+    (
+        _pistolPath,
+        100.f,
+        "PISTOL",
+        { "Single rapid fire", "Infinite ammo." },
+        "", "", col1
+    );
+
+    AddWeapon
+    (
+        _shotgunPath,
+        100.f,
+        "SHOTGUN",
+        { "Fires 5 pellets.", "Faster bullets"},
+        _crateSgPath, "Shotgun Ammo", col2
+    );
+
+    AddWeapon
+    (
+        _rpgPath,
+        100.f,
+        "RPG",
+        { "Single heavy hitting.", "Use cursor to guide." },
+        _crateRpgPath, "RPG Ammo", col3
+    );
 }
 
 void HowToPlayPanel::HandleEvent(const sf::Event& ev)
