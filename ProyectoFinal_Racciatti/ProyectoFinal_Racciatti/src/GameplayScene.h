@@ -94,6 +94,7 @@ private:
 	// shotgunChance como default se da por la diferencia de los otros dos
 	std::vector<std::unique_ptr<Crate>> _crates;
 	void TryDropCrate(sf::Vector2f pos);
+	sf::Sound _cratePickupSfx;
 
 	// Highscore
 	HighScores _scores;

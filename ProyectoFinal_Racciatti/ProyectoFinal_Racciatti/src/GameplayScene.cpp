@@ -23,6 +23,7 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
 	, resourceManager(resourceManager)
 	, _audio(audio)
 	, _level(_window.getSize(), resourceManager, bgPath)
+	, _cratePickupSfx(resourceManager.GetSound("../audio/sfx/CratePickup.mp3"))
 {
 	_progress.Reset();
 
@@ -42,6 +43,9 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
 	music.setLooping(true);
 	music.setVolume(_audio.GetMusicVolume());
 	music.play();
+
+	// Drop sfx
+	_cratePickupSfx.setLooping(false);
 
 	// UI
 	_gameplayUI = new GameplayUI(resourceManager, _window.getSize());
@@ -333,6 +337,9 @@ void GameplayScene::Update(float dt)
 					break;
 				}
 				crate->Kill();
+
+				_cratePickupSfx.setVolume(_audio.GetSfxVolume());
+				_cratePickupSfx.play();
 			}
 		}
 	}
@@ -462,7 +469,7 @@ void GameplayScene::CreatePlayer()
 
 	// Shotgun
 	float sgCooldown = 1.9f;
-	float sgBulletSpeed = 350.f;
+	float sgBulletSpeed = 450.f;
 	float sgBullLifetime = 2.f;
 	int sgBullDamage = 1;
 	int sgStartingAmmo = 4;
