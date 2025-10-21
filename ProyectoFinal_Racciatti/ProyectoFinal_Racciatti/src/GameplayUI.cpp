@@ -1,6 +1,10 @@
 #include "GameplayUI.h"
 #include "GameProgress.h"
-#include "Entity.h"
+#include "Player.h"
+#include "Weapon.h"
+#include "Pistol.h"
+#include "Shotgun.h"
+#include "Rpg.h"
 #include "Utils.h"
 #include <algorithm>
 #include <cstdio>
@@ -35,6 +39,16 @@ GameplayUI::GameplayUI(ResourceManager& resources, const sf::Vector2u& winSize)
     _hpEmpty->setScale({ _hpScale, _hpScale });
     _hpFull->setScale({ _hpScale, _hpScale });
 
+    // Ammo
+    sf::Texture& pistolAmmo = _resourceManager.GetTexture("../sprites/player/PistolAmmo.png", false, {});
+    _ammoIcon = new sf::Sprite(pistolAmmo);
+    _ammoIcon->setScale({ _ammoScale, _ammoScale });
+
+    _ammoText = new sf::Text(font, "99", _characterSize);
+    _ammoText->setFillColor(textColor);
+    _ammoText->setOutlineColor(outlineColor);
+    _ammoText->setOutlineThickness(outlineThickness);
+
     Layout();
 }
 
@@ -44,6 +58,8 @@ GameplayUI::~GameplayUI()
     delete _scoreText;
     delete _hpEmpty;
     delete _hpFull;
+    delete _ammoIcon;
+    delete _ammoText;
 }
 
 void GameplayUI::Update(float dt)
@@ -60,6 +76,7 @@ void GameplayUI::Update(float dt)
     _scoreText->setPosition({ _win.x * 0.5f - bounds.size.x * 0.5f,_bottomY });
 
     UpdateHpBar();
+    UpdateAmmo();
 }
 
 void GameplayUI::Draw(sf::RenderTarget& rt) const
@@ -71,6 +88,10 @@ void GameplayUI::Draw(sf::RenderTarget& rt) const
     // hp
     rt.draw(*_hpEmpty);
     rt.draw(*_hpFull);
+
+    // Ammo
+    rt.draw(*_ammoIcon);
+    rt.draw(*_ammoText);
 }
 
 void GameplayUI::Layout()
@@ -92,6 +113,22 @@ void GameplayUI::Layout()
 
     _hpEmpty->setPosition({ hpX, hpY });
     _hpFull->setPosition({ hpX, hpY });
+
+    // Ammo
+    const float gap = 6.f;
+
+    const auto iconSizePx = _ammoIcon->getTexture().getSize();
+    const sf::Vector2f iconSize{ iconSizePx.x * _ammoScale, iconSizePx.y * _ammoScale };
+
+    const float iconX = _win.x - _margin - iconSize.x;
+    const float iconY = _bottomY - (iconSize.y - _characterSize) * 0.5f;
+
+    _ammoIcon->setPosition({ iconX, iconY });
+
+    const sf::FloatRect t = _ammoText->getGlobalBounds();
+    const float textX = iconX - gap - t.size.x;
+    const float textY = _bottomY;
+    _ammoText->setPosition({ textX, textY });
 }
 
 void GameplayUI::UpdateHpBar()
@@ -111,4 +148,33 @@ void GameplayUI::UpdateHpBar()
 
     const sf::Vector2f base = _hpEmpty->getPosition();
     _hpFull->setPosition({ base.x, base.y + static_cast<float>(top) * _hpScale });
+}
+
+void GameplayUI::UpdateAmmo()
+{
+    if (!_player || !_ammoIcon || !_ammoText) return;
+
+    Weapon* weapon = _player->CurrentWeapon();
+    if (!weapon) return;
+
+    const char* iconPath = "../sprites/player/PistolAmmo.png";
+
+    if (dynamic_cast<Shotgun*>(weapon))
+        iconPath = "../sprites/player/ShotgunAmmo.png";
+    else if (dynamic_cast<Rpg*>(weapon))
+        iconPath = "../sprites/player/RPGAmmo.png";
+    else
+        iconPath = "../sprites/player/PistolAmmo.png";
+
+    if (_ammoIconPath != iconPath)
+    {
+        sf::Texture& tex = _resourceManager.GetTexture(iconPath, false, {});
+        _ammoIcon->setTexture(tex, true);
+        _ammoIcon->setScale({ _ammoScale, _ammoScale });
+        _ammoIconPath = iconPath;
+        Layout();
+    }
+
+    _ammoText->setString(std::to_string(weapon->GetAmmo()));
+    Layout();
 }

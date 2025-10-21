@@ -3,7 +3,7 @@
 #include "ResourceManager.h"
 
 class GameProgress;
-class Entity;
+class Player;
 
 class GameplayUI
 {
@@ -12,7 +12,7 @@ public:
 	~GameplayUI();
 
 	void SetProgress(GameProgress* progress) { _progress = progress; }
-	void SetPlayer(Entity* player) { _player = player; }
+	void SetPlayer(Player* player) { _player = player; }
 
 	void Update(float dt);
 	void Draw(sf::RenderTarget& rt) const;
@@ -22,7 +22,7 @@ private:
 	sf::Vector2u _win{ 0,0 };
 
 	GameProgress* _progress = nullptr;
-	Entity* _player = nullptr;
+	Player* _player = nullptr;
 
 	// Text
 	sf::Text text;
@@ -40,8 +40,15 @@ private:
 	float _hpScale = 2.0f;
 	float _bottomY = 0.f;
 
+	// Ammo
+	sf::Sprite* _ammoIcon = nullptr;
+	sf::Text* _ammoText = nullptr;
+	std::string _ammoIconPath;
+	float _ammoScale = 1.0f;
+
 	// Helpers
 	void Layout();
 	void UpdateHpBar();
+	void UpdateAmmo();
 };
 
