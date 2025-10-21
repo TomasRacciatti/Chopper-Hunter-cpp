@@ -82,26 +82,42 @@ void HowToPlayPanel::BuildControlsPage(ResourceManager& rm)
 {
     const auto win = _window.getSize();
     const sf::Vector2f center(win.x * 0.5f, win.y * 0.5f);
-    float y = center.y - 60.f;
 
-    auto AddRow = [&](const std::string& label)
+    const float topY = 200.f;
+    const float rowH = 56.f;
+    const float leftX = center.x - 260.f;
+    const float rightX = center.x - 60.f;
+
+    auto AddPair = [&](const std::string& key, const std::string& desc, float y, unsigned ks = 42, unsigned ds = 42)
         {
-            IconLabel row;
-            row.icon = nullptr;
-            row.text = new sf::Text(*_bodyFont, label, 42);
-            row.text->setFillColor(textColor);
-            CenterText(row.text);
-            row.pos = { center.x, y };
-            y += 56.f;
-            _controls.push_back(row);
+            // Izquierda
+            IconLabel keys;
+            keys.icon = nullptr;
+            keys.text = new sf::Text(*_bodyFont, key, ks);
+            keys.text->setFillColor(textColor);
+            sf::FloatRect bounds1 = keys.text->getLocalBounds();
+            keys.text->setOrigin({ bounds1.position.x, bounds1.position.y });
+            keys.pos = { leftX, y };
+            _controls.push_back(keys);
+
+            // Derecha
+            IconLabel description;
+            description.icon = nullptr;
+            description.text = new sf::Text(*_bodyFont, desc, ds);
+            description.text->setFillColor(textColor);
+            sf::FloatRect bounds2 = description.text->getLocalBounds();
+            description.text->setOrigin({ bounds2.position.x, bounds2.position.y });
+            description.pos = { rightX, y };
+            _controls.push_back(description);
         };
 
-    AddRow("Controls:");
-    AddRow("A / D: Move");
-    AddRow("S: Crouch");
-    AddRow("1 / 2 / 3: Change weapon");
-    AddRow("Mouse: Aim");
-    AddRow("Left Click: Shoot (hold for constant fire as allowed by cooldowns)");
+    float y = topY;
+    AddPair("CONTROLS:", "", y, 42, 1); y += rowH; 
+    AddPair("A / D:", "Move", y); y += rowH;
+    AddPair("S:", "Crouch", y); y += rowH;
+    AddPair("1 / 2 / 3:", "Change Weapon", y); y += rowH;
+    AddPair("Mouse:", "Aim", y); y += rowH;
+    AddPair("LMB:", "Shoot -can be held-", y, 42, 38); y += rowH;
 }
 
 void HowToPlayPanel::BuildEnemiesPage(ResourceManager& rm)
