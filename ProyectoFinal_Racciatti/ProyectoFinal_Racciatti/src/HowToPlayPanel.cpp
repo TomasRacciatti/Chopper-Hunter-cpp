@@ -51,26 +51,26 @@ void HowToPlayPanel::BuildCommonUI(ResourceManager& rm)
     _title = new sf::Text(*_titleFont, "HOW TO PLAY", 100);
     _title->setFillColor(textColor);
     CenterText(_title);
-    _title->setPosition({ center.x, center.y - _spacingY * 2.1f });
+    _title->setPosition({ center.x, center.y - _spacingY * 3.5f });
 
     _backBtn = MakeButton(rm, _buttonScale * 0.9f);
     CenterSprite(_backBtn);
-    _backBtn->setPosition({ center.x, center.y + _spacingY * 2.6f });
+    _backBtn->setPosition({ center.x, center.y + _spacingY * 3.5f });
 
     _backTxt = new sf::Text(*_titleFont, "BACK", 48);
     _backTxt->setFillColor(textColor);
     CenterText(_backTxt);
     _backTxt->setPosition(_backBtn->getPosition());
 
-    _prevBtn = MakeButton(rm, _buttonScale * 0.7f);
-    _nextBtn = MakeButton(rm, _buttonScale * 0.7f);
+    _prevBtn = MakeButton(rm, _buttonScale * 0.8f);
+    _nextBtn = MakeButton(rm, _buttonScale * 0.8f);
     CenterSprite(_prevBtn); CenterSprite(_nextBtn);
 
-    _prevBtn->setPosition({ center.x - 260.f, _backBtn->getPosition().y });
-    _nextBtn->setPosition({ center.x + 260.f, _backBtn->getPosition().y });
+    _prevBtn->setPosition({ center.x - 280.f, _backBtn->getPosition().y - 30.f });
+    _nextBtn->setPosition({ center.x + 280.f, _backBtn->getPosition().y - 30.f });
 
-    _prevTxt = new sf::Text(*_titleFont, "<", 48);
-    _nextTxt = new sf::Text(*_titleFont, ">", 48);
+    _prevTxt = new sf::Text(*_titleFont, "PREV", 48);
+    _nextTxt = new sf::Text(*_titleFont, "NEXT", 48);
     _prevTxt->setFillColor(textColor);
     _nextTxt->setFillColor(textColor);
     CenterText(_prevTxt); CenterText(_nextTxt);
@@ -86,14 +86,14 @@ void HowToPlayPanel::BuildControlsPage(ResourceManager& rm)
 
     auto AddRow = [&](const std::string& label)
         {
-            IconLabel r;
-            r.icon = nullptr;
-            r.text = new sf::Text(*_bodyFont, label, 42);
-            r.text->setFillColor(textColor);
-            CenterText(r.text);
-            r.pos = { center.x, y };
+            IconLabel row;
+            row.icon = nullptr;
+            row.text = new sf::Text(*_bodyFont, label, 42);
+            row.text->setFillColor(textColor);
+            CenterText(row.text);
+            row.pos = { center.x, y };
             y += 56.f;
-            _controls.push_back(r);
+            _controls.push_back(row);
         };
 
     AddRow("Controls:");
