@@ -55,9 +55,9 @@ void HowToPlayPanel::BuildCommonUI(ResourceManager& rm)
 
     _backBtn = MakeButton(rm, _buttonScale * 0.9f);
     CenterSprite(_backBtn);
-    _backBtn->setPosition({ center.x, center.y + _spacingY * 3.75f });
+    _backBtn->setPosition({ center.x - 550.f, center.y + _spacingY * 4.f });
 
-    _backTxt = new sf::Text(*_titleFont, "BACK", 48);
+    _backTxt = new sf::Text(*_titleFont, "MENU", 48);
     _backTxt->setFillColor(textColor);
     CenterText(_backTxt);
     _backTxt->setPosition(_backBtn->getPosition());
@@ -66,8 +66,8 @@ void HowToPlayPanel::BuildCommonUI(ResourceManager& rm)
     _nextBtn = MakeButton(rm, _buttonScale * 0.8f);
     CenterSprite(_prevBtn); CenterSprite(_nextBtn);
 
-    _prevBtn->setPosition({ center.x - 280.f, _backBtn->getPosition().y });
-    _nextBtn->setPosition({ center.x + 280.f, _backBtn->getPosition().y });
+    _prevBtn->setPosition({ center.x - 80.f, _backBtn->getPosition().y - 30.f });
+    _nextBtn->setPosition({ center.x + 80.f, _backBtn->getPosition().y - 30.f });
 
     _prevTxt = new sf::Text(*_titleFont, "PREV", 48);
     _nextTxt = new sf::Text(*_titleFont, "NEXT", 48);
