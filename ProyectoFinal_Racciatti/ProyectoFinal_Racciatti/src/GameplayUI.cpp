@@ -41,8 +41,16 @@ GameplayUI::GameplayUI(ResourceManager& resources, const sf::Vector2u& winSize)
 
     // Ammo
     sf::Texture& pistolAmmo = _resourceManager.GetTexture("../sprites/player/PistolAmmo.png", false, {});
+    sf::Texture& pistolEmpty = _resourceManager.GetTexture("../sprites/UI/PistolAmmoEmpty.png", false, {});
+    
     _ammoIcon = new sf::Sprite(pistolAmmo);
+    _ammoIconEmpty = new sf::Sprite(pistolEmpty);
+
     _ammoIcon->setScale({ _ammoScale, _ammoScale });
+    _ammoIconEmpty->setScale({ _ammoScale, _ammoScale });
+
+    _ammoIconKey = "Pistol";
+    _ammoIconNativeSize = pistolAmmo.getSize();
 
     _ammoText = new sf::Text(font, "99", _characterSize);
     _ammoText->setFillColor(textColor);
@@ -59,6 +67,7 @@ GameplayUI::~GameplayUI()
     delete _hpEmpty;
     delete _hpFull;
     delete _ammoIcon;
+    delete _ammoIconEmpty;
     delete _ammoText;
 }
 
@@ -90,6 +99,7 @@ void GameplayUI::Draw(sf::RenderTarget& rt) const
     rt.draw(*_hpFull);
 
     // Ammo
+    rt.draw(*_ammoIconEmpty);
     rt.draw(*_ammoIcon);
     rt.draw(*_ammoText);
 }
@@ -117,13 +127,16 @@ void GameplayUI::Layout()
     // Ammo
     const float gap = 6.f;
 
-    const auto iconSizePx = _ammoIcon->getTexture().getSize();
-    const sf::Vector2f iconSize{ iconSizePx.x * _ammoScale, iconSizePx.y * _ammoScale };
+    const auto size = _ammoIconEmpty->getTexture().getSize();
+    const sf::Vector2f iconSize{ size.x * _ammoScale, size.y * _ammoScale };
 
     const float iconX = _win.x - _margin - iconSize.x;
     const float iconY = _bottomY - (iconSize.y - _characterSize) * 0.5f;
 
-    _ammoIcon->setPosition({ iconX, iconY });
+    _ammoIconTopLeft = { iconX, iconY };
+    _ammoIconNativeSize = size;
+
+    _ammoIconEmpty->setPosition({ iconX, iconY });
 
     const sf::FloatRect t = _ammoText->getGlobalBounds();
     const float textX = iconX - gap - t.size.x;
@@ -157,24 +170,50 @@ void GameplayUI::UpdateAmmo()
     Weapon* weapon = _player->CurrentWeapon();
     if (!weapon) return;
 
-    const char* iconPath = "../sprites/player/PistolAmmo.png";
+    const char* key = "Pistol";
 
     if (dynamic_cast<Shotgun*>(weapon))
-        iconPath = "../sprites/player/ShotgunAmmo.png";
+        key = "Shotgun";
     else if (dynamic_cast<Rpg*>(weapon))
-        iconPath = "../sprites/player/RPGAmmo.png";
+        key = "RPG";
     else
-        iconPath = "../sprites/player/PistolAmmo.png";
+        key = "Pistol";
 
-    if (_ammoIconPath != iconPath)
+    if (_ammoIconKey != key)
     {
-        sf::Texture& tex = _resourceManager.GetTexture(iconPath, false, {});
-        _ammoIcon->setTexture(tex, true);
+        std::string fullPath = std::string("../sprites/player/") + key + "Ammo.png";
+        std::string emptyPath = std::string("../sprites/UI/") + key + "AmmoEmpty.png";
+
+        sf::Texture& fullTex = _resourceManager.GetTexture(fullPath, false, {});
+        sf::Texture& emptyTex = _resourceManager.GetTexture(emptyPath, false, {});
+
+        _ammoIcon->setTexture(fullTex, true);
+        _ammoIconEmpty->setTexture(emptyTex, true);
+
         _ammoIcon->setScale({ _ammoScale, _ammoScale });
-        _ammoIconPath = iconPath;
+        _ammoIconEmpty->setScale({ _ammoScale, _ammoScale });
+
+        _ammoIconNativeSize = fullTex.getSize(); 
+        _ammoIconKey = key;
         Layout();
     }
 
-    _ammoText->setString(std::to_string(weapon->GetAmmo()));
+    const int texW = static_cast<int>(_ammoIconNativeSize.x);
+    const int texH = static_cast<int>(_ammoIconNativeSize.y);
+    
+    float fill = std::clamp(weapon->GetCooldownNormalized(), 0.f, 1.f);
+    if (weapon->GetAmmo() <= 0) fill = 0.f;
+
+    int filledPx = static_cast<int>(std::round(fill * texH));
+    filledPx = std::clamp(filledPx, 0, texH);
+
+    sf::IntRect rect(sf::Vector2i{ 0, texH - filledPx }, sf::Vector2i{ texW, filledPx });
+    _ammoIcon->setTextureRect(rect);
+
+    _ammoIconEmpty->setPosition(_ammoIconTopLeft);
+
+    const float fullTopY = _ammoIconTopLeft.y + (texH - filledPx) * _ammoScale;
+    _ammoIcon->setPosition({ _ammoIconTopLeft.x, fullTopY });
+
     Layout();
 }

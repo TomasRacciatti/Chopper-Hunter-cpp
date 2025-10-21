@@ -23,11 +23,20 @@ public:
 	void Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f target, const Level& lvl);
 	void Draw(sf::RenderTarget& rt) const;
 
-	// Modificadores
+	// Getters & Setters
+	float GetCooldownNormalized()
+	{ 
+		float t = _timer; 
+		if (t < 0.f) t = 0.f; 
+		float fill = 1.f - (t / _cooldown);
+		return fill < 0.f ? 0.f : (fill > 1.f ? 1.f : fill);
+	}
 	void SetCooldown(float cd) { _cooldown = cd; }
 	void SetBulletSpeed(float speed) { _bulletSpeed = speed; }
 	void SetBulletLife(float life) { _bulletLifeTime = life; }
 	void SetBulletDamage(int dmg) { _bulletDamage = dmg; }
+
+	void TickPassive(float dt, const Level& lvl);
 
 	float AngleDegrees() const { return _angleDeg; }
 

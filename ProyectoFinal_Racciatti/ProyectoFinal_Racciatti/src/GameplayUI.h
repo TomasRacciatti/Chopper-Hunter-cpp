@@ -42,9 +42,13 @@ private:
 
 	// Ammo
 	sf::Sprite* _ammoIcon = nullptr;
+	sf::Sprite* _ammoIconEmpty = nullptr;
 	sf::Text* _ammoText = nullptr;
-	std::string _ammoIconPath;
+	std::string _ammoIconKey;
 	float _ammoScale = 1.0f;
+
+	sf::Vector2f _ammoIconTopLeft{ 0.f, 0.f };
+	sf::Vector2u _ammoIconNativeSize{ 0, 0 };
 
 	// Helpers
 	void Layout();
