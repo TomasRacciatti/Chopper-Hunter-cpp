@@ -47,16 +47,16 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	const auto winSize = _window.getSize();
 	const sf::Vector2f center(winSize.x * 0.5f, winSize.y * 0.5f);
 
-	startButton->setPosition({ center.x, center.y + spacingY * 0.f });
-	optionsButton->setPosition({ center.x, center.y + spacingY * 1.f });
-	howToButton->setPosition({ center.x, center.y + spacingY * 2.f });
-	creditsButton->setPosition({ center.x, center.y + spacingY * 3.f });
-	exitButton->setPosition({ center.x, center.y + spacingY * 4.f });
+	startButton->setPosition({ center.x, center.y + spacingY * -1.f });
+	optionsButton->setPosition({ center.x, center.y + spacingY * 0.f });
+	howToButton->setPosition({ center.x, center.y + spacingY * 1.f });
+	creditsButton->setPosition({ center.x, center.y + spacingY * 2.f });
+	exitButton->setPosition({ center.x, center.y + spacingY * 3.f });
 
 	// Text
 	playText = new sf::Text(font, "PLAY", 48);
 	optionsText = new sf::Text(font, "OPTIONS", 48);
-	howToText = new sf::Text(font, "HOW TO PLAY", 48);
+	howToText = new sf::Text(font, "HOW TO PLAY", 36);
 	creditsText = new sf::Text(font, "CREDITS", 48);
 	exitText = new sf::Text(font, "EXIT", 48);
 
@@ -80,10 +80,10 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	exitText->setPosition(exitButton->getPosition());
 
 	// Title
-	titleText = new sf::Text(font, "CHOPPER HUNTER", 100);
+	titleText = new sf::Text(font, "CHOPPER HUNTER", 120);
 	titleText->setFillColor(textColor);
 	CenterText(titleText);
-	titleText->setPosition({ winSize.x * 0.5f, 180.f });
+	titleText->setPosition({ winSize.x * 0.5f, 100.f });
 
 
 	// =============== Opciones =========================
