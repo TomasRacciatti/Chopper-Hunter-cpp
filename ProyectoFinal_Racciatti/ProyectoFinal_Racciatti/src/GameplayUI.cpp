@@ -195,7 +195,13 @@ void GameplayUI::UpdateAmmo()
 
         _ammoIconNativeSize = fullTex.getSize(); 
         _ammoIconKey = key;
-        Layout();
+
+        const auto size = _ammoIconEmpty->getTexture().getSize();
+        const sf::Vector2f iconSize{ size.x * _ammoScale, size.y * _ammoScale };
+        const float iconX = _win.x - _margin - iconSize.x;
+        const float iconY = _bottomY - (iconSize.y - _characterSize) * 0.5f;
+        _ammoIconTopLeft = { iconX, iconY };
+        _ammoIconEmpty->setPosition(_ammoIconTopLeft);
     }
 
     const int texW = static_cast<int>(_ammoIconNativeSize.x);
@@ -215,5 +221,8 @@ void GameplayUI::UpdateAmmo()
     const float fullTopY = _ammoIconTopLeft.y + (texH - filledPx) * _ammoScale;
     _ammoIcon->setPosition({ _ammoIconTopLeft.x, fullTopY });
 
-    Layout();
+    _ammoText->setString(std::to_string(weapon->GetAmmo()));
+    const float gap = 6.f;
+    const sf::FloatRect t = _ammoText->getGlobalBounds();
+    _ammoText->setPosition({ _ammoIconTopLeft.x - gap - t.size.x, _bottomY });
 }

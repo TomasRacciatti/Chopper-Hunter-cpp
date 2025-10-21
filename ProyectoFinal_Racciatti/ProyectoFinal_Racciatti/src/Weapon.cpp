@@ -81,6 +81,13 @@ void Weapon::Draw(sf::RenderTarget& rt) const
 	PostDraw(rt);
 }
 
+void Weapon::TickPassive(float dt, const Level& lvl)
+{
+	_timer -= dt;
+
+	PostUpdate(dt, lvl);
+}
+
 Bullet* Weapon::EmitBullet(sf::Vector2f origin, sf::Vector2f dirUnit)
 {
 	if (!_pool) return nullptr;

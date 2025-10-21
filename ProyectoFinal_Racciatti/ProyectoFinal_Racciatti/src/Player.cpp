@@ -70,6 +70,12 @@ void Player::Update(float dt, const Level& lvl)
 
         weapon->Update(dt, _input.fireHeld, muzzle, _input.mouseWorld, lvl);
     }
+
+    for (int i = 0; i < static_cast<int>(_weapons.size()); i++)
+    {
+        if (i == _activeWeapon) continue;
+        if (_weapons[i]) _weapons[i]->TickPassive(dt, lvl);
+    }
 }
 
 void Player::Draw(sf::RenderTarget& rt) const
