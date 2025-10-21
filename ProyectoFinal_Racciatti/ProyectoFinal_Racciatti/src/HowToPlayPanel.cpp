@@ -180,7 +180,7 @@ void HowToPlayPanel::BuildEnemiesPage(ResourceManager& rm)
     // Crates
     {
         IconLabel t; t.icon = nullptr;
-        t.text = new sf::Text(*_bodyFont, "Crate Drops:", 42);
+        t.text = new sf::Text(*_bodyFont, "Crate Drops:", 38);
         t.text->setFillColor(textColor);
         CenterText(t.text);
         t.pos = { win.x * 0.5f, 480.f };
