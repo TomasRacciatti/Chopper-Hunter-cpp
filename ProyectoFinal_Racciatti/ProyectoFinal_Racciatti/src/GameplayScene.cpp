@@ -247,6 +247,9 @@ void GameplayScene::Update(float dt)
 	}
 	else if (_heli && !_heli->IsAlive() && !_heli->IsDying())
 	{
+		const sf::Vector2f dropPos = _heli->Center();
+		TryDropCrate(dropPos);
+		
 		SpawnHelicopter();
 	}
 
@@ -303,6 +306,37 @@ void GameplayScene::Update(float dt)
 		[](const std::unique_ptr<Artillery>& a) { return !a || !a->IsAlive(); }),
 		_artilleryRounds.end());
 
+	// Drops
+	for (auto& crate : _crates)
+	{
+		if (!crate) continue;
+		crate->Update(dt, _level);
+
+		if (_player && _player->IsAlive() && crate->Alive())
+		{
+			if (Utils::RectIntersects(_player->GetBounds(), crate->Bounds()))
+			{
+				switch (crate->Type())
+				{
+				case CrateType::Health:
+					_player->Heal(crate->HealAmount());
+					break;
+
+				case CrateType::ShotgunAmmo:
+					if (auto shotgun = _player->FindWeaponOfType<Shotgun>())
+						shotgun->AddAmmo(crate->ShotgunAmount());
+					break;
+
+				case CrateType::RpgAmmo:
+					if (auto rpg = _player->FindWeaponOfType<Rpg>())
+						rpg->AddAmmo(crate->RpgAmount());
+					break;
+				}
+				crate->Kill();
+			}
+		}
+	}
+
 	// ===== Combat =====
 	// Bullet Player a Helicopteros
 	if (_heli && _heli->IsAlive())
@@ -348,6 +382,11 @@ void GameplayScene::Draw()
 	for (const auto& artiRound : _artilleryRounds)
 		if (artiRound) artiRound->Draw(_window);
 
+	// Drops
+	for (const auto& crates : _crates)
+		if (crates) 
+			crates->Draw(_window);
+
 	// UI
 	if (_gameplayUI) _gameplayUI->Draw(_window);
 
@@ -363,6 +402,33 @@ void GameplayScene::Draw()
 
 
 // ========== Helpers ==========
+
+void GameplayScene::TryDropCrate(sf::Vector2f pos)
+{
+	if (Utils::RandomInt(0, 99) >= _dropChance) return;
+
+	const int rand = Utils::RandomInt(0, 99);
+	CrateType type;
+
+	if (rand < _hpChance)
+		type = CrateType::Health;
+	else if (rand < _hpChance + _rpgChance)
+		type = CrateType::RpgAmmo;
+	else
+		type = CrateType::ShotgunAmmo;
+
+	std::string path;
+	if (type == CrateType::RpgAmmo)   
+		path = "../sprites/player/RPGAmmo.png";
+	else if (type == CrateType::Health) 
+		path = "../sprites/player/HealthCrate.png";
+	else if (type == CrateType::ShotgunAmmo) 
+		path = "../sprites/player/ShotgunAmmo.png";
+
+	sf::Texture& tex = resourceManager.GetTexture(path, false, {});
+	const float scale = 1.25f;
+	_crates.emplace_back(Make<Crate>(pos, type, tex, scale));
+}
 
 void GameplayScene::CreatePlayer()
 {

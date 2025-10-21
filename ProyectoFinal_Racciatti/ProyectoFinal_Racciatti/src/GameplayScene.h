@@ -15,6 +15,9 @@
 #include "GameplayUI.h"
 #include "DeathPanel.h"
 #include "HighScores.h"
+#include "Crate.h"
+#include <memory>
+#include <vector>
 
 class GameplayScene : public Scene
 {
@@ -83,6 +86,14 @@ private:
 	float _artillerySpawnMax = 20.f;
 	float _artillerySpawnTimer = 0.f;
 	int   _maxArtilleryOnScene = 1;
+
+	// Drops
+	int _dropChance = 30;
+	int _hpChance = 20;
+	int _rpgChance = 35;
+	// shotgunChance como default se da por la diferencia de los otros dos
+	std::vector<std::unique_ptr<Crate>> _crates;
+	void TryDropCrate(sf::Vector2f pos);
 
 	// Highscore
 	HighScores _scores;

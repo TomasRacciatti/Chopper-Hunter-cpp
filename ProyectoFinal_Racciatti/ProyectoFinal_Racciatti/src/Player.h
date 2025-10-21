@@ -30,13 +30,12 @@ public:
 	void Draw(sf::RenderTarget& rt) const override;
 
 	void Heal(int amount);
-	template<typename T> T* FindWeaponOfType();
 
 	template<typename T> T* FindWeaponOfType() 
 	{
 		for (auto& weapon : _weapons) 
 		{
-			if (auto ptr = dynamic_cast<T*>(w.get())) return ptr;
+			if (auto ptr = dynamic_cast<T*>(weapon.get())) return ptr;
 		}
 		return nullptr;
 	}

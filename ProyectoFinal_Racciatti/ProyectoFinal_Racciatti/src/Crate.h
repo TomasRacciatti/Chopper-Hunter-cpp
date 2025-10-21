@@ -33,8 +33,8 @@ private:
     float _speedY = 260.f;
     bool  _onFloor = false;
 
-    float _lifespanSec = 15.f;
-    float _flashLastSec = 4.f;
+    float _lifespanSec = 10.f;
+    float _flashLastSec = 2.5f;
     float _ageSec = 0.f;
     float _flashTimer = 0.f;  
     bool  _flashOn = false;
