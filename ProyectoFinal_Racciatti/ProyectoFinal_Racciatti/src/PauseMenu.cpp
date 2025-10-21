@@ -1,7 +1,5 @@
 #include "PauseMenu.h"
 
-#include "PauseMenu.h"
-
 PauseMenu::PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
     : _window(window)
     , _audio(audio)
