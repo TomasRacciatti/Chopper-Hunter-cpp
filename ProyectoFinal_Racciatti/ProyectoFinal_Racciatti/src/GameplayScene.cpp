@@ -450,7 +450,7 @@ void GameplayScene::CreatePlayer()
 	// Pistol
 	float pistolCooldown = 0.35f;
 	float pBulletSpeed = 350.f;
-	float pBullLifetime = 2.f;
+	float pBullLifetime = 5.f;
 	int pBullDamage = 1;
 	auto pistolSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/gunshot.mp3"));
 
@@ -469,8 +469,8 @@ void GameplayScene::CreatePlayer()
 
 	// Shotgun
 	float sgCooldown = 1.9f;
-	float sgBulletSpeed = 450.f;
-	float sgBullLifetime = 2.f;
+	float sgBulletSpeed = 500.f;
+	float sgBullLifetime = 5.f;
 	int sgBullDamage = 1;
 	int sgStartingAmmo = 4;
 	auto shotgunSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/shotgun.mp3"));
