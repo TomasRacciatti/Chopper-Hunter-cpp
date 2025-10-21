@@ -23,6 +23,8 @@ public:
 	void Update(float dt, bool fireHeld, sf::Vector2f origin, sf::Vector2f target, const Level& lvl);
 	void Draw(sf::RenderTarget& rt) const;
 
+	void DrawExtras(sf::RenderTarget& rt) const { PostDraw(rt); }
+
 	// Getters & Setters
 	float GetCooldownNormalized()
 	{ 

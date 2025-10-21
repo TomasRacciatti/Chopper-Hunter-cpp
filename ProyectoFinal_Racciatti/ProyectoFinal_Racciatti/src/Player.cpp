@@ -89,6 +89,13 @@ void Player::Draw(sf::RenderTarget& rt) const
         if (auto* weapon = _weapons[_activeWeapon].get())
             weapon->Draw(rt);
     }
+
+    for (int i = 0; i < static_cast<int>(_weapons.size()); ++i)
+    {
+        if (i == _activeWeapon) continue;
+        if (auto* weapon = _weapons[i].get())
+            weapon->DrawExtras(rt);
+    }
 }
 
 void Player::Heal(int amount)
