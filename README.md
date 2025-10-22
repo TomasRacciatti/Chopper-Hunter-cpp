@@ -26,7 +26,10 @@ Survive wave after wave of enemies, and see how long you can last before succumb
 - A & D to move.
 - S to crouch.  
 - Use the mouse to aim.
-- Left click to shoot.  
+- Left click to shoot.
+
+## 🔗 Downloadable
+<a href="[url](https://tomas-racciatti.itch.io/chopper-hunter)" target="_blank">Link to itch.io</a>
 
 ---
 
