@@ -29,12 +29,27 @@ Survive wave after wave of enemies, and see how long you can last before succumb
 - Use the mouse to aim.
 - Left click to shoot.
 
+## 📝 Credits
+# Developer​
+- Tomas Racciatti
+# Music
+- Hayden Folker
+- Scott Buckley
+- Whitesand
+# Art
+- SquareCircleCo.
+- Paul Chin
+- Craftpix
+- Ansimuz
+- Anim06
+- Cainos
+
 ## 🔗 Downloadable
 <a href="https://tomas-racciatti.itch.io/chopper-hunter" target="_blank">Link to itch.io</a>
 
 ---
 
-## 📝 License
+## © License
 
 This project is for educational purposes and personal development.
 Not affiliated with SquareCircleCo. or the original Heli Attack series.
