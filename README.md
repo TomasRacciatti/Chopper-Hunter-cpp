@@ -24,7 +24,8 @@ Survive wave after wave of enemies, and see how long you can last before succumb
 ## 🎮 Controls  
 
 - A & D to move.
-- S to crouch.  
+- S to crouch.
+- 1, 2, 3 to change weapons
 - Use the mouse to aim.
 - Left click to shoot.
 
