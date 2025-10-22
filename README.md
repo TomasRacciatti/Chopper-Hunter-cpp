@@ -29,7 +29,7 @@ Survive wave after wave of enemies, and see how long you can last before succumb
 - Left click to shoot.
 
 ## 🔗 Downloadable
-<a href="https://tomas-racciatti.itch.io/chopper-hunter" target="_blank">🕹️ Play on itch.io</a>
+<a href="https://tomas-racciatti.itch.io/chopper-hunter" target="_blank">Link to itch.io</a>
 
 ---
 
