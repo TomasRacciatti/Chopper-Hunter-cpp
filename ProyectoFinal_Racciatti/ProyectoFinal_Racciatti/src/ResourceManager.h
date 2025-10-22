@@ -11,6 +11,12 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
+	// Limpieza
+	ResourceManager(const ResourceManager&) = delete;
+	ResourceManager& operator=(const ResourceManager&) = delete;
+	ResourceManager(ResourceManager&&) = delete;
+	ResourceManager& operator=(ResourceManager&&) = delete;
+
 	sf::Texture& GetTexture(const std::string& path, bool useMipmap, sf::IntRect area);
 	sf::Font& GetFont(const std::string& path);
 	sf::SoundBuffer& GetSound(const std::string& path);

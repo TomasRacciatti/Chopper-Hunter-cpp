@@ -469,7 +469,7 @@ void GameplayScene::CreatePlayer()
 
 	// Shotgun
 	float sgCooldown = 1.9f;
-	float sgBulletSpeed = 500.f;
+	float sgBulletSpeed = 550.f;
 	float sgBullLifetime = 5.f;
 	int sgBullDamage = 1;
 	int sgStartingAmmo = 4;
@@ -494,7 +494,7 @@ void GameplayScene::CreatePlayer()
 	const float rpgCooldown = 5.f;  
 	const float rpgSpeed = 300.f;
 	const float rpgLifetime = 5.f;  
-	const int rpgDamage = 6;
+	const int rpgDamage = 8;
 	int rpgStartingAmmo = 2;
 	auto rpgSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/rpg.mp3"));
 

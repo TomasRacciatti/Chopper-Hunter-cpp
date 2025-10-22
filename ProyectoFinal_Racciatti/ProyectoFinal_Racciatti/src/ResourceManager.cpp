@@ -6,6 +6,12 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
+	for (auto& [path, ptr] : texturesMap) delete ptr;
+	for (auto& [path, ptr] : fontsMap) delete ptr;
+	for (auto& [path, ptr] : soundsMap) delete ptr;
+	texturesMap.clear();
+	fontsMap.clear();
+	soundsMap.clear();
 }
 
 sf::Texture& ResourceManager::GetTexture(const std::string& path, bool useMipmap, sf::IntRect area /*opcional pero sirve para anims*/)
