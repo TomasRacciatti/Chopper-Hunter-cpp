@@ -30,13 +30,13 @@ Survive wave after wave of enemies, and see how long you can last before succumb
 - Left click to shoot.
 
 ## 📝 Credits
-# Developer​
+### Developer​
 - Tomas Racciatti
-# Music
+### Music
 - Hayden Folker
 - Scott Buckley
 - Whitesand
-# Art
+### Art
 - SquareCircleCo.
 - Paul Chin
 - Craftpix
