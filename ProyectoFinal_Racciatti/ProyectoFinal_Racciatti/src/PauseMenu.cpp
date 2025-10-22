@@ -47,7 +47,6 @@ PauseMenu::PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window,
 
     // Reuso de OptionsPanel
     _optionsPanel = new OptionsPanel(resourceManager, _window, _audio);
-    _optionsPanel->SetVolume(_optionsPanel->GetVolume());
 }
 
 PauseMenu::~PauseMenu()
