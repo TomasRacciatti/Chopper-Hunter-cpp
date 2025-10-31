@@ -42,7 +42,7 @@ private:
     sf::Vector2f _lastPos{ 0.f, 0.f };
 
     // Sprite explosion
-    const char* _explosionTexPath = "../sprites/enemies/DroneExplosion.png";
+    const char* _explosionTexPath = "res/sprites/enemies/DroneExplosion.png";
     const sf::Vector2i _explosionFrameSize{ 48, 48 };
     const int _explosionFrameCount = 6;
     const int _hideSourceFromFrame = 2;

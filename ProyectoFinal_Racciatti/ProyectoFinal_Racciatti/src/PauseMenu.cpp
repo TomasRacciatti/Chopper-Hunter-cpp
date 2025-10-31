@@ -3,10 +3,10 @@
 PauseMenu::PauseMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
     : _window(window)
     , _audio(audio)
-    , text(resourceManager.GetFont("../fonts/MilitaryPoster.ttf"), "PAUSED", 48)
+    , text(resourceManager.GetFont("res/fonts/MilitaryPoster.ttf"), "PAUSED", 48)
 {
     // Font data
-    const std::string fontPath = "../fonts/MilitaryPoster.ttf";
+    const std::string fontPath = "res/fonts/MilitaryPoster.ttf";
     sf::Font& font = resourceManager.GetFont(fontPath);
     sf::Color textColor = sf::Color(230, 230, 200);
 

@@ -12,9 +12,9 @@
 GameplayUI::GameplayUI(ResourceManager& resources, const sf::Vector2u& winSize)
     : _resourceManager(resources)
     , _win(winSize)
-    , text (_resourceManager.GetFont("../fonts/soldier.ttf"), "", 28)
+    , text (_resourceManager.GetFont("res/fonts/soldier.ttf"), "", 28)
 {
-    const std::string fontPath = "../fonts/soldier.ttf";
+    const std::string fontPath = "res/fonts/soldier.ttf";
     sf::Font& font = _resourceManager.GetFont(fontPath);
 
     sf::Color textColor = sf::Color(sf::Color::White);
@@ -32,16 +32,16 @@ GameplayUI::GameplayUI(ResourceManager& resources, const sf::Vector2u& winSize)
     _scoreText->setOutlineThickness(outlineThickness);
 
     // hp
-    sf::Texture& emptyTex = _resourceManager.GetTexture("../sprites/UI/EmptyHP.png", false, {});
-    sf::Texture& fullTex = _resourceManager.GetTexture("../sprites/UI/FullHP.png", false, {});
+    sf::Texture& emptyTex = _resourceManager.GetTexture("res/sprites/UI/EmptyHP.png", false, {});
+    sf::Texture& fullTex = _resourceManager.GetTexture("res/sprites/UI/FullHP.png", false, {});
     _hpEmpty = new sf::Sprite(emptyTex);
     _hpFull = new sf::Sprite(fullTex);
     _hpEmpty->setScale({ _hpScale, _hpScale });
     _hpFull->setScale({ _hpScale, _hpScale });
 
     // Ammo
-    sf::Texture& pistolAmmo = _resourceManager.GetTexture("../sprites/player/PistolAmmo.png", false, {});
-    sf::Texture& pistolEmpty = _resourceManager.GetTexture("../sprites/UI/PistolAmmoEmpty.png", false, {});
+    sf::Texture& pistolAmmo = _resourceManager.GetTexture("res/sprites/player/PistolAmmo.png", false, {});
+    sf::Texture& pistolEmpty = _resourceManager.GetTexture("res/sprites/UI/PistolAmmoEmpty.png", false, {});
     
     _ammoIcon = new sf::Sprite(pistolAmmo);
     _ammoIconEmpty = new sf::Sprite(pistolEmpty);
@@ -181,8 +181,8 @@ void GameplayUI::UpdateAmmo()
 
     if (_ammoIconKey != key)
     {
-        std::string fullPath = std::string("../sprites/player/") + key + "Ammo.png";
-        std::string emptyPath = std::string("../sprites/UI/") + key + "AmmoEmpty.png";
+        std::string fullPath = std::string("res/sprites/player/") + key + "Ammo.png";
+        std::string emptyPath = std::string("res/sprites/UI/") + key + "AmmoEmpty.png";
 
         sf::Texture& fullTex = _resourceManager.GetTexture(fullPath, false, {});
         sf::Texture& emptyTex = _resourceManager.GetTexture(emptyPath, false, {});

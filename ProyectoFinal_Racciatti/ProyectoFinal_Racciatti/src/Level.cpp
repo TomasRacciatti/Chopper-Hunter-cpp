@@ -10,8 +10,8 @@ Level::Level(const sf::Vector2u& windowSize, ResourceManager& resourceManager, c
     _bgSprite.setTexture(*_bgTex);
     FitBackground();
 
-    _floorTex = &resourceManager.GetTexture("../sprites/tiles/Ground.png", false, {});
-    _wallTex = &resourceManager.GetTexture("../sprites/tiles/Wall.png", false, {});
+    _floorTex = &resourceManager.GetTexture("res/sprites/tiles/Ground.png", false, {});
+    _wallTex = &resourceManager.GetTexture("res/sprites/tiles/Wall.png", false, {});
 
     const auto floorSize = _floorTex->getSize();
     const auto wallSize = _wallTex->getSize();

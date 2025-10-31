@@ -21,8 +21,8 @@ Drone::Drone(const sf::Vector2f& spawnPos,
     , _scale(visualScale)
     , _tex(&resources.GetTexture(spritePath, false, {}))
     , _sprite(*_tex)
-    , _explosionSfx(resources.GetSound("../audio/sfx/ExplosionDrone.mp3"))
-    , _buzzSfx(resources.GetSound("../audio/sfx/DroneFly.mp3"))
+    , _explosionSfx(resources.GetSound("res/audio/sfx/ExplosionDrone.mp3"))
+    , _buzzSfx(resources.GetSound("res/audio/sfx/DroneFly.mp3"))
 {
     SetScoreReward(scoreReward);
     
@@ -166,7 +166,7 @@ void Drone::StartExplosion()
     _buzzSfx.stop();
 
     const sf::Vector2f explosionSpawn = _sprite.getPosition();
-    const std::string explosionTexPath = "../sprites/enemies/DroneExplosion.png";
+    const std::string explosionTexPath = "res/sprites/enemies/DroneExplosion.png";
 
     _explosionFx = std::make_unique<ExplosionEffect>(
         _resourceManager,

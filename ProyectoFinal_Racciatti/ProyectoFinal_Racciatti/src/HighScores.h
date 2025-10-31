@@ -8,7 +8,7 @@
 class HighScores
 {
 public:
-	explicit HighScores(std::string savePath = "../save/highscores.txt")
+	explicit HighScores(std::string savePath = "res/save/highscores.txt")
 		: _path(std::move(savePath)) {}
 
 	bool Load();

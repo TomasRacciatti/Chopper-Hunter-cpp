@@ -57,15 +57,15 @@ private:
     std::vector<IconLabel> _weapons;
 
     // Paths
-    std::string _heliPath = "../sprites/enemies/HeliSingle.png";
-    std::string _dronePath = "../sprites/enemies/DroneSingle.png";
-    std::string _artilleryPath = "../sprites/enemies/Missile.png";
-    std::string _crateSgPath = "../sprites/player/ShotgunAmmo.png";
-    std::string _crateHealthPath = "../sprites/player/HealthCrate.png";
-    std::string _crateRpgPath = "../sprites/player/RPGAmmo.png";
-    std::string _pistolPath = "../sprites/player/Pistol.png";
-    std::string _shotgunPath = "../sprites/player/Shotgun.png";
-    std::string _rpgPath = "../sprites/player/RPG.png";
+    std::string _heliPath = "res/sprites/enemies/HeliSingle.png";
+    std::string _dronePath = "res/sprites/enemies/DroneSingle.png";
+    std::string _artilleryPath = "res/sprites/enemies/Missile.png";
+    std::string _crateSgPath = "res/sprites/player/ShotgunAmmo.png";
+    std::string _crateHealthPath = "res/sprites/player/HealthCrate.png";
+    std::string _crateRpgPath = "res/sprites/player/RPGAmmo.png";
+    std::string _pistolPath = "res/sprites/player/Pistol.png";
+    std::string _shotgunPath = "res/sprites/player/Shotgun.png";
+    std::string _rpgPath = "res/sprites/player/RPG.png";
 
     // Helpers
     void BuildCommonUI(ResourceManager& rm);

@@ -1,16 +1,16 @@
 #include "OptionsPanel.h"
 
 
-static constexpr const char* btnPath = "../sprites/UI/button.png";
-static constexpr const char* fontPath = "../fonts/MilitaryPoster.ttf";
+static constexpr const char* btnPath = "res/sprites/UI/button.png";
+static constexpr const char* fontPath = "res/fonts/MilitaryPoster.ttf";
 
 OptionsPanel::OptionsPanel(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
     : _window(window)
     , _audio (audio)
-    , text(resourceManager.GetFont("../fonts/MilitaryPoster.ttf"), "OPTIONS", 48)
+    , text(resourceManager.GetFont("res/fonts/MilitaryPoster.ttf"), "OPTIONS", 48)
 {
     // BG
-    std::string backgroundPath = "../sprites/backgrounds/MainMenu_bg.png";
+    std::string backgroundPath = "res/sprites/backgrounds/MainMenu_bg.png";
     sf::IntRect backgroundArea({ 0, 0 }, { 1280, 720 });
     sf::Texture& backgroundTexture = resourceManager.GetTexture(backgroundPath, false, backgroundArea);
     background = new sf::Sprite(backgroundTexture); 

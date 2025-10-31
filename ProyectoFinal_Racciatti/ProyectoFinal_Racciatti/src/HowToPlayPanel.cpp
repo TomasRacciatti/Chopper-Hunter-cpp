@@ -1,9 +1,9 @@
 #include "HowToPlayPanel.h"
 
-static constexpr const char* buttonPng = "../sprites/UI/button.png";
-static constexpr const char* bgPng = "../sprites/backgrounds/MainMenu_bg.png";
-static constexpr const char* titleFont = "../fonts/MilitaryPoster.ttf";
-static constexpr const char* bodyFont = "../fonts/soldier.ttf";
+static constexpr const char* buttonPng = "res/sprites/UI/button.png";
+static constexpr const char* bgPng = "res/sprites/backgrounds/MainMenu_bg.png";
+static constexpr const char* titleFont = "res/fonts/MilitaryPoster.ttf";
+static constexpr const char* bodyFont = "res/fonts/soldier.ttf";
 static const sf::Color textColor(230, 230, 200);
 
 HowToPlayPanel::HowToPlayPanel(ResourceManager& rm, sf::RenderWindow& window)

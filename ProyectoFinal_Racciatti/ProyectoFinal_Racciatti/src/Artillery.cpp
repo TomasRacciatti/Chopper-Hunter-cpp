@@ -19,8 +19,8 @@ Artillery::Artillery(const sf::Vector2f& spawnPos, AudioSettings& audio, Resourc
 	, _sprite(*_tex)
 	, _frameSize(spriteFrameSize)
 	, _scale(visualScale)
-	, _explosionSfx(resources.GetSound("../audio/sfx/ExplosionArti.mp3"))
-	, _whistleSfx(resources.GetSound("../audio/sfx/ArtilleryWhistle.mp3"))
+	, _explosionSfx(resources.GetSound("res/audio/sfx/ExplosionArti.mp3"))
+	, _whistleSfx(resources.GetSound("res/audio/sfx/ArtilleryWhistle.mp3"))
 {
 	SetScoreReward(scoreReward);
 
@@ -138,7 +138,7 @@ void Artillery::StartExplosion(float groundY)
 	_explosionWorldPos.x = _sprite.getPosition().x;
 	_explosionWorldPos.y = groundY - centerOffsetY;
 
-	const std::string explosionPath = "../sprites/enemies/ArtilleryExplosion.png";
+	const std::string explosionPath = "res/sprites/enemies/ArtilleryExplosion.png";
 
 	_explosionFx = std::make_unique<ExplosionEffect>(
 		_resourceManager,

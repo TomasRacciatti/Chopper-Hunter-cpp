@@ -12,8 +12,8 @@ Helicopter::Helicopter(sf::Vector2f spawnPos, std::unique_ptr<Weapon> turret, Au
     , _tex(&resources.GetTexture(sheetPath, false, {}))
     , _sprite(*_tex)
     , _resources(resources)
-    , _explosionSfx(resources.GetSound("../audio/sfx/ExplosionHeli.mp3"))
-    , _flightSfx(resources.GetSound("../audio/sfx/helicopter.mp3"))
+    , _explosionSfx(resources.GetSound("res/audio/sfx/ExplosionHeli.mp3"))
+    , _flightSfx(resources.GetSound("res/audio/sfx/helicopter.mp3"))
 {
     SetScoreReward(scoreReward);
 
@@ -295,8 +295,8 @@ void Helicopter::StartExplosion()
     const int   frames = 9;
     const int   hideAt = 3;
     const float scale = 5.5f;
-    const char* texPath = "../sprites/enemies/HeliExplosion.png";
-    const char* sfxPath = "../audio/sfx/ExplosionHeli.mp3";
+    const char* texPath = "res/sprites/enemies/HeliExplosion.png";
+    const char* sfxPath = "res/audio/sfx/ExplosionHeli.mp3";
 
     _explosion = std::make_unique<ExplosionEffect>(
         _resources, 

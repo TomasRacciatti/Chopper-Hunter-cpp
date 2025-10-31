@@ -22,7 +22,7 @@ bool Rpg::Shoot(sf::Vector2f origin, sf::Vector2f dir)
 void Rpg::SetupExplosion(ResourceManager& resources)
 {
     _resources = &resources;
-    _explosionSfx = std::make_unique<sf::Sound>(resources.GetSound("../audio/sfx/ExplosionDrone.mp3"));
+    _explosionSfx = std::make_unique<sf::Sound>(resources.GetSound("res/audio/sfx/ExplosionDrone.mp3"));
 }
 
 void Rpg::PostUpdate(float dt, const Level& /*lvl*/)

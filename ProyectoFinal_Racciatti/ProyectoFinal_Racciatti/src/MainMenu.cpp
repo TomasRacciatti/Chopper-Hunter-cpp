@@ -6,22 +6,22 @@
 MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, AudioSettings& audio)
 	: Scene(window)
 	, _audio(audio)
-	, text(resourceManager.GetFont("../fonts/MilitaryPoster.ttf"), "PLAY", 48)
+	, text(resourceManager.GetFont("res/fonts/MilitaryPoster.ttf"), "PLAY", 48)
 {
 	// BG
-	std::string backgroundPath = "../sprites/backgrounds/MainMenu_bg.png";
+	std::string backgroundPath = "res/sprites/backgrounds/MainMenu_bg.png";
 	sf::IntRect backgroundArea({ 0, 0 }, { 1280, 720 });
 	sf::Texture& backgroundTexture = resourceManager.GetTexture(backgroundPath, false, backgroundArea);
 	background = new sf::Sprite(backgroundTexture);
 
 
 	// Shared button data
-	std::string buttonPath = "../sprites/UI/button.png";
+	std::string buttonPath = "res/sprites/UI/button.png";
 	sf::IntRect buttonArea({ 0, 0 }, { 366, 159 });
 	sf::Texture& btnTex = resourceManager.GetTexture(buttonPath, false, buttonArea);
 
 	// Font data
-	const std::string fontPath = "../fonts/MilitaryPoster.ttf";
+	const std::string fontPath = "res/fonts/MilitaryPoster.ttf";
 	sf::Font& font = resourceManager.GetFont(fontPath);
 	sf::Color textColor = sf::Color(230, 230, 200);
 
@@ -96,7 +96,7 @@ MainMenu::MainMenu(ResourceManager& resourceManager, sf::RenderWindow& window, A
 	_credits = new CreditsPanel(resourceManager, _window);
 
 	// ============== Music ===================
-	std::string musicPath = "../audio/music/MainMenuTheme.mp3";
+	std::string musicPath = "res/audio/music/MainMenuTheme.mp3";
 
 	music.openFromFile(musicPath);
 

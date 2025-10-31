@@ -16,14 +16,14 @@ namespace {
 	}
 }
 
-static constexpr const char* bgPath = "../sprites/backgrounds/Game_bg.png";
+static constexpr const char* bgPath = "res/sprites/backgrounds/Game_bg.png";
 
 GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow& _window, AudioSettings& audio)
 	: Scene(_window)
 	, resourceManager(resourceManager)
 	, _audio(audio)
 	, _level(_window.getSize(), resourceManager, bgPath)
-	, _cratePickupSfx(resourceManager.GetSound("../audio/sfx/CratePickup.mp3"))
+	, _cratePickupSfx(resourceManager.GetSound("res/audio/sfx/CratePickup.mp3"))
 {
 	_progress.Reset();
 
@@ -36,7 +36,7 @@ GameplayScene::GameplayScene(ResourceManager& resourceManager, sf::RenderWindow&
 	_artillerySpawnTimer = Utils::RandomFloat(_artillerySpawnMin, _artillerySpawnMax);
 
 	// ============== Music ===================
-	std::string musicPath = "../audio/music/GameplayMusic.mp3";
+	std::string musicPath = "res/audio/music/GameplayMusic.mp3";
 
 	music.openFromFile(musicPath);
 
@@ -225,7 +225,7 @@ void GameplayScene::Update(float dt)
 			{
 				// Cambio de musica
 				music.stop();
-				std::string deathMusicPath = "../audio/music/DeathMusic.mp3";
+				std::string deathMusicPath = "res/audio/music/DeathMusic.mp3";
 				music.openFromFile(deathMusicPath);
 
 				music.setLooping(true);
@@ -426,11 +426,11 @@ void GameplayScene::TryDropCrate(sf::Vector2f pos)
 
 	std::string path;
 	if (type == CrateType::RpgAmmo)   
-		path = "../sprites/player/RPGAmmo.png";
+		path = "res/sprites/player/RPGAmmo.png";
 	else if (type == CrateType::Health) 
-		path = "../sprites/player/HealthCrate.png";
+		path = "res/sprites/player/HealthCrate.png";
 	else if (type == CrateType::ShotgunAmmo) 
-		path = "../sprites/player/ShotgunAmmo.png";
+		path = "res/sprites/player/ShotgunAmmo.png";
 
 	sf::Texture& tex = resourceManager.GetTexture(path, false, {});
 	const float scale = 1.25f;
@@ -442,7 +442,7 @@ void GameplayScene::CreatePlayer()
 	const auto window = _window.getSize();
 	const sf::Vector2f spawnPos(window.x * 0.5f, window.y - 64.f);
 
-	std::string path = "../sprites/player/SoldierSpriteSheet.png";
+	std::string path = "res/sprites/player/SoldierSpriteSheet.png";
 	_player = Make<Player>(spawnPos, path, _audio, resourceManager);
 
 	// Spawn de arma
@@ -452,11 +452,11 @@ void GameplayScene::CreatePlayer()
 	float pBulletSpeed = 350.f;
 	float pBullLifetime = 5.f;
 	int pBullDamage = 1;
-	auto pistolSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/gunshot.mp3"));
+	auto pistolSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("res/audio/sfx/gunshot.mp3"));
 
 	auto pistol = MakeWith<Pistol>(
 		[&](Pistol& w) {
-			std::string pistolPath = "../sprites/player/Pistol.png";
+			std::string pistolPath = "res/sprites/player/Pistol.png";
 			sf::Texture& pistolTex = resourceManager.GetTexture(pistolPath, false, {});
 			w.SetVisualSprite(pistolTex, { 25.f, 26.5f }, 1.5f);
 			w.SetMuzzleDistance(18.f);
@@ -473,11 +473,11 @@ void GameplayScene::CreatePlayer()
 	float sgBullLifetime = 5.f;
 	int sgBullDamage = 1;
 	int sgStartingAmmo = 4;
-	auto shotgunSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/shotgun.mp3"));
+	auto shotgunSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("res/audio/sfx/shotgun.mp3"));
 
 	auto shotgun = MakeWith<Shotgun>(
 		[&](Shotgun& w) {
-			std::string shotgunPath = "../sprites/player/Shotgun.png";
+			std::string shotgunPath = "res/sprites/player/Shotgun.png";
 			sf::Texture& shotgunTex = resourceManager.GetTexture(shotgunPath, false, {});
 			w.SetVisualSprite(shotgunTex, { 25.f, 26.5f }, 1.5f);
 			w.SetMuzzleDistance(25.f);
@@ -496,17 +496,17 @@ void GameplayScene::CreatePlayer()
 	const float rpgLifetime = 5.f;  
 	const int rpgDamage = 8;
 	int rpgStartingAmmo = 2;
-	auto rpgSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/rpg.mp3"));
+	auto rpgSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("res/audio/sfx/rpg.mp3"));
 
 	auto rpg = MakeWith<Rpg>(
 		[&](Rpg& w) {
-			std::string rpgPath = "../sprites/player/RPG.png";
+			std::string rpgPath = "res/sprites/player/RPG.png";
 			sf::Texture& rpgTex = resourceManager.GetTexture(rpgPath, false, {});
 			w.SetVisualSprite(rpgTex, { 25.f, 26.5f }, 1.5f);
 			w.SetMuzzleDistance(25.f);
 
 			// Textura distinta para la bala
-			const std::string missilePath = "../sprites/player/RpgRound.png";
+			const std::string missilePath = "res/sprites/player/RpgRound.png";
 			sf::Texture& missileTex = resourceManager.GetTexture(missilePath, false, {});
 			w.SetMissileSprite(missileTex, { 9.f, 5.5f }, 1.5f);
 
@@ -541,11 +541,11 @@ void GameplayScene::SpawnHelicopter()
 	float tBulletSpeed = 350.f;
 	float tBullLifetime = 5.f;
 	int tBullDamage = 1;
-	auto turretSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("../audio/sfx/turret.mp3"));
+	auto turretSfx = std::make_unique<sf::Sound>(resourceManager.GetSound("res/audio/sfx/turret.mp3"));
 
 	auto turret = MakeWith<Pistol>(
 		[&](Pistol& w) {
-			std::string turretPath = "../sprites/enemies/Turret.png";
+			std::string turretPath = "res/sprites/enemies/Turret.png";
 			sf::Texture& turretTex = resourceManager.GetTexture(turretPath, false, {});
 			w.SetVisualSprite(turretTex, { 25.f, 26.5f }, 1.0f);
 			w.SetMuzzleDistance(25.f);
@@ -554,7 +554,7 @@ void GameplayScene::SpawnHelicopter()
 		&_enemyBulletPool, _audio, std::move(turretSfx)
 	);
 
-	std::string path = "../sprites/enemies/HelicopterSpriteSheet_Damaged.png";
+	std::string path = "res/sprites/enemies/HelicopterSpriteSheet_Damaged.png";
 	_heli = Make<Helicopter>(heliSpawn, std::move(turret), _audio, resourceManager, path);
 
 	_heli->SetProgress(&_progress);
@@ -606,7 +606,7 @@ void GameplayScene::SpawnDrone()
 		x = Utils::RandomFloat(minX, maxX);
 	}
 
-	const std::string droneSpritePath = "../sprites/enemies/DroneSpriteSheet.png";
+	const std::string droneSpritePath = "res/sprites/enemies/DroneSpriteSheet.png";
 
 	auto drone = Make<Drone>(
 		sf::Vector2f{ x, y },
@@ -638,7 +638,7 @@ void GameplayScene::SpawnArtillery()
 	const float spawnX = Utils::RandomFloat(minX, maxX);
 	const float spawnY = -offY;
 
-	const std::string spritePath = "../sprites/enemies/Missile.png";
+	const std::string spritePath = "res/sprites/enemies/Missile.png";
 
 	const sf::Vector2i frame{ 64, 64 };
 	const float scale = 1.0f;

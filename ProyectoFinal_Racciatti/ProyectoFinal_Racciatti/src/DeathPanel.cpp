@@ -5,9 +5,9 @@
 #include <algorithm>
 #include <cstdio>
 
-static constexpr const char* btnPath = "../sprites/UI/button.png";
-static constexpr const char* fontTitlePath = "../fonts/MilitaryPoster.ttf";
-static constexpr const char* fontBodyPath = "../fonts/soldier.ttf";
+static constexpr const char* btnPath = "res/sprites/UI/button.png";
+static constexpr const char* fontTitlePath = "res/fonts/MilitaryPoster.ttf";
+static constexpr const char* fontBodyPath = "res/fonts/soldier.ttf";
 
 namespace
 {
